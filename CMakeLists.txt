@@ -1,17 +1,41 @@
-set(SCP_SRC "${SC_KPM_ROOT}/scp")
+project (scp)
+cmake_minimum_required (VERSION 2.8)
 
-file(GLOB_RECURSE SOURCES "*.cpp")
-file(GLOB_RECURSE HEADERS "*.hpp")
+get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
 
-set(CMAKE_C_FLAGS_DEBUG "-DSCP_DEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "-DSCP_DEBUG")
-add_definitions(-DSCP_MATH)
-add_definitions(-DSCP_STRING)
+set(SC_BIN_PATH "${PARENT_DIR}/sc-machine/bin/")
+set(SC_MACHINE_ROOT "${PARENT_DIR}/sc-machine/")
+set(SC_MEMORY_SRC "${SC_MACHINE_ROOT}/sc-memory/")
 
-include_directories(${SCP_SRC} ${SC_MEMORY_SRC} ${GLIB2_INCLUDE_DIRS})
+# codegen
+if (${UNIX})
+    set(SC_CODEGEN_TOOL "${SC_BIN_PATH}/sc-code-generator")
+elseif (${WIN32})
+    set(SC_CODEGEN_TOOL "${SC_BIN_PATH}/sc-code-generator.exe")
+endif()
+include("${SC_MACHINE_ROOT}/cmake/codegen.cmake")
 
-add_library (scp SHARED ${SOURCES} ${HEADERS})
-add_dependencies(scp sc-memory-cpp sc-kpm-common)
-target_link_libraries(scp sc-memory-cpp sc-kpm-common)
+# for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${SC_BIN_PATH} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${SC_BIN_PATH} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
-sc_codegen(scp ${SCP_SRC})
+if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+    set(CMAKE_CXX_FLAGS_RELEASE "-O3")        ## Optimize
+    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")  ## Strip binary
+endif()
+
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DSC_DEBUG -DSC_PROFILE")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DSC_DEBUG -DSC_PROFILE")
+
+include_directories(${SC_MEMORY_SRC} ${SC_MACHINE_ROOT})
+link_directories(${SC_BIN_PATH})
+
+set(SC_EXTENSION_DIRECTORY "${SC_BIN_PATH}/extensions")
+file(MAKE_DIRECTORY ${SC_EXTENSION_DIRECTORY})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSION_DIRECTORY})  
+
+add_subdirectory(scp)

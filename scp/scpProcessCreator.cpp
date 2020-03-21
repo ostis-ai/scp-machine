@@ -10,8 +10,7 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 ScAddr ASCPProcessCreator::msAgentKeynode;
 
 SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
@@ -39,7 +38,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
 
     ScTemplate program_templ;
     ms_context->HelperBuildTemplate(program_templ, program);
-    ScTemplateGenParams gen_params;
+    ScTemplateParams gen_params;
 
     ScAddr process_node;
     ScIterator5Ptr iter_temp = ms_context->Iterator5(program, ScType::EdgeAccessConstPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_key_sc_element);
