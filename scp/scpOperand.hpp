@@ -9,8 +9,7 @@
 #include "sc-memory/cpp/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 
-namespace scp
-{
+namespace scp {
 
 class SCPOperand
 {
@@ -39,10 +38,10 @@ private:
     void resolveSetOrder(ScAddr modifier);
     uint8_t order = 0;
     uint8_t set_order = 0;
-    ScMemoryContext &ms_context;
+    const std::unique_ptr<ScMemoryContext>& ms_context;
 
 public:
-    SCPOperand(ScMemoryContext &ctx_, ScAddr addr_);
+    SCPOperand(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_);
     ScAddr GetAddr();
     ScAddr GetValue();
     ScType GetType();

@@ -21,7 +21,7 @@ private:
     ScEvent::Type resolve_event_type(ScAddr const & event_type_node);
 
 public:
-    SCPOperatorSysWait(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorSysWait(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

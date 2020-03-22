@@ -14,7 +14,7 @@ namespace scp
 {
 
 //return
-SCPOperatorReturn::SCPOperatorReturn(ScMemoryContext &ctx, ScAddr addr): SCPOperator(ctx, addr)
+SCPOperatorReturn::SCPOperatorReturn(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperator(ctx, addr)
 {
 }
 
@@ -32,10 +32,10 @@ sc_result SCPOperatorReturn::Execute()
 {
     sc_bool flag = SC_FALSE;
     ScAddr process_node;
-    ScIterator3Ptr iter1 = ms_context.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, this->addr);
+    ScIterator3Ptr iter1 = ms_context->Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, this->addr);
     while (iter1->Next())
     {
-        ScIterator5Ptr iter2 = ms_context.Iterator5(iter1->Get(0), ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_decomposition_of_action);
+        ScIterator5Ptr iter2 = ms_context->Iterator5(iter1->Get(0), ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_decomposition_of_action);
         if (iter2->Next())
         {
             process_node = iter2->Get(2);
@@ -49,7 +49,7 @@ sc_result SCPOperatorReturn::Execute()
     }
     else
     {
-        ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, process_node);
+        ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, process_node);
     }
     return SC_RESULT_OK;
 }

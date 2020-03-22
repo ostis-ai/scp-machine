@@ -10,11 +10,10 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 
 //genEl
-SCPOperatorEraseEl::SCPOperatorEraseEl(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
+SCPOperatorEraseEl::SCPOperatorEraseEl(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
 {
 }
 
@@ -50,7 +49,7 @@ sc_result SCPOperatorEraseEl::Execute()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    ms_context.EraseElement(operands[0]->GetValue());
+    ms_context->EraseElement(operands[0]->GetValue());
 
     FinishExecutionSuccessfully();
     return SC_RESULT_OK;

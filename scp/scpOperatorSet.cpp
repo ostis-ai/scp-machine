@@ -16,7 +16,7 @@
 namespace scp
 {
 
-SCPOperatorSetStr3::SCPOperatorSetStr3(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorSetStr3::SCPOperatorSetStr3(const std::unique_ptr<ScMemoryContext> &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(3);
     set_operands = std::vector<SCPOperand*>(3);
@@ -25,7 +25,7 @@ SCPOperatorSetStr3::SCPOperatorSetStr3(ScMemoryContext &ctx_, ScAddr addr_): SCP
 sc_result SCPOperatorSetStr3::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
         SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));
@@ -110,7 +110,7 @@ SCPOperatorSetStr3::~SCPOperatorSetStr3()
     }
 }
 
-SCPOperatorSetStr5::SCPOperatorSetStr5(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorSetStr5::SCPOperatorSetStr5(const std::unique_ptr<ScMemoryContext> &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(5);
     set_operands = std::vector<SCPOperand*>(5);
@@ -119,7 +119,7 @@ SCPOperatorSetStr5::SCPOperatorSetStr5(ScMemoryContext &ctx_, ScAddr addr_): SCP
 sc_result SCPOperatorSetStr5::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
         SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));

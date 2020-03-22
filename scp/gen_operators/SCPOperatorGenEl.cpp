@@ -14,7 +14,7 @@ namespace scp
 {
 
 //genEl
-SCPOperatorGenEl::SCPOperatorGenEl(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
+SCPOperatorGenEl::SCPOperatorGenEl(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
 {
 }
 

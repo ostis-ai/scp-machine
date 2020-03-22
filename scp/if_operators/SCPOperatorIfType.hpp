@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorIfType: public SCPOperatorElStr1
 {
 public:
-    SCPOperatorIfType(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorIfType(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

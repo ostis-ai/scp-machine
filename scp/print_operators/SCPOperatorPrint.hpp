@@ -21,7 +21,7 @@ private:
     sc_bool newline;
 
 public:
-    SCPOperatorPrint(ScMemoryContext &ctx, ScAddr addr, sc_bool newline_);
+    SCPOperatorPrint(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr, sc_bool newline_);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

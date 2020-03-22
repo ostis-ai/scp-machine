@@ -22,7 +22,7 @@ protected:
     std::vector<SCPOperand*> set_operands;
 
 public:
-    SCPOperatorSetStr3(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorSetStr3(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     sc_result Parse();
     ~SCPOperatorSetStr3();
 };
@@ -33,7 +33,7 @@ protected:
     std::vector<SCPOperand*> set_operands;
 
 public:
-    SCPOperatorSetStr5(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorSetStr5(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     sc_result Parse();
     ~SCPOperatorSetStr5();
 };

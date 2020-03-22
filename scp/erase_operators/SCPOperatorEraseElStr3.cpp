@@ -10,10 +10,9 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 
-SCPOperatorEraseElStr3::SCPOperatorEraseElStr3(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
+SCPOperatorEraseElStr3::SCPOperatorEraseElStr3(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
 {
 }
 
@@ -84,77 +83,77 @@ sc_result SCPOperatorEraseElStr3::Execute()
 
     switch (type)
     {
-    case 0x101:
-    {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
-        if (iter->Next())
+        case 0x101:
         {
-            if (operands[1]->IsErase())
-            {
-                ms_context.EraseElement(iter->Get(1));
-            }
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x001:
-    {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
-        if (iter->Next())
-        {
-            if (operands[0]->IsErase())
-            {
-                ms_context.EraseElement(iter->Get(0));
-            }
-            else
+            ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
+            if (iter->Next())
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context->EraseElement(iter->Get(1));
                 }
-            }
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x100:
-    {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
-        if (iter->Next())
-        {
-            if (operands[2]->IsErase())
-            {
-                ms_context.EraseElement(iter->Get(2));
+                FinishExecutionSuccessfully();
             }
             else
             {
-                if (operands[1]->IsErase())
-                {
-                    ms_context.EraseElement(iter->Get(1));
-                }
+                FinishExecutionUnsuccessfully();
             }
-            FinishExecutionSuccessfully();
+            break;
         }
-        else
+        case 0x001:
         {
-            FinishExecutionUnsuccessfully();
+            ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
+            if (iter->Next())
+            {
+                if (operands[0]->IsErase())
+                {
+                    ms_context->EraseElement(iter->Get(0));
+                }
+                else
+                {
+                    if (operands[1]->IsErase())
+                    {
+                        ms_context->EraseElement(iter->Get(1));
+                    }
+                }
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        break;
-    }
-    default:
+        case 0x100:
+        {
+            ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
+            if (iter->Next())
+            {
+                if (operands[2]->IsErase())
+                {
+                    ms_context->EraseElement(iter->Get(2));
+                }
+                else
+                {
+                    if (operands[1]->IsErase())
+                    {
+                        ms_context->EraseElement(iter->Get(1));
+                    }
+                }
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
+        }
+        default:
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Unsupported operand type combination", addr);
+            Utils::logSCPError(ms_context, "Unsupported operand type combination", addr);
 #endif
-        FinishExecutionWithError();
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+            FinishExecutionWithError();
+            return SC_RESULT_ERROR_INVALID_PARAMS;
     }
     return SC_RESULT_OK;
 }

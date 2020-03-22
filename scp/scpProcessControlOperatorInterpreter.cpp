@@ -25,21 +25,21 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
     ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType((ScMemoryContext&)ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_return)
     {
-        oper = new SCPOperatorReturn((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorReturn(ms_context, scp_operator);
     }
     else if (type == Keynodes::op_sys_wait)
     {
-        oper = new SCPOperatorSysWait((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorSysWait(ms_context, scp_operator);
     }
     else if (type == Keynodes::op_call)
     {
-        oper = new SCPOperatorCall((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorCall(ms_context, scp_operator);
     }
     else
         return SC_RESULT_ERROR_INVALID_PARAMS;

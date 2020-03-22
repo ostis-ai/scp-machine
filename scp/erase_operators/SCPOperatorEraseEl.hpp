@@ -12,13 +12,12 @@
 #include "scpKeynodes.hpp"
 #include "scpOperatorStr.hpp"
 
-namespace scp
-{
+namespace scp {
 
 class SCPOperatorEraseEl: public SCPOperatorElStr1
 {
 public:
-    SCPOperatorEraseEl(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorEraseEl(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

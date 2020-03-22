@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorVarErase: public SCPOperatorElStr1
 {
 public:
-    SCPOperatorVarErase(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorVarErase(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

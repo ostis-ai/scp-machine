@@ -10,10 +10,9 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 
-SCPOperatorSearchElStr3::SCPOperatorSearchElStr3(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
+SCPOperatorSearchElStr3::SCPOperatorSearchElStr3(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
 {
 }
 
@@ -84,120 +83,120 @@ sc_result SCPOperatorSearchElStr3::Execute()
 
     switch (type)
     {
-    case 0x101:
-    {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
-        if (iter->Next())
+        case 0x101:
         {
-            operands[1]->SetValue(iter->Get(1));
-            FinishExecutionSuccessfully();
+            ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
+            if (iter->Next())
+            {
+                operands[1]->SetValue(iter->Get(1));
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        else
+        case 0x001:
         {
-            FinishExecutionUnsuccessfully();
+            ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
+            if (iter->Next())
+            {
+                operands[0]->SetValue(iter->Get(0));
+                operands[1]->SetValue(iter->Get(1));
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        break;
-    }
-    case 0x001:
-    {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
-        if (iter->Next())
+        case 0x100:
         {
-            operands[0]->SetValue(iter->Get(0));
-            operands[1]->SetValue(iter->Get(1));
-            FinishExecutionSuccessfully();
+            ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
+            if (iter->Next())
+            {
+                operands[1]->SetValue(iter->Get(1));
+                operands[2]->SetValue(iter->Get(2));
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        else
+        case 0x010:
         {
-            FinishExecutionUnsuccessfully();
+            ScAddr elem1 = ms_context->GetEdgeSource(operands[1]->GetValue());
+            ScAddr elem3 = ms_context->GetEdgeTarget(operands[1]->GetValue());
+            ScType type1 = ms_context->GetElementType(elem1);
+            ScType type3 = ms_context->GetElementType(elem3);
+            if (((type1 & operands[0]->GetType()) == operands[0]->GetType()) && (((type3 & operands[2]->GetType()) == operands[2]->GetType())))
+            {
+                operands[0]->SetValue(elem1);
+                operands[2]->SetValue(elem3);
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        break;
-    }
-    case 0x100:
-    {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
-        if (iter->Next())
+        case 0x110:
         {
-            operands[1]->SetValue(iter->Get(1));
-            operands[2]->SetValue(iter->Get(2));
-            FinishExecutionSuccessfully();
+            ScAddr elem1 = ms_context->GetEdgeSource(operands[1]->GetValue());
+            ScAddr elem3 = ms_context->GetEdgeTarget(operands[1]->GetValue());
+            ScType type3 = ms_context->GetElementType(elem3);
+            if (elem1 == operands[0]->GetValue() && (type3 & operands[2]->GetType()) == operands[2]->GetType())
+            {
+                operands[2]->SetValue(elem3);
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        else
+        case 0x011:
         {
-            FinishExecutionUnsuccessfully();
+            ScAddr elem1 = ms_context->GetEdgeSource(operands[1]->GetValue());
+            ScAddr elem3 = ms_context->GetEdgeTarget(operands[1]->GetValue());
+            ScType type1 = ms_context->GetElementType(elem1);
+            if ((type1 & operands[0]->GetType()) == operands[0]->GetType() && elem3 == operands[2]->GetValue())
+            {
+                operands[0]->SetValue(elem1);
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        break;
-    }
-    case 0x010:
-    {
-        ScAddr elem1 = ms_context.GetEdgeSource(operands[1]->GetValue());
-        ScAddr elem3 = ms_context.GetEdgeTarget(operands[1]->GetValue());
-        ScType type1 = ms_context.GetElementType(elem1);
-        ScType type3 = ms_context.GetElementType(elem3);
-        if (((type1 & operands[0]->GetType()) == operands[0]->GetType()) && (((type3 & operands[2]->GetType()) == operands[2]->GetType())))
+        case 0x111:
         {
-            operands[0]->SetValue(elem1);
-            operands[2]->SetValue(elem3);
-            FinishExecutionSuccessfully();
+            ScAddr elem1 = ms_context->GetEdgeSource(operands[1]->GetValue());
+            ScAddr elem3 = ms_context->GetEdgeTarget(operands[1]->GetValue());
+            if (elem1 == operands[0]->GetValue() && elem3 == operands[2]->GetValue())
+            {
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
         }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x110:
-    {
-        ScAddr elem1 = ms_context.GetEdgeSource(operands[1]->GetValue());
-        ScAddr elem3 = ms_context.GetEdgeTarget(operands[1]->GetValue());
-        ScType type3 = ms_context.GetElementType(elem3);
-        if (elem1 == operands[0]->GetValue() && (type3 & operands[2]->GetType()) == operands[2]->GetType())
-        {
-            operands[2]->SetValue(elem3);
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x011:
-    {
-        ScAddr elem1 = ms_context.GetEdgeSource(operands[1]->GetValue());
-        ScAddr elem3 = ms_context.GetEdgeTarget(operands[1]->GetValue());
-        ScType type1 = ms_context.GetElementType(elem1);
-        if ((type1 & operands[0]->GetType()) == operands[0]->GetType() && elem3 == operands[2]->GetValue())
-        {
-            operands[0]->SetValue(elem1);
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x111:
-    {
-        ScAddr elem1 = ms_context.GetEdgeSource(operands[1]->GetValue());
-        ScAddr elem3 = ms_context.GetEdgeTarget(operands[1]->GetValue());
-        if (elem1 == operands[0]->GetValue() && elem3 == operands[2]->GetValue())
-        {
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    default:
+        default:
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Unsupported operand type combination", addr);
+            Utils::logSCPError(ms_context, "Unsupported operand type combination", addr);
 #endif
-        FinishExecutionWithError();
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+            FinishExecutionWithError();
+            return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
     return SC_RESULT_OK;

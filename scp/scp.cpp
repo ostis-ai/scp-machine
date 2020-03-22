@@ -47,7 +47,7 @@ sc_result scpModule::InitializeImpl()
     SC_AGENT_REGISTER(ASCPAgentDeactivator)
 
     s_default_ctx.reset(new ScMemoryContext(sc_access_lvl_make_min));
-    SCPAgentEvent::register_all_scp_agents((ScMemoryContext&)s_default_ctx);
+    SCPAgentEvent::register_all_scp_agents(s_default_ctx);
 
     return SC_RESULT_OK;
 }

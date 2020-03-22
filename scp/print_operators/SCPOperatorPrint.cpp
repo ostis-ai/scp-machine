@@ -14,7 +14,7 @@
 namespace scp
 {
 
-SCPOperatorPrint::SCPOperatorPrint(ScMemoryContext &ctx, ScAddr addr, sc_bool newline_): SCPOperatorElStr1(ctx, addr)
+SCPOperatorPrint::SCPOperatorPrint(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr, sc_bool newline_): SCPOperatorElStr1(ctx, addr)
 {
     newline = newline_;
 }
@@ -55,7 +55,7 @@ sc_result SCPOperatorPrint::Execute()
     }
 
     ScStream stream;
-    if (ms_context.GetLinkContent(operands[0]->GetValue(), stream))
+    if (ms_context->GetLinkContent(operands[0]->GetValue(), stream))
     {
         std::string str;
         if (ScStreamConverter::StreamToString(stream, str))

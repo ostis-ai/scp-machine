@@ -24,17 +24,17 @@ SC_AGENT_IMPLEMENTATION(ASCPVarValueOperatorInterpreter)
     ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType((ScMemoryContext&)ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_varAssign)
     {
-        oper = new SCPOperatorVarAssign((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorVarAssign(ms_context, scp_operator);
     }
     if (type == Keynodes::op_varErase)
     {
-        oper = new SCPOperatorVarErase((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorVarErase(ms_context, scp_operator);
     }
 
     if (oper == nullptr)

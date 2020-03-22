@@ -9,8 +9,7 @@
 #include "sc-memory/cpp/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 
-namespace scp
-{
+namespace scp {
 
 class SCPParameter
 {
@@ -20,13 +19,13 @@ private:
     bool isIn = false;
     bool isOut = false;
     uint8_t order = 0;
-    ScMemoryContext &ms_context;
+    const std::unique_ptr<ScMemoryContext>& ms_context;
 
     void resolveModifiers();
     void resolveOrder(ScAddr modifier);
 
 public:
-    SCPParameter(ScMemoryContext &ctx_, ScAddr addr_);
+    SCPParameter(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_);
     ScAddr GetAddr();
     uint8_t GetOrder();
     bool IsIn();

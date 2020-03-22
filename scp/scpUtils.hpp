@@ -10,54 +10,52 @@
 
 #include <string>
 
-namespace scp
-{
-namespace Utils
-{
+namespace scp {
+namespace Utils {
 
 /*! Adds element (elAddr) into set (setAddr).
  * @returns If element already exists in set, then do nothing and returns false. Otherwise
  * add element into set and returns true.
  */
-bool addToSet(ScMemoryContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr);
+bool addToSet(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& setAddr, ScAddr const& elAddr);
 
 /*! Remove element (elAddr) from set (setAddr)
  * @returns If element doesn't exist in set, then do nothing and returns false. Otherwise
  * remove element from set and returns true.
  */
-bool removeFromSet(ScMemoryContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr);
+bool removeFromSet(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& setAddr, ScAddr const& elAddr);
 
 /*! Resolves order role relation (1'-10') (relationAddr) of given arc (arcAddr)
  * @returns true, if relation resolved
  */
-bool resolveOrderRoleRelation(ScMemoryContext & ctx, ScAddr const & arcAddr, ScAddr &relationAddr);
+bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& arcAddr, ScAddr& relationAddr);
 
 /*! Resolves order role relation (1'-10') (relationAddr) by given number (order)
  * @returns true, if relation resolved
  */
-bool resolveOrderRoleRelation(ScMemoryContext & ctx, uint8_t const order, ScAddr &relationAddr);
+bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, uint8_t const order, ScAddr& relationAddr);
 
 /*! Resolves atomic operator type (operatorType) of given operator (operatorAddr)
  * @returns true, if relation resolved
  */
-bool resolveOperatorType(ScMemoryContext & ctx, ScAddr const &operatorAddr, ScAddr &operatorType);
+bool resolveOperatorType(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& operatorAddr, ScAddr& operatorType);
 
 /*! Prints system identifier or address of sc-element (elemAddr)
  */
-void printSystemIdentifier(ScMemoryContext & ctx, ScAddr const & elemAddr);
+void printSystemIdentifier(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
 
 /*! Prints semantic neighborhood of sc-element (elemAddr)
  */
-void printInfo(ScMemoryContext & ctx, ScAddr const & elemAddr);
+void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
 
 #ifdef SCP_DEBUG
-/*! Logs error about unknown type of given operator (addr)
- */
-void logUnknownOperatorTypeError(ScMemoryContext & ctx, ScAddr &addr);
+    /*! Logs error about unknown type of given operator (addr)
+    */
+    void logUnknownOperatorTypeError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr& addr);
 
-/*! Logs error with text (text) and element addr (addr)
- */
-void logSCPError(ScMemoryContext & ctx, std::string text, ScAddr &addr);
+    /*! Logs error with text (text) and element addr (addr)
+    */
+    void logSCPError(const std::unique_ptr<ScMemoryContext>& ctx, std::string text, ScAddr& addr);
 #endif
 
 }

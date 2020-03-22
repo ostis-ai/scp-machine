@@ -12,8 +12,7 @@
 
 #include <vector>
 
-namespace scp
-{
+namespace scp {
 
 class SCPOperator
 {
@@ -22,13 +21,13 @@ protected:
     ScAddr type;
     std::vector<SCPOperand*> operands;
 
-    ScMemoryContext &ms_context;
+    const std::unique_ptr<ScMemoryContext>& ms_context;
 
     sc_result ResetValues();
     sc_result CheckNullValues();
 
 public:
-    SCPOperator(ScMemoryContext &ctx_, ScAddr addr_);
+    SCPOperator(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_);
     virtual ~SCPOperator();
     ScAddr GetAddr();
     virtual std::string GetTypeName();

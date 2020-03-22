@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorIfCoin::SCPOperatorIfCoin(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorIfCoin::SCPOperatorIfCoin(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 

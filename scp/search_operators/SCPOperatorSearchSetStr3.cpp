@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorSearchSetStr3::SCPOperatorSearchSetStr3(ScMemoryContext &ctx, ScAddr addr): SCPOperatorSetStr3(ctx, addr)
+SCPOperatorSearchSetStr3::SCPOperatorSearchSetStr3(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorSetStr3(ctx, addr)
 {
 }
 
@@ -108,7 +108,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
         ScAddr set1;
 
         sc_bool found = SC_FALSE;
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
         while (iter->Next())
         {
             if (SC_FALSE == found)
@@ -119,13 +119,13 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                 }
                 else
                 {
-                    set1 = ms_context.CreateNode(ScType::NodeConst);
+                    set1 = ms_context->CreateNode(ScType::NodeConst);
                     set_operands[1]->SetValue(set1);
                 }
                 operands[1]->SetValue(iter->Get(1));
                 found = SC_TRUE;
             }
-            ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
         }
 
         if (SC_TRUE == found)
@@ -139,7 +139,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
         ScAddr set0, set1;
 
         sc_bool found = SC_FALSE;
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
         while (iter->Next())
         {
             if (set_operands[0] != nullptr)
@@ -152,12 +152,12 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     else
                     {
-                        set0 = ms_context.CreateNode(ScType::NodeConst);
+                        set0 = ms_context->CreateNode(ScType::NodeConst);
                         set_operands[0]->SetValue(set0);
                     }
                     operands[0]->SetValue(iter->Get(0));
                 }
-                ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
+                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
             }
             if (set_operands[1] != nullptr)
             {
@@ -169,12 +169,12 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     else
                     {
-                        set1 = ms_context.CreateNode(ScType::NodeConst);
+                        set1 = ms_context->CreateNode(ScType::NodeConst);
                         set_operands[1]->SetValue(set1);
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             found = SC_TRUE;
         }
@@ -190,7 +190,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
         ScAddr set1, set2;
 
         sc_bool found = SC_FALSE;
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
         while (iter->Next())
         {
             if (set_operands[1] != nullptr)
@@ -203,12 +203,12 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     else
                     {
-                        set1 = ms_context.CreateNode(ScType::NodeConst);
+                        set1 = ms_context->CreateNode(ScType::NodeConst);
                         set_operands[1]->SetValue(set1);
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[2] != nullptr)
             {
@@ -220,12 +220,12 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     else
                     {
-                        set2 = ms_context.CreateNode(ScType::NodeConst);
+                        set2 = ms_context->CreateNode(ScType::NodeConst);
                         set_operands[2]->SetValue(set2);
                     }
                     operands[2]->SetValue(iter->Get(2));
                 }
-                ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
+                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
             }
             found = SC_TRUE;
         }

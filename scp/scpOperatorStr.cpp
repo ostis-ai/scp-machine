@@ -13,10 +13,9 @@
 #include <sstream>
 
 
-namespace scp
-{
+namespace scp {
 
-SCPOperatorElStr1::SCPOperatorElStr1(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorElStr1::SCPOperatorElStr1(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(1);
 }
@@ -24,10 +23,10 @@ SCPOperatorElStr1::SCPOperatorElStr1(ScMemoryContext &ctx_, ScAddr addr_): SCPOp
 sc_result SCPOperatorElStr1::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
-        SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));
+        SCPOperand* operand = new SCPOperand(ms_context, iter_operator->Get(1));
         if (!(operand->GetOrder() == 1 && operands[0] == nullptr))
         {
 #ifdef SCP_DEBUG
@@ -47,7 +46,7 @@ sc_result SCPOperatorElStr1::Parse()
     return CheckNullValues();
 }
 
-SCPOperatorElStr2::SCPOperatorElStr2(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorElStr2::SCPOperatorElStr2(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(2);
 }
@@ -56,10 +55,10 @@ SCPOperatorElStr2::SCPOperatorElStr2(ScMemoryContext &ctx_, ScAddr addr_): SCPOp
 sc_result SCPOperatorElStr2::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
-        SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));
+        SCPOperand* operand = new SCPOperand(ms_context, iter_operator->Get(1));
         if (!(operand->GetOrder() > 0 && operand->GetOrder() < 3 && operands[operand->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG
@@ -79,7 +78,7 @@ sc_result SCPOperatorElStr2::Parse()
     return CheckNullValues();
 }
 
-SCPOperatorElStr3::SCPOperatorElStr3(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorElStr3::SCPOperatorElStr3(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(3);
 }
@@ -88,10 +87,10 @@ SCPOperatorElStr3::SCPOperatorElStr3(ScMemoryContext &ctx_, ScAddr addr_): SCPOp
 sc_result SCPOperatorElStr3::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
-        SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));
+        SCPOperand* operand = new SCPOperand(ms_context, iter_operator->Get(1));
         if (!(operand->GetOrder() > 0 && operand->GetOrder() < 4 && operands[operand->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG
@@ -111,7 +110,7 @@ sc_result SCPOperatorElStr3::Parse()
     return CheckNullValues();
 }
 
-SCPOperatorElStr5::SCPOperatorElStr5(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorElStr5::SCPOperatorElStr5(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(5);
 }
@@ -120,10 +119,10 @@ SCPOperatorElStr5::SCPOperatorElStr5(ScMemoryContext &ctx_, ScAddr addr_): SCPOp
 sc_result SCPOperatorElStr5::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
-        SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));
+        SCPOperand* operand = new SCPOperand(ms_context, iter_operator->Get(1));
         if (!(operand->GetOrder() > 0 && operand->GetOrder() < 6 && operands[operand->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG

@@ -13,10 +13,9 @@
 #include <algorithm>
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 
-SCPOperator::SCPOperator(ScMemoryContext &ctx_, ScAddr addr_): addr(addr_), ms_context(ctx_)
+SCPOperator::SCPOperator(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): addr(addr_), ms_context(ctx_)
 {
 }
 
@@ -79,24 +78,24 @@ sc_result SCPOperator::Execute()
 
 void SCPOperator::FinishExecution()
 {
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, addr);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, addr);
 }
 
 void SCPOperator::FinishExecutionSuccessfully()
 {
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, addr);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, addr);
     FinishExecution();
 }
 
 void SCPOperator::FinishExecutionUnsuccessfully()
 {
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, addr);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, addr);
     FinishExecution();
 }
 
 void SCPOperator::FinishExecutionWithError()
 {
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, addr);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, addr);
     FinishExecution();
 }
 

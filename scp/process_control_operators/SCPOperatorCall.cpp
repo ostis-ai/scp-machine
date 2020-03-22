@@ -16,7 +16,7 @@
 namespace scp
 {
 
-SCPOperatorCall::SCPOperatorCall(ScMemoryContext &ctx_, ScAddr addr_): SCPOperatorElStr3(ctx_, addr_)
+SCPOperatorCall::SCPOperatorCall(const std::unique_ptr<ScMemoryContext> &ctx_, ScAddr addr_): SCPOperatorElStr3(ctx_, addr_)
 {
     //!TODO Change 10 to some correct value
     params = std::vector<SCPOperand*>(10);
@@ -61,7 +61,7 @@ sc_result SCPOperatorCall::Parse()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    ScIterator3Ptr iter_param = ms_context.Iterator3(param_set, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_param = ms_context->Iterator3(param_set, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_param->Next())
     {
         SCPOperand *operand = new SCPOperand(ms_context, iter_param->Get(1));
@@ -122,13 +122,13 @@ sc_result SCPOperatorCall::Execute()
     }
 
     ScAddr process_node;
-    ScIterator5Ptr iter_temp = ms_context.Iterator5(program_node, ScType::EdgeAccessConstPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_key_sc_element);
+    ScIterator5Ptr iter_temp = ms_context->Iterator5(program_node, ScType::EdgeAccessConstPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_key_sc_element);
     if (iter_temp->IsValid() && iter_temp->Next())
         process_node = iter_temp->Get(2);
     else
         return SC_RESULT_ERROR_INVALID_PARAMS;
 
-    ScIterator5Ptr iter_params = ms_context.Iterator5(process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program_node);
+    ScIterator5Ptr iter_params = ms_context->Iterator5(process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program_node);
     while (iter_params->Next())
     {
         SCPParameter *param = new SCPParameter(ms_context, iter_params->Get(1));
@@ -149,7 +149,7 @@ sc_result SCPOperatorCall::Execute()
         }
     }
 
-    ScAddr params_set = ms_context.CreateNode(ScType::NodeConst);
+    ScAddr params_set = ms_context->CreateNode(ScType::NodeConst);
 
     for (uint8_t i = 0; i < expected_params.size(); i++)
     {
@@ -163,7 +163,7 @@ sc_result SCPOperatorCall::Execute()
                 ss << "Expected parameter " << (i + 1) << " was not passed";
                 Utils::logSCPError(ms_context, ss.str(), addr);
 #endif
-                ms_context.EraseElement(params_set);
+                ms_context->EraseElement(params_set);
                 FinishExecutionWithError();
                 return SC_RESULT_ERROR_INVALID_PARAMS;
             }
@@ -181,7 +181,7 @@ sc_result SCPOperatorCall::Execute()
                         ss << "Passed param " << (i + 1) << " has modifier FIXED, but has no value";
                         Utils::logSCPError(ms_context, ss.str(), addr);
 #endif
-                        ms_context.EraseElement(params_set);
+                        ms_context->EraseElement(params_set);
                         FinishExecutionWithError();
                         return SC_RESULT_ERROR_INVALID_PARAMS;
                     }
@@ -194,32 +194,32 @@ sc_result SCPOperatorCall::Execute()
                     ss << "Passed param " << (i + 1) << " must have FIXED modifier, because corresponds to IN parameter";
                     Utils::logSCPError(ms_context, ss.str(), addr);
 #endif
-                    ms_context.EraseElement(params_set);
+                    ms_context->EraseElement(params_set);
                     FinishExecutionWithError();
                     return SC_RESULT_ERROR_INVALID_PARAMS;
                 }
-                arc = ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetValue());
+                arc = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetValue());
             }
             else
             {
-                arc = ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetAddr());
+                arc = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetAddr());
             }
-            ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, role_rel, arc);
+            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, role_rel, arc);
         }
     }
 
-    ScAddr scp_quest = ms_context.CreateNode(ScType::NodeConst);
-    ScAddr arc1 = ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, program_node);
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
+    ScAddr scp_quest = ms_context->CreateNode(ScType::NodeConst);
+    ScAddr arc1 = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, program_node);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
 
-    arc1 = ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, params_set);
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
+    arc1 = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, params_set);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
 
-    arc1 = ms_context.CreateArc(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
+    arc1 = ms_context->CreateArc(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
 
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
-    ms_context.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
+    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
 
     operands[2]->SetValue(scp_quest);
 

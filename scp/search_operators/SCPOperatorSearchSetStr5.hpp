@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorSearchSetStr5: public SCPOperatorSetStr5
 {
 public:
-    SCPOperatorSearchSetStr5(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorSearchSetStr5(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

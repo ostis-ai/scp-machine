@@ -10,10 +10,9 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 
-SCPOperatorEraseElStr5::SCPOperatorEraseElStr5(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr5(ctx, addr)
+SCPOperatorEraseElStr5::SCPOperatorEraseElStr5(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr5(ctx, addr)
 {
 }
 
@@ -105,279 +104,279 @@ sc_result SCPOperatorEraseElStr5::Execute()
 
     switch (type)
     {
-    case 0x10000:
-    {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetType());
-        if (iter->Next())
+        case 0x10000:
         {
-            if (operands[2]->IsErase())
+            ScIterator5Ptr iter = ms_context-> Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetType());
+            if (iter->Next())
             {
-                ms_context.EraseElement(iter->Get(2));
-                if (operands[4]->IsErase())
+                if (operands[2]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(4));
-                }
-            }
-            else
-            {
-                if (operands[1]->IsErase())
-                {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context-> EraseElement(iter->Get(2));
                     if (operands[4]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
+                        ms_context-> EraseElement(iter->Get(4));
                     }
                 }
                 else
                 {
-                    if (operands[4]->IsErase())
+                    if (operands[1]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
-                    }
-                    else
-                    {
-                        if (operands[3]->IsErase())
+                        ms_context-> EraseElement(iter->Get(1));
+                        if (operands[4]->IsErase())
                         {
-                            ms_context.EraseElement(iter->Get(3));
+                            ms_context-> EraseElement(iter->Get(4));
                         }
                     }
-                }
-
-            }
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x00001:
-    {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
-        bool flag = false;
-        while (iter->Next())
-        {
-            ScAddr elem1 = ms_context.GetEdgeSource(iter->Get(2));
-            ScAddr elem3 = ms_context.GetEdgeTarget(iter->Get(2));
-            ScType type1 = ms_context.GetElementType(elem1);
-            ScType type3 = ms_context.GetElementType(elem3);
-            if (((type1 & operands[0]->GetType()) == operands[0]->GetType()) && (((type3 & operands[2]->GetType()) == operands[2]->GetType())))
-            {
-                if (operands[0]->IsErase())
-                {
-                    ms_context.EraseElement(elem1);
-                    if (operands[2]->IsErase())
-                    {
-                        ms_context.EraseElement(elem3);
-                    }
-                }
-                else
-                {
-                    if (operands[2]->IsErase())
-                    {
-                        ms_context.EraseElement(elem3);
-                    }
                     else
                     {
-                        if (operands[1]->IsErase())
+                        if (operands[4]->IsErase())
                         {
-                            ms_context.EraseElement(iter->Get(2));
+                            ms_context-> EraseElement(iter->Get(4));
                         }
                         else
                         {
                             if (operands[3]->IsErase())
                             {
-                                ms_context.EraseElement(iter->Get(1));
+                                ms_context-> EraseElement(iter->Get(3));
+                            }
+                        }
+                    }
+
+                }
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
+        }
+        case 0x00001:
+        {
+            ScIterator3Ptr iter = ms_context-> Iterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
+            bool flag = false;
+            while (iter->Next())
+            {
+                ScAddr elem1 = ms_context-> GetEdgeSource(iter->Get(2));
+                ScAddr elem3 = ms_context-> GetEdgeTarget(iter->Get(2));
+                ScType type1 = ms_context-> GetElementType(elem1);
+                ScType type3 = ms_context-> GetElementType(elem3);
+                if (((type1 & operands[0]->GetType()) == operands[0]->GetType()) && (((type3 & operands[2]->GetType()) == operands[2]->GetType())))
+                {
+                    if (operands[0]->IsErase())
+                    {
+                        ms_context-> EraseElement(elem1);
+                        if (operands[2]->IsErase())
+                        {
+                            ms_context-> EraseElement(elem3);
+                        }
+                    }
+                    else
+                    {
+                        if (operands[2]->IsErase())
+                        {
+                            ms_context-> EraseElement(elem3);
+                        }
+                        else
+                        {
+                            if (operands[1]->IsErase())
+                            {
+                                ms_context-> EraseElement(iter->Get(2));
+                            }
+                            else
+                            {
+                                if (operands[3]->IsErase())
+                                {
+                                    ms_context-> EraseElement(iter->Get(1));
+                                }
+                            }
+                        }
+                    }
+                    FinishExecutionSuccessfully();
+                    flag = true;
+                    break;
+                }
+                else
+                    continue;
+            }
+            if (!flag)
+                FinishExecutionUnsuccessfully();
+            break;
+        }
+        case 0x00100:
+        {
+            ScIterator5Ptr iter = ms_context-> Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
+            if (iter->Next())
+            {
+                if (operands[0]->IsErase())
+                {
+                    ms_context-> EraseElement(iter->Get(0));
+                    if (operands[4]->IsErase())
+                    {
+                        ms_context-> EraseElement(iter->Get(4));
+                    }
+                }
+                else
+                {
+                    if (operands[1]->IsErase())
+                    {
+                        ms_context-> EraseElement(iter->Get(1));
+                        if (operands[4]->IsErase())
+                        {
+                            ms_context-> EraseElement(iter->Get(4));
+                        }
+                    }
+                    else
+                    {
+                        if (operands[4]->IsErase())
+                        {
+                            ms_context-> EraseElement(iter->Get(4));
+                        }
+                        else
+                        {
+                            if (operands[3]->IsErase())
+                            {
+                                ms_context-> EraseElement(iter->Get(3));
                             }
                         }
                     }
                 }
                 FinishExecutionSuccessfully();
-                flag = true;
-                break;
             }
             else
-                continue;
-        }
-        if (!flag)
-            FinishExecutionUnsuccessfully();
-        break;
-    }
-    case 0x00100:
-    {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
-        if (iter->Next())
-        {
-            if (operands[0]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(0));
-                if (operands[4]->IsErase())
-                {
-                    ms_context.EraseElement(iter->Get(4));
-                }
+                FinishExecutionUnsuccessfully();
             }
-            else
+            break;
+        }
+        case 0x10100:
+        {
+            ScIterator5Ptr iter = ms_context-> Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
+            if (iter->Next())
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context-> EraseElement(iter->Get(1));
                     if (operands[4]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
+                        ms_context-> EraseElement(iter->Get(4));
                     }
                 }
                 else
                 {
                     if (operands[4]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
+                        ms_context-> EraseElement(iter->Get(4));
                     }
                     else
                     {
                         if (operands[3]->IsErase())
                         {
-                            ms_context.EraseElement(iter->Get(3));
+                            ms_context-> EraseElement(iter->Get(3));
                         }
                     }
                 }
-            }
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x10100:
-    {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
-        if (iter->Next())
-        {
-            if (operands[1]->IsErase())
-            {
-                ms_context.EraseElement(iter->Get(1));
-                if (operands[4]->IsErase())
-                {
-                    ms_context.EraseElement(iter->Get(4));
-                }
+                FinishExecutionSuccessfully();
             }
             else
             {
-                if (operands[4]->IsErase())
+                FinishExecutionUnsuccessfully();
+            }
+            break;
+        }
+        case 0x00101:
+        {
+            ScIterator5Ptr iter = ms_context-> Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
+            if (iter->Next())
+            {
+                if (operands[0]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(4));
+                    ms_context-> EraseElement(iter->Get(0));
                 }
                 else
                 {
-                    if (operands[3]->IsErase())
+                    if (operands[1]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(3));
+                        ms_context-> EraseElement(iter->Get(1));
+                    }
+                    else
+                    {
+                        if (operands[3]->IsErase())
+                        {
+                            ms_context-> EraseElement(iter->Get(3));
+                        }
                     }
                 }
-            }
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x00101:
-    {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
-        if (iter->Next())
-        {
-            if (operands[0]->IsErase())
-            {
-                ms_context.EraseElement(iter->Get(0));
+                FinishExecutionSuccessfully();
             }
             else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
+        }
+        case 0x10001:
+        {
+            ScIterator5Ptr iter = ms_context-> Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetValue());
+            if (iter->Next())
+            {
+                if (operands[2]->IsErase())
+                {
+                    ms_context-> EraseElement(iter->Get(2));
+                }
+                else
+                {
+                    if (operands[1]->IsErase())
+                    {
+                        ms_context-> EraseElement(iter->Get(1));
+                    }
+                    else
+                    {
+                        if (operands[3]->IsErase())
+                        {
+                            ms_context-> EraseElement(iter->Get(3));
+                        }
+                    }
+                }
+                FinishExecutionSuccessfully();
+            }
+            else
+            {
+                FinishExecutionUnsuccessfully();
+            }
+            break;
+        }
+        case 0x10101:
+        {
+            ScIterator5Ptr iter = ms_context-> Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
+            if (iter->Next())
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context-> EraseElement(iter->Get(1));
                 }
                 else
                 {
                     if (operands[3]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(3));
+                        ms_context-> EraseElement(iter->Get(3));
                     }
                 }
-            }
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x10001:
-    {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetValue());
-        if (iter->Next())
-        {
-            if (operands[2]->IsErase())
-            {
-                ms_context.EraseElement(iter->Get(2));
+                FinishExecutionSuccessfully();
             }
             else
             {
-                if (operands[1]->IsErase())
-                {
-                    ms_context.EraseElement(iter->Get(1));
-                }
-                else
-                {
-                    if (operands[3]->IsErase())
-                    {
-                        ms_context.EraseElement(iter->Get(3));
-                    }
-                }
+                FinishExecutionUnsuccessfully();
             }
-            FinishExecutionSuccessfully();
+            break;
         }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
-    case 0x10101:
-    {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
-        if (iter->Next())
-        {
-            if (operands[1]->IsErase())
-            {
-                ms_context.EraseElement(iter->Get(1));
-            }
-            else
-            {
-                if (operands[3]->IsErase())
-                {
-                    ms_context.EraseElement(iter->Get(3));
-                }
-            }
-            FinishExecutionSuccessfully();
-        }
-        else
-        {
-            FinishExecutionUnsuccessfully();
-        }
-        break;
-    }
 
-    default:
+        default:
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Unsupported operand type combination", addr);
+            Utils::logSCPError(ms_context, "Unsupported operand type combination", addr);
 #endif
-        FinishExecutionWithError();
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+            FinishExecutionWithError();
+            return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
     return SC_RESULT_OK;

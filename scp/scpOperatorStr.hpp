@@ -19,28 +19,28 @@ namespace scp
 class SCPOperatorElStr1: public SCPOperator
 {
 public:
-    SCPOperatorElStr1(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorElStr1(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     sc_result Parse();
 };
 
 class SCPOperatorElStr2: public SCPOperator
 {
 public:
-    SCPOperatorElStr2(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorElStr2(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     sc_result Parse();
 };
 
 class SCPOperatorElStr3: public SCPOperator
 {
 public:
-    SCPOperatorElStr3(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorElStr3(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     sc_result Parse();
 };
 
 class SCPOperatorElStr5: public SCPOperator
 {
 public:
-    SCPOperatorElStr5(ScMemoryContext &ctx, ScAddr addr);
+    SCPOperatorElStr5(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
     sc_result Parse();
 };
 

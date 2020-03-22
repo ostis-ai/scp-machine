@@ -10,8 +10,7 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 ScAddr ASCPAgentActivator::msAgentKeynode;
 ScAddr ASCPAgentDeactivator::msAgentKeynode;
 
@@ -22,7 +21,7 @@ SC_AGENT_IMPLEMENTATION(ASCPAgentActivator)
 
     ScAddr agent = ms_context->GetArcEnd(edgeAddr);
 
-    SCPAgentEvent::register_scp_agent((ScMemoryContext&)ms_context, agent);
+    SCPAgentEvent::register_scp_agent(ms_context, agent);
 
     return SC_RESULT_OK;
 }
@@ -34,7 +33,7 @@ SC_AGENT_IMPLEMENTATION(ASCPAgentDeactivator)
 
     //!TODO Fix crush error
     //ScAddr agent = ms_context->GetArcEnd(edgeAddr);
-    //SCPAgentEvent::unregister_scp_agent((ScMemoryContext&)ms_context, agent);
+    //SCPAgentEvent::unregister_scp_agent(ms_context, agent);
 
     return SC_RESULT_OK;
 }

@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorPrintEl::SCPOperatorPrintEl(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
+SCPOperatorPrintEl::SCPOperatorPrintEl(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
 {
 }
 

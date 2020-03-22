@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorSearchElStr5::SCPOperatorSearchElStr5(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr5(ctx, addr)
+SCPOperatorSearchElStr5::SCPOperatorSearchElStr5(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr5(ctx, addr)
 {
 }
 
@@ -107,7 +107,7 @@ sc_result SCPOperatorSearchElStr5::Execute()
     {
     case 0x10000:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetType());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetType());
         if (iter->Next())
         {
             operands[1]->SetValue(iter->Get(1));
@@ -124,14 +124,14 @@ sc_result SCPOperatorSearchElStr5::Execute()
     }
     case 0x00001:
     {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
         bool flag = false;
         while (iter->Next())
         {
-            ScAddr elem1 = ms_context.GetEdgeSource(iter->Get(2));
-            ScAddr elem3 = ms_context.GetEdgeTarget(iter->Get(2));
-            ScType type1 = ms_context.GetElementType(elem1);
-            ScType type3 = ms_context.GetElementType(elem3);
+            ScAddr elem1 = ms_context->GetEdgeSource(iter->Get(2));
+            ScAddr elem3 = ms_context->GetEdgeTarget(iter->Get(2));
+            ScType type1 = ms_context->GetElementType(elem1);
+            ScType type3 = ms_context->GetElementType(elem3);
             if (((type1 & operands[0]->GetType()) == operands[0]->GetType()) && (((type3 & operands[2]->GetType()) == operands[2]->GetType())))
             {
                 operands[0]->SetValue(elem1);
@@ -151,7 +151,7 @@ sc_result SCPOperatorSearchElStr5::Execute()
     }
     case 0x00100:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
         if (iter->Next())
         {
             operands[0]->SetValue(iter->Get(0));
@@ -168,7 +168,7 @@ sc_result SCPOperatorSearchElStr5::Execute()
     }
     case 0x10100:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
         if (iter->Next())
         {
             operands[1]->SetValue(iter->Get(1));
@@ -184,7 +184,7 @@ sc_result SCPOperatorSearchElStr5::Execute()
     }
     case 0x00101:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
         if (iter->Next())
         {
             operands[0]->SetValue(iter->Get(0));
@@ -200,7 +200,7 @@ sc_result SCPOperatorSearchElStr5::Execute()
     }
     case 0x10001:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetValue());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetValue());
         if (iter->Next())
         {
             operands[1]->SetValue(iter->Get(1));
@@ -216,7 +216,7 @@ sc_result SCPOperatorSearchElStr5::Execute()
     }
     case 0x10101:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
         if (iter->Next())
         {
             operands[1]->SetValue(iter->Get(1));

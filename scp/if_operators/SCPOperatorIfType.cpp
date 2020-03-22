@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorIfType::SCPOperatorIfType(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
+SCPOperatorIfType::SCPOperatorIfType(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
 {
 }
 
@@ -49,7 +49,7 @@ sc_result SCPOperatorIfType::Execute()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    ScType type = ms_context.GetElementType(operands[0]->GetValue());
+    ScType type = ms_context->GetElementType(operands[0]->GetValue());
     if ((operands[0]->GetType() & type) == operands[0]->GetType())
     {
         FinishExecutionSuccessfully();

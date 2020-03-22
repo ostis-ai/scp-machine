@@ -15,8 +15,7 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 ScAddr ASCPEraseOperatorInterpreter::msAgentKeynode;
 
 SC_AGENT_IMPLEMENTATION(ASCPEraseOperatorInterpreter)
@@ -27,29 +26,29 @@ SC_AGENT_IMPLEMENTATION(ASCPEraseOperatorInterpreter)
     ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType((ScMemoryContext&)ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_eraseEl)
     {
-        oper = new SCPOperatorEraseEl((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorEraseEl(ms_context, scp_operator);
     }
     if (type == Keynodes::op_eraseElStr3)
     {
-        oper = new SCPOperatorEraseElStr3((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorEraseElStr3(ms_context, scp_operator);
     }
     if (type == Keynodes::op_eraseElStr5)
     {
-        oper = new SCPOperatorEraseElStr5((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorEraseElStr5(ms_context, scp_operator);
     }
     if (type == Keynodes::op_eraseSetStr3)
     {
-        oper = new SCPOperatorEraseSetStr3((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorEraseSetStr3(ms_context, scp_operator);
     }
     if (type == Keynodes::op_eraseSetStr5)
     {
-        oper = new SCPOperatorEraseSetStr5((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorEraseSetStr5(ms_context, scp_operator);
     }
     if (oper == nullptr)
         return SC_RESULT_ERROR_INVALID_PARAMS;

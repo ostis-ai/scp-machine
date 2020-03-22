@@ -25,21 +25,21 @@ SC_AGENT_IMPLEMENTATION(ASCPIfOperatorInterpreter)
     ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType((ScMemoryContext&)ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_ifCoin)
     {
-        oper = new SCPOperatorIfCoin((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorIfCoin(ms_context, scp_operator);
     }
     if (type == Keynodes::op_ifType)
     {
-        oper = new SCPOperatorIfType((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorIfType(ms_context, scp_operator);
     }
     if (type == Keynodes::op_ifVarAssign)
     {
-        oper = new SCPOperatorIfVarAssign((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorIfVarAssign(ms_context, scp_operator);
     }
 
     if (oper == nullptr)

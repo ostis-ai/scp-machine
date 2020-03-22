@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorEraseSetStr5::SCPOperatorEraseSetStr5(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr5(ctx, addr)
+SCPOperatorEraseSetStr5::SCPOperatorEraseSetStr5(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr5(ctx, addr)
 {
 }
 
@@ -107,39 +107,39 @@ sc_result SCPOperatorEraseSetStr5::Execute()
     {
     case 0x10000:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetType());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetType());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[2]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(2));
+                ms_context->EraseElement(iter->Get(2));
                 if (operands[4]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(4));
+                    ms_context->EraseElement(iter->Get(4));
                 }
             }
             else
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context->EraseElement(iter->Get(1));
                     if (operands[4]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
+                        ms_context->EraseElement(iter->Get(4));
                     }
                 }
                 else
                 {
                     if (operands[4]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
+                        ms_context->EraseElement(iter->Get(4));
                     }
                     else
                     {
                         if (operands[3]->IsErase())
                         {
-                            ms_context.EraseElement(iter->Get(3));
+                            ms_context->EraseElement(iter->Get(3));
                         }
                     }
                 }
@@ -159,41 +159,41 @@ sc_result SCPOperatorEraseSetStr5::Execute()
     }
     case 0x00001:
     {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
         bool flag = false;
         while (iter->Next())
         {
-            ScAddr elem1 = ms_context.GetEdgeSource(iter->Get(2));
-            ScAddr elem3 = ms_context.GetEdgeTarget(iter->Get(2));
-            ScType type1 = ms_context.GetElementType(elem1);
-            ScType type3 = ms_context.GetElementType(elem3);
+            ScAddr elem1 = ms_context->GetEdgeSource(iter->Get(2));
+            ScAddr elem3 = ms_context->GetEdgeTarget(iter->Get(2));
+            ScType type1 = ms_context->GetElementType(elem1);
+            ScType type3 = ms_context->GetElementType(elem3);
             if (((type1 & operands[0]->GetType()) == operands[0]->GetType()) && (((type3 & operands[2]->GetType()) == operands[2]->GetType())))
             {
                 if (operands[0]->IsErase())
                 {
-                    ms_context.EraseElement(elem1);
+                    ms_context->EraseElement(elem1);
                     if (operands[2]->IsErase())
                     {
-                        ms_context.EraseElement(elem3);
+                        ms_context->EraseElement(elem3);
                     }
                 }
                 else
                 {
                     if (operands[2]->IsErase())
                     {
-                        ms_context.EraseElement(elem3);
+                        ms_context->EraseElement(elem3);
                     }
                     else
                     {
                         if (operands[1]->IsErase())
                         {
-                            ms_context.EraseElement(iter->Get(2));
+                            ms_context->EraseElement(iter->Get(2));
                         }
                         else
                         {
                             if (operands[3]->IsErase())
                             {
-                                ms_context.EraseElement(iter->Get(1));
+                                ms_context->EraseElement(iter->Get(1));
                             }
                         }
                     }
@@ -215,39 +215,39 @@ sc_result SCPOperatorEraseSetStr5::Execute()
     }
     case 0x00100:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[0]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(0));
+                ms_context->EraseElement(iter->Get(0));
                 if (operands[4]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(4));
+                    ms_context->EraseElement(iter->Get(4));
                 }
             }
             else
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context->EraseElement(iter->Get(1));
                     if (operands[4]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
+                        ms_context->EraseElement(iter->Get(4));
                     }
                 }
                 else
                 {
                     if (operands[4]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(4));
+                        ms_context->EraseElement(iter->Get(4));
                     }
                     else
                     {
                         if (operands[3]->IsErase())
                         {
-                            ms_context.EraseElement(iter->Get(3));
+                            ms_context->EraseElement(iter->Get(3));
                         }
                     }
                 }
@@ -266,29 +266,29 @@ sc_result SCPOperatorEraseSetStr5::Execute()
     }
     case 0x10100:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetType());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[1]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(1));
+                ms_context->EraseElement(iter->Get(1));
                 if (operands[4]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(4));
+                    ms_context->EraseElement(iter->Get(4));
                 }
             }
             else
             {
                 if (operands[4]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(4));
+                    ms_context->EraseElement(iter->Get(4));
                 }
                 else
                 {
                     if (operands[3]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(3));
+                        ms_context->EraseElement(iter->Get(3));
                     }
                 }
             }
@@ -306,25 +306,25 @@ sc_result SCPOperatorEraseSetStr5::Execute()
     }
     case 0x00101:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[0]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(0));
+                ms_context->EraseElement(iter->Get(0));
             }
             else
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context->EraseElement(iter->Get(1));
                 }
                 else
                 {
                     if (operands[3]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(3));
+                        ms_context->EraseElement(iter->Get(3));
                     }
                 }
             }
@@ -342,25 +342,25 @@ sc_result SCPOperatorEraseSetStr5::Execute()
     }
     case 0x10001:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetValue());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType(), operands[3]->GetType(), operands[4]->GetValue());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[2]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(2));
+                ms_context->EraseElement(iter->Get(2));
             }
             else
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context->EraseElement(iter->Get(1));
                 }
                 else
                 {
                     if (operands[3]->IsErase())
                     {
-                        ms_context.EraseElement(iter->Get(3));
+                        ms_context->EraseElement(iter->Get(3));
                     }
                 }
             }
@@ -378,19 +378,19 @@ sc_result SCPOperatorEraseSetStr5::Execute()
     }
     case 0x10101:
     {
-        ScIterator5Ptr iter = ms_context.Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
+        ScIterator5Ptr iter = ms_context->Iterator5(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue(), operands[3]->GetType(), operands[4]->GetValue());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[1]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(1));
+                ms_context->EraseElement(iter->Get(1));
             }
             else
             {
                 if (operands[3]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(3));
+                    ms_context->EraseElement(iter->Get(3));
                 }
             }
             flag = SC_TRUE;

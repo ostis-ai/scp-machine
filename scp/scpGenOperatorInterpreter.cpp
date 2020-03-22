@@ -13,8 +13,7 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 ScAddr ASCPGenOperatorInterpreter::msAgentKeynode;
 
 SC_AGENT_IMPLEMENTATION(ASCPGenOperatorInterpreter)
@@ -25,21 +24,21 @@ SC_AGENT_IMPLEMENTATION(ASCPGenOperatorInterpreter)
     ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType((ScMemoryContext&)ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_genEl)
     {
-        oper = new SCPOperatorGenEl((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorGenEl(ms_context, scp_operator);
     }
     if (type == Keynodes::op_genElStr3)
     {
-        oper = new SCPOperatorGenElStr3((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorGenElStr3(ms_context, scp_operator);
     }
     if (type == Keynodes::op_genElStr5)
     {
-        oper = new SCPOperatorGenElStr5((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorGenElStr5(ms_context, scp_operator);
     }
     if (oper == nullptr)
         return SC_RESULT_ERROR_INVALID_PARAMS;

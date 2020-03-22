@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorVarAssign::SCPOperatorVarAssign(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorVarAssign::SCPOperatorVarAssign(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 

@@ -24,18 +24,18 @@ SC_AGENT_IMPLEMENTATION(ASCPPrintOperatorInterpreter)
     ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType((ScMemoryContext&)ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_printEl)
     {
-        oper = new SCPOperatorPrintEl((ScMemoryContext&)ms_context, scp_operator);
+        oper = new SCPOperatorPrintEl(ms_context, scp_operator);
     }
     if (type == Keynodes::op_print || type == Keynodes::op_printNl)
     {
         sc_bool newline = (type == Keynodes::op_printNl);
-        oper = new SCPOperatorPrint((ScMemoryContext&)ms_context, scp_operator, newline);
+        oper = new SCPOperatorPrint(ms_context, scp_operator, newline);
     }
 
     if (oper == nullptr)

@@ -12,12 +12,11 @@
 
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 
-SCPOperand::SCPOperand(ScMemoryContext &ctx_, ScAddr addr_): arc_addr(addr_), ms_context(ctx_)
+SCPOperand::SCPOperand(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): arc_addr(addr_), ms_context(ctx_)
 {
-    addr = ms_context.GetArcEnd(arc_addr);
+    addr = ms_context->GetArcEnd(arc_addr);
     resolveModifiers();
     value_addr.Reset();
     if (operand_type == SCP_CONST)
@@ -26,7 +25,7 @@ SCPOperand::SCPOperand(ScMemoryContext &ctx_, ScAddr addr_): arc_addr(addr_), ms
     }
     else
     {
-        ScIterator3Ptr iter = ms_context.Iterator3(addr, ScType(sc_type_arc_access | sc_type_arc_pos | sc_type_const), ScType(0));
+        ScIterator3Ptr iter = ms_context->Iterator3(addr, ScType(sc_type_arc_access | sc_type_arc_pos | sc_type_const), ScType(0));
         if (iter->Next())
         {
             value_addr = iter->Get(2);
@@ -61,10 +60,10 @@ uint8_t SCPOperand::GetSetOrder()
 
 void SCPOperand::ResetValue()
 {
-    ScIterator3Ptr iter = ms_context.Iterator3(addr, ScType(sc_type_arc_access | sc_type_arc_pos | sc_type_const), ScType(0));
+    ScIterator3Ptr iter = ms_context->Iterator3(addr, ScType(sc_type_arc_access | sc_type_arc_pos | sc_type_const), ScType(0));
     while (iter->Next())
     {
-        ms_context.EraseElement(iter->Get(1));
+        ms_context->EraseElement(iter->Get(1));
     }
     value_addr.Reset();
 }
@@ -72,16 +71,16 @@ void SCPOperand::ResetValue()
 void SCPOperand::SetValue(ScAddr value)
 {
     value_addr = value;
-    ms_context.CreateArc(SC_TYPE(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
+    ms_context->CreateArc(SC_TYPE(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
 }
 
 ScAddr SCPOperand::CreateNodeOrLink()
 {
     if (element_type.IsLink())
-        value_addr = ms_context.CreateLink();
+        value_addr = ms_context->CreateLink();
     else
-        value_addr = ms_context.CreateNode(element_type);
-    ms_context.CreateArc(SC_TYPE(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
+        value_addr = ms_context->CreateNode(element_type);
+    ms_context->CreateArc(SC_TYPE(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
     return value_addr;
 }
 
@@ -185,11 +184,11 @@ void SCPOperand::resolveSetOrder(ScAddr modifier)
 
 void SCPOperand::resolveModifiers()
 {
-    ScIterator3Ptr iter = ms_context.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, arc_addr);
+    ScIterator3Ptr iter = ms_context->Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, arc_addr);
     while (iter->Next())
     {
         ScAddr modifier = iter->Get(0);
-        if (ms_context.HelperCheckArc(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+        if (ms_context->HelperCheckArc(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
         {
             resolveOrder(modifier);
             continue;

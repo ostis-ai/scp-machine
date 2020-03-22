@@ -55,13 +55,13 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
     while (iter_temp->Next())
     {
         ScAddr order;
-        if (Utils::resolveOrderRoleRelation((ScMemoryContext&)ms_context, iter_temp->Get(1), order));
+        if (Utils::resolveOrderRoleRelation(ms_context, iter_temp->Get(1), order));
         {
             iter_param = ms_context->Iterator5(params, ScType::EdgeAccessConstPosPerm, ScType(0), ScType::EdgeAccessConstPosPerm, order);
             if (!iter_param->Next())
             {
 #ifdef SCP_DEBUG
-                Utils::logSCPError((ScMemoryContext&)ms_context, "Missed scp-program parameter", order);
+                Utils::logSCPError(ms_context, "Missed scp-program parameter", order);
 #endif
                 continue;
             }
@@ -86,7 +86,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
         else
         {
 #ifdef SCP_DEBUG
-            Utils::logSCPError((ScMemoryContext&)ms_context, "Missed initial scp-operator", program);
+            Utils::logSCPError(ms_context, "Missed initial scp-operator", program);
 #endif
             ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
         }
@@ -94,7 +94,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
     else
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError((ScMemoryContext&)ms_context, "Missed scp-process decomposition", program);
+        Utils::logSCPError(ms_context, "Missed scp-process decomposition", program);
 #endif
         ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
     }

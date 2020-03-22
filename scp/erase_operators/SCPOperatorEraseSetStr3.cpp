@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorEraseSetStr3::SCPOperatorEraseSetStr3(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
+SCPOperatorEraseSetStr3::SCPOperatorEraseSetStr3(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
 {
 }
 
@@ -86,13 +86,13 @@ sc_result SCPOperatorEraseSetStr3::Execute()
     {
     case 0x101:
     {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[1]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(1));
+                ms_context->EraseElement(iter->Get(1));
             }
             flag = SC_TRUE;
         }
@@ -108,19 +108,19 @@ sc_result SCPOperatorEraseSetStr3::Execute()
     }
     case 0x001:
     {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[0]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(0));
+                ms_context->EraseElement(iter->Get(0));
             }
             else
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context->EraseElement(iter->Get(1));
                 }
             }
             flag = SC_TRUE;
@@ -137,19 +137,19 @@ sc_result SCPOperatorEraseSetStr3::Execute()
     }
     case 0x100:
     {
-        ScIterator3Ptr iter = ms_context.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
+        ScIterator3Ptr iter = ms_context->Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
         sc_bool flag = SC_FALSE;
         while (iter->Next())
         {
             if (operands[2]->IsErase())
             {
-                ms_context.EraseElement(iter->Get(2));
+                ms_context->EraseElement(iter->Get(2));
             }
             else
             {
                 if (operands[1]->IsErase())
                 {
-                    ms_context.EraseElement(iter->Get(1));
+                    ms_context->EraseElement(iter->Get(1));
                 }
             }
             flag = SC_TRUE;
