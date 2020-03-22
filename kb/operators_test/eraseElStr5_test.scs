@@ -1,0 +1,12 @@
+
+scp_test_operator_eraseElStr5_1
+<- eraseElStr5;
+-> rrel_1: rrel_assign: rrel_erase: rrel_scp_var: rrel_node: rrel_const: ...;
+-> rrel_2: rrel_assign: rrel_scp_var: rrel_common: rrel_const: ...;
+-> rrel_3: rrel_fixed: rrel_scp_const: test_elem1;
+-> rrel_4: rrel_assign: rrel_erase: rrel_scp_var: rrel_pos_const_perm: ...;
+-> rrel_5: rrel_fixed: rrel_scp_var: ... (* -> test_attr1;; *);
+=> nrel_then: ...;
+=> nrel_else: ...;;
+
+test_set1 => test_attr1: test_elem1;;

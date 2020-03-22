@@ -1,0 +1,6 @@
+scp_test_operator_ifCoin
+<- ifCoin;
+-> rrel_1: rrel_fixed: rrel_scp_var: ... (* -> _x;; *);
+-> rrel_2: rrel_fixed: rrel_scp_var: ... (* -> _y;; *);
+=> nrel_then: scp_test_operator_ifCoin_then;
+=> nrel_else: scp_test_operator_ifCoin_else;;

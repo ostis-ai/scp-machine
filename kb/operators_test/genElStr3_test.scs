@@ -1,0 +1,13 @@
+scp_test_operator_genElStr3_1
+<- genElStr3;
+-> rrel_1: rrel_fixed: rrel_scp_var: ... (* -> test_set1;; *);
+-> rrel_2: rrel_assign: rrel_scp_var: rrel_pos_const_perm: ... ;
+-> rrel_3: rrel_fixed: rrel_scp_var: ... (* -> test_elem1;; *);
+=> nrel_goto: ...;;
+
+scp_test_operator_genElStr3_2
+<- genElStr3;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_assign: rrel_scp_var: rrel_pos_const_perm: ... ;
+-> rrel_3: rrel_fixed: rrel_scp_var: ... (* -> test_elem2;; *);
+=> nrel_goto: ...;;

@@ -1,0 +1,7 @@
+scp_test_operator_eraseEl
+<- eraseEl;
+-> rrel_1: rrel_fixed: rrel_scp_var: ... (* -> test_scp_var_value1;; *);
+=> nrel_goto: ...;;
+
+
+test_set1 -> test_scp_var_value1;;

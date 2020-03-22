@@ -1,0 +1,4 @@
+scp_test_operator_genEl
+<- genEl;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_node: rrel_const: ... (* -> test_scp_var_value1;; *);
+=> nrel_goto: ...;;

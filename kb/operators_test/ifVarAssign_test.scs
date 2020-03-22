@@ -1,0 +1,5 @@
+scp_test_operator_ifVarAssign
+<- ifVarAssign;
+-> rrel_1: rrel_fixed: rrel_scp_var: ...;
+=> nrel_then: scp_test_operator_ifVarAssign_then;
+=> nrel_else: scp_test_operator_ifVarAssign_else;;
