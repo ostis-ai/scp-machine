@@ -77,6 +77,9 @@ public:
     SC_PROPERTY(Keynode("nrel_authors"), ForceCreate)
     static ScAddr nrel_authors;
 
+    SC_PROPERTY(Keynode("nrel_result"), ForceCreate)
+    static ScAddr nrel_result;
+
     SC_PROPERTY(Keynode("nrel_system_identifier"), ForceCreate)
     static ScAddr nrel_system_identifier;
 

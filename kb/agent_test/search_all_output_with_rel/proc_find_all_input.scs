@@ -1,0 +1,39 @@
+proc_find_all_input_role_rel
+=> nrel_main_idtf:
+	[scp-программа поиска всех входящих ролевых отношений] (* <- lang_ru;; *);
+	[scp-program to search all input role relations] (* <- lang_en;; *);
+<- scp_program;
+-> rrel_key_sc_element: _process1;;
+
+proc_find_all_input_role_rel = [*
+_process1 
+_<- scp_process;
+//params
+_-> rrel_1:: rrel_in:: _input_arc;
+_-> rrel_2:: rrel_in:: _answer;
+
+//operators
+_<= nrel_decomposition_of_action:: _... (*
+  
+  _-> rrel_1:: _..operator1
+    (*
+    _<- searchSetStr3;;
+
+    _-> rrel_1:: rrel_assign:: rrel_node:: rrel_role_relation:: rrel_scp_var:: _temp;;
+    _-> rrel_2:: rrel_assign:: rrel_scp_var:: _arc;;
+    _-> rrel_3:: rrel_fixed:: rrel_scp_const:: _input_arc;;
+    
+    _-> rrel_set_1:: rrel_fixed:: rrel_scp_const:: _answer;;
+    _-> rrel_set_2:: rrel_fixed:: rrel_scp_const:: _answer;;
+
+    _=> nrel_goto:: _..operator2;;
+    *);;
+
+    _-> _..operator2
+    (*
+    _<- return;;
+    *);;
+
+*);;
+
+*];;

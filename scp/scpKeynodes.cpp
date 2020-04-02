@@ -30,6 +30,7 @@ ScAddr Keynodes::nrel_scp_process;
 ScAddr Keynodes::rrel_key_sc_element;
 ScAddr Keynodes::nrel_decomposition_of_action;
 ScAddr Keynodes::nrel_authors;
+ScAddr Keynodes::nrel_result;
 ScAddr Keynodes::nrel_system_identifier;
 ScAddr Keynodes::active_action;
 ScAddr Keynodes::active_sc_agent;
