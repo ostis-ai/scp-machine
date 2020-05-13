@@ -1,0 +1,13 @@
+scp_test_operator_stringEndsWith1
+<- stringEndsWith;
+-> rrel_1: rrel_fixed: rrel_scp_const: [String];
+-> rrel_2: rrel_fixed: rrel_scp_const: [ing];
+=> nrel_then: scp_test_operator_stringEndsWith1_then;
+=> nrel_else: scp_test_operator_stringEndsWith1_else;;
+
+scp_test_operator_stringEndsWith2
+<- stringEndsWith;
+-> rrel_1: rrel_fixed: rrel_scp_const: [Concat];
+-> rrel_2: rrel_fixed: rrel_scp_const: [fact];
+=> nrel_then: scp_test_operator_stringEndsWith2_then;
+=> nrel_else: scp_test_operator_stringEndsWith2_else;;

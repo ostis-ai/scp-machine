@@ -1,0 +1,13 @@
+scp_test_operator_stringSplit1
+<- stringSplit;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_const: rrel_node: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [I see skies of blue];
+-> rrel_3: rrel_fixed: rrel_scp_const: [ ];
+=> nrel_goto: scp_test_stringSplit1_next;;
+
+scp_test_operator_stringSplit2
+<- stringSplit;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_const: rrel_node: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [I see skies of blue, and clouds of white, the bright blessed days, the dark sacred nights];
+-> rrel_3: rrel_fixed: rrel_scp_const: [,];
+=> nrel_goto: scp_test_stringSplit2_next;;

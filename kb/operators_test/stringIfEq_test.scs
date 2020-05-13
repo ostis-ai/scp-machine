@@ -1,0 +1,13 @@
+scp_test_operator_stringIfEq1
+<- stringIfEq;
+-> rrel_1: rrel_fixed: rrel_scp_const: [string];
+-> rrel_2: rrel_fixed: rrel_scp_const: [string];
+=> nrel_then: scp_test_operator_stringIfEq1_then;
+=> nrel_else: scp_test_operator_stringIfEq1_else;;
+
+scp_test_operator_stringIfEq2
+<- stringIfEq;
+-> rrel_1: rrel_fixed: rrel_scp_const: [Concat];
+-> rrel_2: rrel_fixed: rrel_scp_const: [Contact];
+=> nrel_then: scp_test_operator_stringIfEq2_then;
+=> nrel_else: scp_test_operator_stringIfEq2_else;;
