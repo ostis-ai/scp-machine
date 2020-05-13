@@ -71,23 +71,6 @@ sc_result SCPOperatorStringToLowerCase::Execute()
             ms_context->HelperSetSystemIdtf("stringToLowerCaseAnswer", answerLink);
 
             Utils::printOperatorAnswer(ms_context, operands[0], answerLink);
-            /*ScAddr elem1, elem3, elem5, arc1;
-                elem1.Reset();
-                elem3.Reset();
-                elem5.Reset();
-                arc1.Reset();
-
-                elem5 = Keynodes::nrel_scp_var_value;
-                elem3 = answerLink;
-                elem1 = operands[0]->CreateNodeOrLink();
-
-                arc1 = ms_context->CreateArc(sc_type_arc_common, elem1, elem3);
-                ms_context->CreateArc(sc_type_arc_pos_const_perm, elem5, arc1);
-                Utils::printInfo(ms_context, elem5);
-                Utils::printInfo(ms_context, elem3);
-                Utils::printInfo(ms_context, elem1);
-                std::cout << ms_context->IsElement(elem1);
-                operands[0]->SetValue(elem1);*/
 
 
             FinishExecutionSuccessfully();
