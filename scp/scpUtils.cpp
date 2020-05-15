@@ -6,7 +6,13 @@
 
 #include "scpUtils.hpp"
 #include "scpKeynodes.hpp"
+#include "sc-memory/sc_helper.h"
+#include "sc-memory/sc_memory_headers.h"
+#include "sc-memory/cpp/sc_stream.hpp"
+#include "sc-memory/cpp/sc_link.hpp"
+#include "scpOperand.hpp"
 
+#include <regex>
 #include <string>
 #include <iostream>
 
@@ -173,6 +179,278 @@ void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAd
     }
     cout << "Total output arcs: " << c_out << endl;
 }
+
+bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            //FinishExecutionSuccessfully();
+            if(string.find("int:") != std::string::npos){
+                std::cout << "EEEEYE!!!";
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+            //FinishExecutionWithError();
+    }
+    return false;
+}
+
+int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        std::string intInit = "int: ";
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            std::string::size_type i = string.find(intInit);
+
+            if (i != std::string::npos)
+               string.erase(i, intInit.length());
+            int convertedInt = std::stoi(string);
+            return convertedInt;
+        }
+    }
+}
+
+string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            return string;
+        }
+    }
+}
+
+bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            //FinishExecutionSuccessfully();
+            if(string.find("uint:") != std::string::npos){
+                std::cout << "EEEEYE!!!";
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+            //FinishExecutionWithError();
+    }
+    return false;
+}
+
+int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        std::string intInit = "uint: ";
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            std::string::size_type i = string.find(intInit);
+
+            if (i != std::string::npos)
+               string.erase(i, intInit.length());
+            int convertedInt = std::stoi(string);
+            return convertedInt;
+        }
+    }
+}
+
+bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            //FinishExecutionSuccessfully();
+            if(string.find("float:") != std::string::npos){
+                std::cout << "EEEEYE!!!";
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+            //FinishExecutionWithError();
+    }
+    return false;
+}
+
+float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        std::string intInit = "float:";
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            std::string::size_type i = string.find(intInit);
+
+            if (i != std::string::npos)
+               string.erase(i, intInit.length());
+            float convertedFloat = std::stof(string);
+            return convertedFloat;
+        }
+    }
+}
+
+bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            //FinishExecutionSuccessfully();
+            if(string.find("double:") != std::string::npos){
+                std::cout << "EEEEYE!!!";
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+            //FinishExecutionWithError();
+    }
+    return false;
+}
+
+double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    ScStream stream;
+    if (ctx->GetLinkContent(elemAddr, stream))
+    {
+        //double value;
+        //std::cout << "SCPOperatorSIn execute(): get link\n";
+        std::string string;
+        std::string intInit = "double: ";
+        if (ScStreamConverter::StreamToString(stream, string))
+        {
+            std::string::size_type i = string.find(intInit);
+
+            if (i != std::string::npos)
+               string.erase(i, intInit.length());
+            double convertedDouble = std::stod(string);
+            return convertedDouble;
+        }
+    }
+}
+
+ScStreamMemory::ScStreamMemory(MemoryBufferPtr const & buff)
+  : ScStream (static_cast<sc_char const *>(buff->Data()), sc_uint(buff->Size()), SC_STREAM_FLAG_READ)
+  , m_buffer(buff)
+{
+}
+
+ScStreamMemory::~ScStreamMemory()
+{
+}
+
+ScStreamPtr StreamFromString(std::string const & str)
+{
+  MemoryBufferPtr buff = MemoryBufferPtr(new MemoryBufferSafe(str.c_str(), (uint32_t)str.size()));
+  return std::make_shared<ScStreamMemory>(buff);
+}
+
+string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    string input = scLinkGetString(ctx, elemAddr);
+    regex integer_expr("(\\+|-)?[[:digit:]]+");
+
+    string result = "";
+
+    if(input.find("int:") != std::string::npos && regex_match(input, integer_expr)) result = input;
+    return result;
+}
+
+void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand* nodeAddr, ScAddr const& linkAddr)
+{
+    ScAddr elem1, elem3, elem5, arc1;
+        elem1.Reset();
+        elem3.Reset();
+        elem5.Reset();
+        arc1.Reset();
+
+        elem5 = Keynodes::nrel_scp_var_value;
+        elem3 = linkAddr;
+        elem1 = nodeAddr->CreateNodeOrLink();
+
+        arc1 = ctx->CreateArc(sc_type_arc_common, elem1, elem3);
+        ctx->CreateArc(sc_type_arc_pos_const_perm, elem5, arc1);
+        printInfo(ctx, elem5);
+        printInfo(ctx, elem3);
+        printInfo(ctx, elem1);
+        std::cout << ctx->IsElement(elem1);
+        nodeAddr->SetValue(elem1);
+}
+
+std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr){
+    std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
+
+    std::regex integer_expr("(\\+|-)?[[:digit:]]+");
+    std::regex double_expr("(\\+|-)?[[:digit:]]+\\.[[:digit:]]*");
+
+    std::string answer_str;
+
+    if(std::regex_match(str_link,integer_expr)){
+        std::cout<<"Input is an integer"<<std::endl;
+        //int value = std::atoi(str_link.c_str());
+        //int answer = (int)sin((double)value);
+        std::string int_str = "int: ";
+        answer_str = int_str.append(str_link);
+    }
+
+    if(std::regex_match(str_link, double_expr)){
+        std::cout<<"Input is a double"<<std::endl;
+        //double convertedDouble = std::stod(str_link);
+        //double answer = sin(convertedDouble);
+        std::string double_str = "double: ";
+        answer_str = double_str.append(str_link);
+        std::cout<<answer_str<<std::endl;
+    }
+
+    return answer_str;
+}
+
 
 #ifdef SCP_DEBUG
 void logUnknownOperatorTypeError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr& addr)
