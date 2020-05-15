@@ -7,11 +7,23 @@
 #pragma once
 
 #include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/cpp/sc_stream.hpp"
+#include "scpOperand.hpp"
 
 #include <string>
 
 namespace scp {
 namespace Utils {
+
+class ScStreamMemory : public ScStream
+{
+public:
+  _SC_EXTERN explicit ScStreamMemory(MemoryBufferPtr const & buff);
+  _SC_EXTERN virtual ~ScStreamMemory();
+
+private:
+  MemoryBufferPtr m_buffer;
+};
 
 /*! Adds element (elAddr) into set (setAddr).
  * @returns If element already exists in set, then do nothing and returns false. Otherwise
@@ -47,6 +59,32 @@ void printSystemIdentifier(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
 /*! Prints semantic neighborhood of sc-element (elemAddr)
  */
 void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+ScStreamPtr StreamFromString(std::string const & str);
+
+std::string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
+
+void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand* nodeAddr , ScAddr const& linkAddr);
+
+std::string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
 
 #ifdef SCP_DEBUG
     /*! Logs error about unknown type of given operator (addr)

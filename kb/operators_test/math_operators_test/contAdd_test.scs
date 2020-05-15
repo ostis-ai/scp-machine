@@ -1,0 +1,34 @@
+scp_test_operator_contAdd_int
+<- contAdd;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [int: 30];
+-> rrel_3: rrel_fixed: rrel_scp_const: [int: 50];
+=> nrel_goto: next_operator;;
+
+scp_test_operator_contAdd_float
+<- contAdd;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_const: rrel_node: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [float: 3,5];
+-> rrel_3: rrel_fixed: rrel_scp_const: [float: 5,1];
+=> nrel_goto: next_operator;;
+
+scp_test_operator_contAdd_double
+<- contAdd;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [double: 30,222];
+-> rrel_3: rrel_fixed: rrel_scp_const: [double: 50,111];
+=> nrel_goto: next_operator;;
+
+scp_test_operator_contAdd
+<- contAdd;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [30];
+-> rrel_3: rrel_fixed: rrel_scp_const: [50];
+=> nrel_goto: next_operator;;
+
+scp_test_operator_contAdd_string
+<- contAdd;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [hey];
+-> rrel_3: rrel_fixed: rrel_scp_const: [bye];
+=> nrel_goto: next_operator;;

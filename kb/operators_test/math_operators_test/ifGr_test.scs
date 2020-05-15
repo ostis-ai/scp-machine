@@ -1,0 +1,27 @@
+scp_test_operator_ifGr_int
+<- ifGr;
+-> rrel_1: rrel_fixed: rrel_scp_const: [int: 15];
+-> rrel_2: rrel_fixed: rrel_scp_const: [int: 10];
+=> nrel_then: scp_test_operator_ifGr_then;
+=> nrel_else: scp_test_operator_ifGr_else;;
+
+scp_test_operator_ifGr_float
+<- ifGr;
+-> rrel_1: rrel_fixed: rrel_scp_const: [float: 15.1];
+-> rrel_2: rrel_fixed: rrel_scp_const: [float: 10.8];
+=> nrel_then: scp_test_operator_ifGr_then;
+=> nrel_else: scp_test_operator_ifGr_else;;
+
+scp_test_operator_ifGr_double
+<- ifGr;
+-> rrel_1: rrel_fixed: rrel_scp_const: [double: 1.14];
+-> rrel_2: rrel_fixed: rrel_scp_const: [double: 10.86];
+=> nrel_then: scp_test_operator_ifGr_then;
+=> nrel_else: scp_test_operator_ifGr_else;;
+
+scp_test_operator_ifGr
+<- ifGr;
+-> rrel_1: rrel_fixed: rrel_scp_const: [15];
+-> rrel_2: rrel_fixed: rrel_scp_const: [10];
+=> nrel_then: scp_test_operator_ifGr_then;
+=> nrel_else: scp_test_operator_ifGr_else;;
