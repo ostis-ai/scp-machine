@@ -423,6 +423,8 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         nodeAddr->SetValue(elem1);
 }
 
+//!TODO Compare with master branch
+
 std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr){
     std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
 
