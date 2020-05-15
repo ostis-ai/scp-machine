@@ -1,11 +1,19 @@
-#ifndef SCPOPERATORACOS_H
-#define SCPOPERATORACOS_H
+#pragma once
 
+#include "sc-memory/cpp/sc_addr.hpp"
+#include "sc-memory/cpp/sc_object.hpp"
+#include "sc-memory/cpp/kpm/sc_agent.hpp"
+#include "scpKeynodes.hpp"
+#include "scpOperatorStr.hpp"
+namespace scp
+{
 
-class SCPOperatorACos
+class SCPOperatorACos: public SCPOperatorElStr2
 {
 public:
-    SCPOperatorACos();
+    SCPOperatorACos(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
+    std::string GetTypeName();
+    sc_result Parse();
+    sc_result Execute();
 };
-
-#endif // SCPOPERATORACOS_H
+}
