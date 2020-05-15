@@ -68,7 +68,6 @@ sc_result SCPOperatorStringToUpperCase::Execute()
             ScAddr answerLink = ms_context->CreateLink();
 
             ms_context->SetLinkContent(answerLink, *streamPtr);
-            ms_context->HelperSetSystemIdtf("stringToUpperCaseAnswer", answerLink);
 
             Utils::printOperatorAnswer(ms_context, operands[0], answerLink);
 

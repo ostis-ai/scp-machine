@@ -90,7 +90,6 @@ sc_result SCPOperatorStringSplit::Execute()
             ms_context->CreateArc(sc_type_arc_pos_const_perm, setNode, answerLink);
             cout << output[i] << endl;
         }
-            ms_context->HelperSetSystemIdtf("stringSplitAnswer", setNode);
 
             Utils::printOperatorAnswer(ms_context, operands[0], setNode);
 

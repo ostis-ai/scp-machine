@@ -68,7 +68,6 @@ sc_result SCPOperatorStringToLowerCase::Execute()
             ScAddr answerLink = ms_context->CreateLink();
 
             ms_context->SetLinkContent(answerLink, *streamPtr);
-            ms_context->HelperSetSystemIdtf("stringToLowerCaseAnswer", answerLink);
 
             Utils::printOperatorAnswer(ms_context, operands[0], answerLink);
 
