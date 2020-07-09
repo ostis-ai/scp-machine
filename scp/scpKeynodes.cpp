@@ -7,8 +7,7 @@
 #include "scpKeynodes.hpp"
 #include "sc-memory/cpp/sc_memory.hpp"
 
-namespace scp
-{
+namespace scp {
 
 ScAddr Keynodes::scp_program;
 ScAddr Keynodes::agent_scp_program;
@@ -39,6 +38,7 @@ ScAddr Keynodes::nrel_then;
 ScAddr Keynodes::nrel_else;
 ScAddr Keynodes::nrel_goto;
 ScAddr Keynodes::nrel_error;
+ScAddr Keynodes::nrel_result;
 ScAddr Keynodes::rrel_in;
 ScAddr Keynodes::rrel_out;
 ScAddr Keynodes::rrel_fixed;

@@ -11,8 +11,7 @@
 
 #include "scpKeynodes.generated.hpp"
 
-namespace scp
-{
+namespace scp {
 SC_CLASS()
 class Keynodes : public ScObject
 {
@@ -98,6 +97,9 @@ public:
 
     SC_PROPERTY(Keynode("nrel_error"), ForceCreate)
     static ScAddr nrel_error;
+
+    SC_PROPERTY(Keynode("nrel_result"), ForceCreate)
+    static ScAddr nrel_result;
 
     SC_PROPERTY(Keynode("rrel_in"), ForceCreate)
     static ScAddr rrel_in;
