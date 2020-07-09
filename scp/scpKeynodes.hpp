@@ -77,9 +77,6 @@ public:
     SC_PROPERTY(Keynode("nrel_authors"), ForceCreate)
     static ScAddr nrel_authors;
 
-    SC_PROPERTY(Keynode("nrel_result"), ForceCreate)
-    static ScAddr nrel_result;
-
     SC_PROPERTY(Keynode("nrel_system_identifier"), ForceCreate)
     static ScAddr nrel_system_identifier;
 
@@ -332,9 +329,11 @@ public:
     SC_PROPERTY(Keynode("contDivRem"), ForceCreate)
     static ScAddr op_contDivRem;
 #endif
-#ifdef SCP_STRING
+
     SC_PROPERTY(Keynode("contStringConcat"), ForceCreate)
     static ScAddr op_contStringConcat;
+
+
     SC_PROPERTY(Keynode("stringIfEq"), ForceCreate)
     static ScAddr op_stringIfEq;
     SC_PROPERTY(Keynode("stringIfGr"), ForceCreate)
@@ -357,7 +356,10 @@ public:
     static ScAddr op_stringToUpperCase;
     SC_PROPERTY(Keynode("stringToLowerCase"), ForceCreate)
     static ScAddr op_stringToLowerCase;
-#endif
+
+
+    SC_PROPERTY(Keynode("nrel_scp_var_value"), ForceCreate)
+    static ScAddr nrel_scp_var_value;
 
     SC_PROPERTY(Keynode("contAssign"), ForceCreate)
     static ScAddr op_contAssign;

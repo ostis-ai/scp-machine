@@ -1,0 +1,13 @@
+scp_test_operator_stringStartsWith1
+<- stringStartsWith;
+-> rrel_1: rrel_fixed: rrel_scp_const: [String];
+-> rrel_2: rrel_fixed: rrel_scp_const: [Str];
+=> nrel_then: scp_test_operator_stringStartsWith1_then;
+=> nrel_else: scp_test_operator_stringStartsWith1_else;;
+
+scp_test_operator_stringStartsWith2
+<- stringStartsWith;
+-> rrel_1: rrel_fixed: rrel_scp_const: [String];
+-> rrel_2: rrel_fixed: rrel_scp_const: [Ttr];
+=> nrel_then: scp_test_operator_stringStartsWith2_then;
+=> nrel_else: scp_test_operator_stringStartsWith2_else;;
