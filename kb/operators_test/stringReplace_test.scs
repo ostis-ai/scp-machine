@@ -1,0 +1,17 @@
+scp_test_operator_stringReplace1
+<- stringReplace;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_const: rrel_node: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [The sun does shine];
+-> rrel_3: rrel_fixed: rrel_scp_const: [gold];
+-> rrel_4: rrel_fixed: rrel_scp_const: [star];
+-> rrel_5: rrel_fixed: rrel_scp_const: ...;
+=> nrel_goto: scp_test_stringReplace1_next;;
+
+scp_test_operator_stringReplace2
+<- stringReplace;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_const: rrel_node: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [I see skies of blue, and clouds of white];
+-> rrel_3: rrel_fixed: rrel_scp_const: [skies of blue, and clouds of white];
+-> rrel_4: rrel_fixed: rrel_scp_const: [trees of green, red roses too];
+-> rrel_5: rrel_fixed: rrel_scp_const: ...;
+=> nrel_goto: scp_test_stringReplace2_next;;

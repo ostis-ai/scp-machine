@@ -80,11 +80,8 @@ ScStreamPtr StreamFromString(std::string const & str);
 
 std::string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
 
-std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
-
 void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand* nodeAddr , ScAddr const& linkAddr);
 
-std::string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr);
 
 #ifdef SCP_DEBUG
     /*! Logs error about unknown type of given operator (addr)

@@ -214,7 +214,8 @@ int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
 
             if (i != std::string::npos)
                string.erase(i, intInit.length());
-            int convertedInt = std::atoi(string.c_str());
+            int convertedInt = std::stoi(string);
+
             return convertedInt;
         }
     }
@@ -225,14 +226,16 @@ string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
             return string;
         }
     }
+
+    return nullptr;
 }
+
 
 bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
@@ -243,6 +246,9 @@ bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
         if (ScStreamConverter::StreamToString(stream, string))
         {
             if(string.find("uint:") != std::string::npos){
+
+                std::cout << "EEEEYE!!!";
+
                 return true;
             }
             else{
@@ -266,7 +272,9 @@ int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
 
             if (i != std::string::npos)
                string.erase(i, intInit.length());
-            int convertedInt = std::atoi(string.c_str());
+
+            int convertedInt = std::stoi(string);
+
             return convertedInt;
         }
     }
@@ -281,6 +289,9 @@ bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr co
         if (ScStreamConverter::StreamToString(stream, string))
         {
             if(string.find("float:") != std::string::npos){
+
+                std::cout << "EEEEYE!!!";
+
                 return true;
             }
             else{
@@ -318,7 +329,11 @@ bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
+
+            //FinishExecutionSuccessfully();
             if(string.find("double:") != std::string::npos){
+                std::cout << "EEEEYE!!!";
+
                 return true;
             }
             else{
@@ -348,28 +363,6 @@ double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAdd
     }
 }
 
-std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr){
-    std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
-
-    std::regex integer_expr("(\\+|-)?[[:digit:]]+");
-    std::regex double_expr("(\\+|-)?[[:digit:]]+\\.[[:digit:]]*");
-
-    std::string answer_str;
-
-    if(std::regex_match(str_link,integer_expr)){
-        std::cout<<"Input is an integer"<<std::endl;
-        std::string int_str = "int: ";
-        answer_str = int_str.append(str_link);
-    }
-
-    if(std::regex_match(str_link, double_expr)){
-        std::cout<<"Input is a double"<<std::endl;
-        std::string double_str = "double: ";
-        answer_str = double_str.append(str_link);
-    }
-
-    return answer_str;
-}
 
 ScStreamMemory::ScStreamMemory(MemoryBufferPtr const & buff)
   : ScStream (static_cast<sc_char const *>(buff->Data()), sc_uint(buff->Size()), SC_STREAM_FLAG_READ)
@@ -387,16 +380,7 @@ ScStreamPtr StreamFromString(std::string const & str)
   return std::make_shared<ScStreamMemory>(buff);
 }
 
-string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
-{
-    string input = scLinkGetString(ctx, elemAddr);
-    regex integer_expr("(\\+|-)?[[:digit:]]+");
 
-    string result = "";
-
-    if(input.find("int:") != std::string::npos && regex_match(input, integer_expr)) result = input;
-    return result;
-}
 
 void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand* nodeAddr, ScAddr const& linkAddr)
 {
@@ -418,6 +402,9 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         std::cout << ctx->IsElement(elem1);
         nodeAddr->SetValue(elem1);
 }
+
+
+
 
 #ifdef SCP_DEBUG
 void logUnknownOperatorTypeError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr& addr)

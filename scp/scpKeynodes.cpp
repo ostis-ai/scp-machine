@@ -7,8 +7,7 @@
 #include "scpKeynodes.hpp"
 #include "sc-memory/cpp/sc_memory.hpp"
 
-namespace scp
-{
+namespace scp {
 
 ScAddr Keynodes::scp_program;
 ScAddr Keynodes::agent_scp_program;
@@ -30,7 +29,6 @@ ScAddr Keynodes::nrel_scp_process;
 ScAddr Keynodes::rrel_key_sc_element;
 ScAddr Keynodes::nrel_decomposition_of_action;
 ScAddr Keynodes::nrel_authors;
-ScAddr Keynodes::nrel_result;
 ScAddr Keynodes::nrel_system_identifier;
 ScAddr Keynodes::active_action;
 ScAddr Keynodes::active_sc_agent;
@@ -40,6 +38,7 @@ ScAddr Keynodes::nrel_then;
 ScAddr Keynodes::nrel_else;
 ScAddr Keynodes::nrel_goto;
 ScAddr Keynodes::nrel_error;
+ScAddr Keynodes::nrel_result;
 ScAddr Keynodes::rrel_in;
 ScAddr Keynodes::rrel_out;
 ScAddr Keynodes::rrel_fixed;
@@ -135,7 +134,7 @@ ScAddr Keynodes::op_contDivInt;
 ScAddr Keynodes::op_contDivRem;
 #endif
 
-#ifdef SCP_STRING
+
 ScAddr Keynodes::op_contStringConcat;
 ScAddr Keynodes::op_stringIfEq;
 ScAddr Keynodes::op_stringIfGr;
@@ -148,7 +147,8 @@ ScAddr Keynodes::op_stringEndsWith;
 ScAddr Keynodes::op_stringReplace;
 ScAddr Keynodes::op_stringToUpperCase;
 ScAddr Keynodes::op_stringToLowerCase;
-#endif
+
+ScAddr Keynodes::nrel_scp_var_value;
 
 ScAddr Keynodes::op_contAssign;
 ScAddr Keynodes::op_contErase;
