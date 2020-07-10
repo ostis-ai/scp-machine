@@ -1,0 +1,27 @@
+scp_test_operator_contMult_int
+<- contMult;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [int: 3];
+-> rrel_3: rrel_fixed: rrel_scp_const: [int: 5];
+=> nrel_goto: next_operator;;
+
+scp_test_operator_contMult_float
+<- contMult;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [float: 3,5];
+-> rrel_3: rrel_fixed: rrel_scp_const: [float: 5,1];
+=> nrel_goto: next_operator;;
+
+scp_test_operator_contMult_double
+<- contMult;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [double: 8,222];
+-> rrel_3: rrel_fixed: rrel_scp_const: [double: 5,111];
+=> nrel_goto: next_operator;;
+
+scp_test_operator_contMult
+<- contMult;
+-> rrel_1: rrel_assign: rrel_scp_var: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [3];
+-> rrel_3: rrel_fixed: rrel_scp_const: [5];
+=> nrel_goto: next_operator;;

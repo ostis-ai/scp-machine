@@ -15,6 +15,8 @@
 #include <regex>
 #include <string>
 #include <iostream>
+#include <regex>
+
 
 using namespace std;
 
@@ -213,6 +215,7 @@ int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
             if (i != std::string::npos)
                string.erase(i, intInit.length());
             int convertedInt = std::stoi(string);
+
             return convertedInt;
         }
     }
@@ -229,6 +232,7 @@ string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const
             return string;
         }
     }
+
     return nullptr;
 }
 
@@ -242,7 +246,9 @@ bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
         if (ScStreamConverter::StreamToString(stream, string))
         {
             if(string.find("uint:") != std::string::npos){
+
                 std::cout << "EEEEYE!!!";
+
                 return true;
             }
             else{
@@ -266,7 +272,9 @@ int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
 
             if (i != std::string::npos)
                string.erase(i, intInit.length());
+
             int convertedInt = std::stoi(string);
+
             return convertedInt;
         }
     }
@@ -281,7 +289,9 @@ bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr co
         if (ScStreamConverter::StreamToString(stream, string))
         {
             if(string.find("float:") != std::string::npos){
+
                 std::cout << "EEEEYE!!!";
+
                 return true;
             }
             else{
@@ -319,9 +329,11 @@ bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
+
             //FinishExecutionSuccessfully();
             if(string.find("double:") != std::string::npos){
                 std::cout << "EEEEYE!!!";
+
                 return true;
             }
             else{
@@ -351,6 +363,7 @@ double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAdd
     }
 }
 
+
 ScStreamMemory::ScStreamMemory(MemoryBufferPtr const & buff)
   : ScStream (static_cast<sc_char const *>(buff->Data()), sc_uint(buff->Size()), SC_STREAM_FLAG_READ)
   , m_buffer(buff)
@@ -378,6 +391,7 @@ string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
     return result;
 }
 
+
 void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand* nodeAddr, ScAddr const& linkAddr)
 {
     ScAddr elem1, elem3, elem5, arc1;
@@ -399,7 +413,7 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         nodeAddr->SetValue(elem1);
 }
 
-
+  
 std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr){
     std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
 

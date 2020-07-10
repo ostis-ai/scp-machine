@@ -1,0 +1,29 @@
+scp_test_operator_ifEq_int
+<- ifEq;
+-> rrel_1: rrel_fixed: rrel_scp_const: [int: 10];
+-> rrel_2: rrel_fixed: rrel_scp_const: [int: 10];
+=> nrel_then: scp_test_operator_ifEq_then;
+=> nrel_else: scp_test_operator_ifeq_else;;
+
+scp_test_operator_ifEq
+<- ifEq;
+-> rrel_1: rrel_fixed: rrel_scp_const: [10];
+-> rrel_2: rrel_fixed: rrel_scp_const: [15];
+=> nrel_then: scp_test_operator_ifEq_then;
+=> nrel_else: scp_test_operator_ifeq_else;;
+
+scp_test_operator_ifEq_float
+<- ifEq;
+-> rrel_1: rrel_fixed: rrel_scp_const: [float: 10.3];
+-> rrel_2: rrel_fixed: rrel_scp_const: [float: 15.3];
+=> nrel_then: scp_test_operator_ifEq_then;
+=> nrel_else: scp_test_operator_ifeq_else;;
+
+scp_test_operator_ifEq_double
+<- ifEq;
+-> rrel_1: rrel_fixed: rrel_scp_const: [double: 15.356];
+-> rrel_2: rrel_fixed: rrel_scp_const: [double: 15.356];
+=> nrel_then: scp_test_operator_ifEq_then;
+=> nrel_else: scp_test_operator_ifeq_else;;
+
+
