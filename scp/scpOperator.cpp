@@ -76,6 +76,27 @@ sc_result SCPOperator::Execute()
     return SC_RESULT_OK;
 }
 
+void SCPOperator::ClearExecutionState()
+{
+    std::vector<ScAddr> arcs;
+    ScIterator3Ptr iter=ms_context->Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, addr);
+    while (iter->Next())
+    {
+        if (iter->Get(0)==Keynodes::active_action)
+            arcs.push_back(iter->Get(1));
+        if (iter->Get(0)==Keynodes::question_finished)
+            arcs.push_back(iter->Get(1));
+        if (iter->Get(0)==Keynodes::question_finished_successfully)
+            arcs.push_back(iter->Get(1));
+        if (iter->Get(0)==Keynodes::question_finished_unsuccessfully)
+            arcs.push_back(iter->Get(1));
+        if (iter->Get(0)==Keynodes::question_finished_with_error)
+            arcs.push_back(iter->Get(1));
+    }
+    for (std::vector<ScAddr>::iterator i = arcs.begin(); i != arcs.end(); ++i)
+        ms_context->EraseElement(*i);
+}
+
 void SCPOperator::FinishExecution()
 {
     ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, addr);
@@ -83,18 +104,21 @@ void SCPOperator::FinishExecution()
 
 void SCPOperator::FinishExecutionSuccessfully()
 {
+    ClearExecutionState();
     ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, addr);
     FinishExecution();
 }
 
 void SCPOperator::FinishExecutionUnsuccessfully()
 {
+    ClearExecutionState();
     ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, addr);
     FinishExecution();
 }
 
 void SCPOperator::FinishExecutionWithError()
 {
+    ClearExecutionState();
     ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, addr);
     FinishExecution();
 }

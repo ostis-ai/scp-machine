@@ -1,0 +1,13 @@
+scp_test_operator_stringIfGr1
+<- stringIfGr;
+-> rrel_1: rrel_fixed: rrel_scp_const: [String];
+-> rrel_2: rrel_fixed: rrel_scp_const: [string];
+=> nrel_then: scp_test_operator_stringIfGr1_then;
+=> nrel_else: scp_test_operator_stringIfGr1_else;;
+
+scp_test_operator_stringIfGr2
+<- stringIfGr;
+-> rrel_1: rrel_fixed: rrel_scp_const: [concat];
+-> rrel_2: rrel_fixed: rrel_scp_const: [Concat];
+=> nrel_then: scp_test_operator_stringIfGr2_then;
+=> nrel_else: scp_test_operator_stringIfGr2_else;;

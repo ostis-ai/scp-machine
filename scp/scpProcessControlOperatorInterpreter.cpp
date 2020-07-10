@@ -10,11 +10,11 @@
 #include "process_control_operators/SCPOperatorReturn.hpp"
 #include "process_control_operators/SCPOperatorSysWait.hpp"
 #include "process_control_operators/SCPOperatorCall.hpp"
+#include "process_control_operators/SCPOperatorWaitReturn.hpp"
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 ScAddr ASCPProcessControlOperatorInterpreter::msAgentKeynode;
 
 SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
@@ -40,6 +40,10 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
     else if (type == Keynodes::op_call)
     {
         oper = new SCPOperatorCall(ms_context, scp_operator);
+    }
+    else if (type == Keynodes::op_waitReturn)
+    {
+        oper = new SCPOperatorWaitReturn(ms_context, scp_operator);
     }
     else
         return SC_RESULT_ERROR_INVALID_PARAMS;

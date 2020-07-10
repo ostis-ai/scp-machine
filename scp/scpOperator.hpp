@@ -33,6 +33,7 @@ public:
     virtual std::string GetTypeName();
     virtual sc_result Parse();
     virtual sc_result Execute();
+    void ClearExecutionState();
     void FinishExecution();
     void FinishExecutionSuccessfully();
     void FinishExecutionUnsuccessfully();

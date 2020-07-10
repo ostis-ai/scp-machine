@@ -9,8 +9,7 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 ScAddr ASCPProgramExecutionSyncronizer::msAgentKeynode;
 
 SC_AGENT_IMPLEMENTATION(ASCPProgramExecutionSyncronizer)

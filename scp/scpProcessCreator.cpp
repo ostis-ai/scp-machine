@@ -81,6 +81,8 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
         ScIterator5Ptr oper_iter = ms_context->Iterator5(iter_temp->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
         if (oper_iter->Next())
         {
+            ScAddr arc = ms_context->CreateArc(ScType::EdgeDCommonConst, action, const_process_node);
+            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_result, arc);
             ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, oper_iter->Get(2));
         }
         else

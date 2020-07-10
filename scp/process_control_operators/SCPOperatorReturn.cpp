@@ -10,8 +10,7 @@
 #include "sc-memory/cpp/sc_memory.hpp"
 #include <iostream>
 
-namespace scp
-{
+namespace scp {
 
 //return
 SCPOperatorReturn::SCPOperatorReturn(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperator(ctx, addr)
@@ -49,6 +48,11 @@ sc_result SCPOperatorReturn::Execute()
     }
     else
     {
+        ScIterator5Ptr iter3 = ms_context->Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, process_node, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_result);
+        if (iter3->Next())
+        {
+            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, iter3->Get(0));
+        }
         ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, process_node);
     }
     return SC_RESULT_OK;

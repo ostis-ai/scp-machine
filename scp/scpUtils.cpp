@@ -185,21 +185,16 @@ bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
-            //FinishExecutionSuccessfully();
             if(string.find("int:") != std::string::npos){
-                std::cout << "EEEEYE!!!";
                 return true;
             }
             else{
                 return false;
             }
         }
-            //FinishExecutionWithError();
     }
     return false;
 }
@@ -209,8 +204,6 @@ int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         std::string intInit = "int: ";
         if (ScStreamConverter::StreamToString(stream, string))
@@ -230,27 +223,24 @@ string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
             return string;
         }
     }
+    return nullptr;
 }
+
 
 bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
-            //FinishExecutionSuccessfully();
             if(string.find("uint:") != std::string::npos){
                 std::cout << "EEEEYE!!!";
                 return true;
@@ -259,7 +249,6 @@ bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
                 return false;
             }
         }
-            //FinishExecutionWithError();
     }
     return false;
 }
@@ -269,8 +258,6 @@ int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         std::string intInit = "uint: ";
         if (ScStreamConverter::StreamToString(stream, string))
@@ -290,12 +277,9 @@ bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr co
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
-            //FinishExecutionSuccessfully();
             if(string.find("float:") != std::string::npos){
                 std::cout << "EEEEYE!!!";
                 return true;
@@ -304,7 +288,6 @@ bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr co
                 return false;
             }
         }
-            //FinishExecutionWithError();
     }
     return false;
 }
@@ -314,8 +297,6 @@ float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr 
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         std::string intInit = "float:";
         if (ScStreamConverter::StreamToString(stream, string))
@@ -335,8 +316,6 @@ bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
@@ -349,7 +328,6 @@ bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
                 return false;
             }
         }
-            //FinishExecutionWithError();
     }
     return false;
 }
@@ -359,8 +337,6 @@ double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAdd
     ScStream stream;
     if (ctx->GetLinkContent(elemAddr, stream))
     {
-        //double value;
-        //std::cout << "SCPOperatorSIn execute(): get link\n";
         std::string string;
         std::string intInit = "double: ";
         if (ScStreamConverter::StreamToString(stream, string))
@@ -423,7 +399,6 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         nodeAddr->SetValue(elem1);
 }
 
-//!TODO Compare with master branch
 
 std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr){
     std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
@@ -452,7 +427,6 @@ std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAd
 
     return answer_str;
 }
-
 
 #ifdef SCP_DEBUG
 void logUnknownOperatorTypeError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr& addr)

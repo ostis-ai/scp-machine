@@ -41,6 +41,7 @@ sc_result scpModule::InitializeImpl()
     SC_AGENT_REGISTER(ASCPEraseOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPSearchOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPIfOperatorInterpreter)
+    SC_AGENT_REGISTER(ASCPStringOperatorInterpreter);
     SC_AGENT_REGISTER(ASCPPrintOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPVarValueOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPProgramExecutionSyncronizer)

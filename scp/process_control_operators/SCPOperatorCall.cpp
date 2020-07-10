@@ -13,8 +13,7 @@
 #include <sstream>
 
 
-namespace scp
-{
+namespace scp {
 
 SCPOperatorCall::SCPOperatorCall(const std::unique_ptr<ScMemoryContext> &ctx_, ScAddr addr_): SCPOperatorElStr3(ctx_, addr_)
 {
@@ -155,7 +154,6 @@ sc_result SCPOperatorCall::Execute()
     {
         if (expected_params[i] != nullptr)
         {
-            std::cout << "PARAM" << std::endl;
             if (params[i] == nullptr)
             {
 #ifdef SCP_DEBUG
