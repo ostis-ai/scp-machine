@@ -380,6 +380,16 @@ ScStreamPtr StreamFromString(std::string const & str)
   return std::make_shared<ScStreamMemory>(buff);
 }
 
+string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+{
+    string input = scLinkGetString(ctx, elemAddr);
+    regex integer_expr("(\\+|-)?[[:digit:]]+");
+
+    string result = "";
+
+    if(input.find("int:") != std::string::npos && regex_match(input, integer_expr)) result = input;
+    return result;
+}
 
 
 void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand* nodeAddr, ScAddr const& linkAddr)
@@ -403,8 +413,34 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         nodeAddr->SetValue(elem1);
 }
 
+  
+std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr){
+    std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
 
+    std::regex integer_expr("(\\+|-)?[[:digit:]]+");
+    std::regex double_expr("(\\+|-)?[[:digit:]]+\\.[[:digit:]]*");
 
+    std::string answer_str;
+
+    if(std::regex_match(str_link,integer_expr)){
+        std::cout<<"Input is an integer"<<std::endl;
+        //int value = std::atoi(str_link.c_str());
+        //int answer = (int)sin((double)value);
+        std::string int_str = "int: ";
+        answer_str = int_str.append(str_link);
+    }
+
+    if(std::regex_match(str_link, double_expr)){
+        std::cout<<"Input is a double"<<std::endl;
+        //double convertedDouble = std::stod(str_link);
+        //double answer = sin(convertedDouble);
+        std::string double_str = "double: ";
+        answer_str = double_str.append(str_link);
+        std::cout<<answer_str<<std::endl;
+    }
+
+    return answer_str;
+}
 
 #ifdef SCP_DEBUG
 void logUnknownOperatorTypeError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr& addr)

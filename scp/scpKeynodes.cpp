@@ -31,6 +31,7 @@ ScAddr Keynodes::nrel_decomposition_of_action;
 ScAddr Keynodes::nrel_authors;
 ScAddr Keynodes::nrel_system_identifier;
 ScAddr Keynodes::active_action;
+ScAddr Keynodes::nrel_scp_var_value;
 ScAddr Keynodes::active_sc_agent;
 
 // rrels
@@ -115,7 +116,6 @@ ScAddr Keynodes::op_ifType;
 ScAddr Keynodes::op_varAssign;
 ScAddr Keynodes::op_varErase;
 
-#ifdef SCP_MATH
 ScAddr Keynodes::op_ifEq;
 ScAddr Keynodes::op_ifGr;
 ScAddr Keynodes::op_contAdd;
@@ -124,7 +124,7 @@ ScAddr Keynodes::op_contMult;
 ScAddr Keynodes::op_contSub;
 ScAddr Keynodes::op_contPow;
 ScAddr Keynodes::op_contLn;
-ScAddr Keynodes::op_contSin;
+ScAddr Keynodes::op_contSin; // My sc starts here
 ScAddr Keynodes::op_contCos;
 ScAddr Keynodes::op_contTg;
 ScAddr Keynodes::op_contASin;
@@ -132,7 +132,6 @@ ScAddr Keynodes::op_contACos;
 ScAddr Keynodes::op_contATg;
 ScAddr Keynodes::op_contDivInt;
 ScAddr Keynodes::op_contDivRem;
-#endif
 
 
 ScAddr Keynodes::op_contStringConcat;
