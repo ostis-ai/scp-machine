@@ -1,0 +1,5 @@
+scp_test_operator_contASin
+<- contASin;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_const: rrel_node: ...;
+-> rrel_2: rrel_fixed: rrel_scp_const: [uint: 42];
+=> nrel_goto: scp_test_operator_contASin_next;;

@@ -85,6 +85,9 @@ public:
     SC_PROPERTY(Keynode("active_sc_agent"), ForceCreate)
     static ScAddr active_sc_agent;
 
+    SC_PROPERTY(Keynode("nrel_scp_var_value"), ForceCreate)
+    static ScAddr nrel_scp_var_value;
+
 // rrels
     SC_PROPERTY(Keynode("nrel_then"), ForceCreate)
     static ScAddr nrel_then;
@@ -294,7 +297,6 @@ public:
     SC_PROPERTY(Keynode("varErase"), ForceCreate)
     static ScAddr op_varErase;
 
-#ifdef SCP_MATH
     SC_PROPERTY(Keynode("ifEq"), ForceCreate)
     static ScAddr op_ifEq;
     SC_PROPERTY(Keynode("ifGr"), ForceCreate)
@@ -330,7 +332,6 @@ public:
     static ScAddr op_contDivInt;
     SC_PROPERTY(Keynode("contDivRem"), ForceCreate)
     static ScAddr op_contDivRem;
-#endif
 
     SC_PROPERTY(Keynode("contStringConcat"), ForceCreate)
     static ScAddr op_contStringConcat;
