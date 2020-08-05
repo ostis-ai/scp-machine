@@ -361,9 +361,6 @@ public:
     static ScAddr op_stringToLowerCase;
 
 
-    SC_PROPERTY(Keynode("nrel_scp_var_value"), ForceCreate)
-    static ScAddr nrel_scp_var_value;
-
     SC_PROPERTY(Keynode("contAssign"), ForceCreate)
     static ScAddr op_contAssign;
     SC_PROPERTY(Keynode("contErase"), ForceCreate)

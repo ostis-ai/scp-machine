@@ -16,7 +16,7 @@
 #include "scpPrintOperatorInterpreter.hpp"
 #include "scpProgramExecutionSyncronizer.hpp"
 #include "scpProcessControlOperatorInterpreter.hpp"
-#include "scpmathoperatorinterpreter.hpp"
+#include "SCPMathOperatorInterpreter.hpp"
 #include "scpStringOperatorInterpreter.hpp"
 #include "scpAgentProcessor.hpp"
 #include "scpAgentEvent.hpp"
@@ -48,7 +48,7 @@ sc_result scpModule::InitializeImpl()
     SC_AGENT_REGISTER(ASCPProcessControlOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPAgentActivator)
     SC_AGENT_REGISTER(ASCPAgentDeactivator)
-    SC_AGENT_REGISTER(SCPMathOperatorInterpreter)
+    SC_AGENT_REGISTER(ASCPMathOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPStringOperatorInterpreter)
 
     s_default_ctx.reset(new ScMemoryContext(sc_access_lvl_make_min));
@@ -73,7 +73,7 @@ sc_result scpModule::ShutdownImpl()
     SC_AGENT_UNREGISTER(ASCPProcessControlOperatorInterpreter)
     SC_AGENT_UNREGISTER(ASCPAgentActivator)
     SC_AGENT_UNREGISTER(ASCPAgentDeactivator)
-    SC_AGENT_UNREGISTER(SCPMathOperatorInterpreter)
+    SC_AGENT_UNREGISTER(ASCPMathOperatorInterpreter)
     SC_AGENT_UNREGISTER(ASCPStringOperatorInterpreter)
 
     SCPAgentEvent::unregister_all_scp_agents();
