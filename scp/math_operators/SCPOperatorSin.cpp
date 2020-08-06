@@ -7,32 +7,35 @@
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpoperatordivrem.hpp"
+#include "SCPOperatorSin.hpp"
 #include "sc-kpm/scp/scp_lib/scp_utils.h"
 #include "sc-memory/sc_helper.h"
 #include "sc-memory/sc_memory_headers.h"
 #include "sc-memory/cpp/sc_stream.hpp"
+#include "sc-memory/cpp/sc_link.hpp"
 #include <iostream>
 #include <math.h>
+#include <regex>
+#include <string.h>
 
 namespace scp
 {
 
-SCPOperatorDivRem::SCPOperatorDivRem(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
+SCPOperatorSIn::SCPOperatorSIn(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
-std::string SCPOperatorDivRem::GetTypeName()
+std::string SCPOperatorSIn::GetTypeName()
 {
-    return "contDivRem";
+    return "contSin";
 }
 
-sc_result SCPOperatorDivRem::Parse()
+sc_result SCPOperatorSIn::Parse()
 {
-    return SCPOperatorElStr3::Parse();
+    return SCPOperatorElStr2::Parse();
 }
 
-sc_result SCPOperatorDivRem::Execute()
+sc_result SCPOperatorSIn::Execute()
 {
     std::cout << "SCPOperatorSIn execute(): start";
     if (SC_RESULT_OK != ResetValues())
@@ -56,78 +59,75 @@ sc_result SCPOperatorDivRem::Execute()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    if (!(operands[2]->IsFixed()))
-    {
-#ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Third operand must have FIXED modifier", addr);
-#endif
-        FinishExecutionWithError();
-        return SC_RESULT_ERROR_INVALID_PARAMS;
-    }
-
-    if (!operands[2]->GetValue().IsValid())
-    {
-#ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Third operand is FIXED, but has no value", addr);
-#endif
-        FinishExecutionWithError();
-        return SC_RESULT_ERROR_INVALID_PARAMS;
-    }
-
-    int firstOperand;
-    int secondOperand;
+    std::string answer_str;
 
     if (Utils::scLinkContentIsInt(ms_context, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is INT" << std::endl;
-        firstOperand = Utils::scLinkGetContentInt(ms_context, operands[1]->GetValue());
+        int value = Utils::scLinkGetContentInt(ms_context, operands[1]->GetValue());
+        int answer = (int)sin((double)value);
+        answer_str = std::to_string(answer);
     }
 
     if (Utils::scLinkContentIsUint(ms_context, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is UINT" << std::endl;
-        firstOperand = Utils::scLinkGetContentUint(ms_context, operands[1]->GetValue());
+        int value = Utils::scLinkGetContentUint(ms_context, operands[1]->GetValue());
+        int answer = (int)sin((double)value);
+        answer_str = std::to_string(answer);
     }
 
     if (Utils::scLinkContentIsFloat(ms_context, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is FLOAT" << std::endl;
-        firstOperand = Utils::scLinkGetContentFloat(ms_context, operands[1]->GetValue());
+        float value = Utils::scLinkGetContentFloat(ms_context, operands[1]->GetValue());
+        float answer = (float)sin((double)value);
+        answer_str = std::to_string(answer);
     }
 
     if (Utils::scLinkContentIsDouble(ms_context, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is DOUBLE" << std::endl;
-        firstOperand = Utils::scLinkGetContentDouble(ms_context, operands[1]->GetValue());
+        double value = Utils::scLinkGetContentDouble(ms_context, operands[1]->GetValue());
+        double answer = sin(value);
+        answer_str = std::to_string(answer);
     }
 
-    if (Utils::scLinkContentIsInt(ms_context, operands[2]->GetValue()) == true)
-    {
-        std::cout << "Link is INT" << std::endl;
-        secondOperand = Utils::scLinkGetContentInt(ms_context, operands[2]->GetValue());
+    if (answer_str.empty()){
+        if(!Utils::scLinkPlainNumbers(ms_context, operands[1]->GetValue()).empty()){
+            answer_str = Utils::scLinkPlainNumbers(ms_context, operands[1]->GetValue());
+            std::string intInit = "int: ";
+            std::string::size_type i = answer_str.find(intInit);
+
+            if (i != std::string::npos)
+            {
+                std::cout << "Link is INT" << std::endl;
+                answer_str.erase(i, intInit.length());
+                int value = std::atoi(answer_str.c_str());
+                int answer = (int)sin((double)value);
+                answer_str = std::to_string(answer);
+            }
+
+            std::string intDouble = "double: ";
+            std::string::size_type d = answer_str.find(intDouble);
+
+            if (d != std::string::npos)
+            {
+                std::cout << "Link is Double" << std::endl;
+                answer_str.erase(d, intDouble.length());
+                double value = std::stod(answer_str);
+                double answer = sin(value);
+                answer_str = std::to_string(answer);
+            }
+        }
+        else{
+            FinishExecutionUnsuccessfully();
+            #ifdef SCP_DEBUG
+                Utils::logSCPError(ms_context, "Second operand is not numeric!", addr);
+            #endif
+            return SC_RESULT_OK;
+        }
     }
-
-    if (Utils::scLinkContentIsUint(ms_context, operands[2]->GetValue()) == true)
-    {
-        std::cout << "Link is UINT" << std::endl;
-        secondOperand = Utils::scLinkGetContentUint(ms_context, operands[2]->GetValue());
-    }
-
-    if (Utils::scLinkContentIsFloat(ms_context, operands[2]->GetValue()) == true)
-    {
-        std::cout << "Link is FLOAT" << std::endl;
-        secondOperand = Utils::scLinkGetContentFloat(ms_context, operands[2]->GetValue());
-    }
-
-    if (Utils::scLinkContentIsDouble(ms_context, operands[2]->GetValue()) == true)
-    {
-        std::cout << "Link is DOUBLE" << std::endl;
-        secondOperand = Utils::scLinkGetContentDouble(ms_context, operands[2]->GetValue());
-    }
-
-    int ans =  div(firstOperand, secondOperand).rem;
-
-    std::string answer_str = std::to_string(ans);
 
     std::cout << "Link: " << answer_str << std::endl;
 
@@ -153,13 +153,9 @@ sc_result SCPOperatorDivRem::Execute()
     std::cout << ms_context->IsElement(elem1);
     operands[0]->SetValue(elem1);
 
-    //int answer = div(firstOperand, secondOperand);
-    FinishExecutionSuccessfully();
-    return SC_RESULT_OK;
-
+    std::cout << "SCPOperatorSIn execute(): end";
     FinishExecutionSuccessfully();
     return SC_RESULT_OK;
 }
 
 }
-

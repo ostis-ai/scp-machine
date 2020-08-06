@@ -7,7 +7,7 @@
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpoperatoratg.hpp"
+#include "SCPOperatorTg.hpp"
 #include "sc-kpm/scp/scp_lib/scp_utils.h"
 #include "sc-memory/sc_helper.h"
 #include "sc-memory/sc_memory_headers.h"
@@ -18,21 +18,21 @@
 namespace scp
 {
 
-SCPOperatorATg::SCPOperatorATg(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorTg::SCPOperatorTg(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
-std::string SCPOperatorATg::GetTypeName()
+std::string SCPOperatorTg::GetTypeName()
 {
-    return "contATg";
+    return "contTg";
 }
 
-sc_result SCPOperatorATg::Parse()
+sc_result SCPOperatorTg::Parse()
 {
     return SCPOperatorElStr2::Parse();
 }
 
-sc_result SCPOperatorATg::Execute()
+sc_result SCPOperatorTg::Execute()
 {
     std::cout << "SCPOperatorSIn execute(): start";
     if (SC_RESULT_OK != ResetValues())
@@ -62,7 +62,7 @@ sc_result SCPOperatorATg::Execute()
     {
         std::cout << "Link is INT" << std::endl;
         int value = Utils::scLinkGetContentInt(ms_context, operands[1]->GetValue());
-        int answer = (int)atan((double)value);
+        int answer = (int)tan((double)value);
         answer_str = std::to_string(answer);
     }
 
@@ -70,7 +70,7 @@ sc_result SCPOperatorATg::Execute()
     {
         std::cout << "Link is UINT" << std::endl;
         int value = Utils::scLinkGetContentUint(ms_context, operands[1]->GetValue());
-        int answer = (int)atan((double)value);
+        int answer = (int)tan((double)value);
         answer_str = std::to_string(answer);
     }
 
@@ -78,7 +78,7 @@ sc_result SCPOperatorATg::Execute()
     {
         std::cout << "Link is FLOAT" << std::endl;
         float value = Utils::scLinkGetContentFloat(ms_context, operands[1]->GetValue());
-        float answer = (float)atan((double)value);
+        float answer = (float)tan((double)value);
         answer_str = std::to_string(answer);
     }
 
@@ -86,7 +86,7 @@ sc_result SCPOperatorATg::Execute()
     {
         std::cout << "Link is DOUBLE" << std::endl;
         double value = Utils::scLinkGetContentDouble(ms_context, operands[1]->GetValue());
-        double answer = atan(value);
+        double answer = tan(value);
         answer_str = std::to_string(answer);
     }
 
@@ -101,7 +101,7 @@ sc_result SCPOperatorATg::Execute()
                 std::cout << "Link is INT" << std::endl;
                 answer_str.erase(i, intInit.length());
                 int value = std::atoi(answer_str.c_str());
-                int answer = (int)atan((double)value);
+                int answer = (int)tan((double)value);
                 answer_str = std::to_string(answer);
             }
 
@@ -113,7 +113,7 @@ sc_result SCPOperatorATg::Execute()
                 std::cout << "Link is Double" << std::endl;
                 answer_str.erase(d, intDouble.length());
                 double value = std::stod(answer_str);
-                double answer = atan(value);
+                double answer = tan(value);
                 answer_str = std::to_string(answer);
             }
         }

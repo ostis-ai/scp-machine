@@ -7,7 +7,7 @@
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpoperatoracos.hpp"
+#include "SCPOperatorCos.hpp"
 #include "sc-kpm/scp/scp_lib/scp_utils.h"
 #include "sc-memory/sc_helper.h"
 #include "sc-memory/sc_memory_headers.h"
@@ -18,21 +18,21 @@
 namespace scp
 {
 
-SCPOperatorACos::SCPOperatorACos(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorCos::SCPOperatorCos(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
-std::string SCPOperatorACos::GetTypeName()
+std::string SCPOperatorCos::GetTypeName()
 {
-    return "contACos";
+    return "contCos";
 }
 
-sc_result SCPOperatorACos::Parse()
+sc_result SCPOperatorCos::Parse()
 {
     return SCPOperatorElStr2::Parse();
 }
 
-sc_result SCPOperatorACos::Execute()
+sc_result SCPOperatorCos::Execute()
 {
     std::cout << "SCPOperatorSIn execute(): start";
     if (SC_RESULT_OK != ResetValues())
@@ -62,7 +62,7 @@ sc_result SCPOperatorACos::Execute()
     {
         std::cout << "Link is INT" << std::endl;
         int value = Utils::scLinkGetContentInt(ms_context, operands[1]->GetValue());
-        int answer = (int)acos((double)value);
+        int answer = (int)cos((double)value);
         answer_str = std::to_string(answer);
     }
 
@@ -70,15 +70,15 @@ sc_result SCPOperatorACos::Execute()
     {
         std::cout << "Link is UINT" << std::endl;
         int value = Utils::scLinkGetContentUint(ms_context, operands[1]->GetValue());
-        int answer = (int)acos((double)value);
-        std::string answer_str = std::to_string(answer);
+        int answer = (int)cos((double)value);
+        answer_str = std::to_string(answer);
     }
 
     if (Utils::scLinkContentIsFloat(ms_context, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is FLOAT" << std::endl;
         float value = Utils::scLinkGetContentFloat(ms_context, operands[1]->GetValue());
-        float answer = (float)acos((double)value);
+        float answer = (float)cos((double)value);
         answer_str = std::to_string(answer);
     }
 
@@ -86,7 +86,7 @@ sc_result SCPOperatorACos::Execute()
     {
         std::cout << "Link is DOUBLE" << std::endl;
         double value = Utils::scLinkGetContentDouble(ms_context, operands[1]->GetValue());
-        double answer = acos(value);
+        double answer = cos(value);
         answer_str = std::to_string(answer);
     }
 
@@ -101,7 +101,7 @@ sc_result SCPOperatorACos::Execute()
                 std::cout << "Link is INT" << std::endl;
                 answer_str.erase(i, intInit.length());
                 int value = std::atoi(answer_str.c_str());
-                int answer = (int)acos((double)value);
+                int answer = (int)cos((double)value);
                 answer_str = std::to_string(answer);
             }
 
@@ -113,7 +113,7 @@ sc_result SCPOperatorACos::Execute()
                 std::cout << "Link is Double" << std::endl;
                 answer_str.erase(d, intDouble.length());
                 double value = std::stod(answer_str);
-                double answer = acos(value);
+                double answer = cos(value);
                 answer_str = std::to_string(answer);
             }
         }
@@ -125,8 +125,6 @@ sc_result SCPOperatorACos::Execute()
             return SC_RESULT_OK;
         }
     }
-
-
 
     std::cout << "Link: " << answer_str << std::endl;
 

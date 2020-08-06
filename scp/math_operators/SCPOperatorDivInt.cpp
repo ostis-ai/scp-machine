@@ -7,7 +7,7 @@
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpoperatordivint.hpp"
+#include "SCPOperatorDivInt.hpp"
 #include "sc-kpm/scp/scp_lib/scp_utils.h"
 #include "sc-memory/sc_helper.h"
 #include "sc-memory/sc_memory_headers.h"

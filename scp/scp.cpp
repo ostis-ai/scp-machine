@@ -16,7 +16,7 @@
 #include "scpPrintOperatorInterpreter.hpp"
 #include "scpProgramExecutionSyncronizer.hpp"
 #include "scpProcessControlOperatorInterpreter.hpp"
-#include "SCPMathOperatorInterpreter.hpp"
+#include "scpMathOperatorInterpreter.hpp"
 #include "scpStringOperatorInterpreter.hpp"
 #include "scpAgentProcessor.hpp"
 #include "scpAgentEvent.hpp"
