@@ -1,0 +1,44 @@
+Math_Test
+=> nrel_main_idtf:
+[программа проверки математических операторов] (* <- lang_ru;; *);
+[programm for test math operators] (* <- lang_en;; *);
+<- scp_program;
+-> rrel_key_sc_element: _process1;;
+
+Math_Test = [*
+_process1
+_<- scp_process;
+//params
+_-> rrel_1:: rrel_in:: _event;
+
+//operators
+_<= nrel_decomposition_of_action:: _... (*
+
+					_-> rrel_1:: _..operator1
+					(*
+					_<- searchElStr3;;
+
+					_-> rrel_1:: rrel_fixed:: rrel_scp_const:: mySet;;
+					_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_pos_const_perm:: arc1;;
+					_-> rrel_3:: rrel_assign:: rrel_scp_var:: rrel_const:: _mylink;;
+
+					_=> nrel_goto:: _..operator2;;
+					*);;
+
+					_-> _..operator2
+					(*
+					_<- printNl;;
+
+					_-> rrel_1:: rrel_fixed:: rrel_scp_var:: _mylink;;
+
+					_=> nrel_goto:: _..operator_return;;
+					*);;
+
+					_-> _..operator_return
+					(*
+					_<- return;;
+					*);;
+
+*);;
+
+*];;

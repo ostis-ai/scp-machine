@@ -147,7 +147,6 @@ ScAddr Keynodes::op_stringReplace;
 ScAddr Keynodes::op_stringToUpperCase;
 ScAddr Keynodes::op_stringToLowerCase;
 
-ScAddr Keynodes::nrel_scp_var_value;
 
 ScAddr Keynodes::op_contAssign;
 ScAddr Keynodes::op_contErase;

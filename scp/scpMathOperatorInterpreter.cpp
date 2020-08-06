@@ -1,8 +1,16 @@
-#include "SCPMathOperatorInterpreter.hpp"
+#include "scpMathOperatorInterpreter.hpp"
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
+#include "math_operators/SCPOperatorSin.hpp"
+#include "math_operators/SCPOperatorCos.hpp"
+#include "math_operators/SCPOperatorTg.hpp"
+#include "math_operators/SCPOperatorASin.hpp"
+#include "math_operators/SCPOperatorACos.hpp"
+#include "math_operators/SCPOperatorATg.hpp"
+#include "math_operators/SCPOperatorDivInt.hpp"
+#include "math_operators/SCPOperatorDivRem.hpp"
 #include "math_operators/SCPOperatorIfEq.hpp"
 #include "math_operators/SCPOperatorIfGr.hpp"
 #include "math_operators/SCPOperatorContLn.hpp"
@@ -30,6 +38,38 @@ SC_AGENT_IMPLEMENTATION(ASCPMathOperatorInterpreter){
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
+    if (type == Keynodes::op_contSin)
+    {
+        oper = new SCPOperatorSIn(ms_context, scp_operator);
+    }
+    if (type == Keynodes::op_contCos)
+    {
+        oper = new SCPOperatorCos(ms_context, scp_operator);
+    }
+    if (type == Keynodes::op_contTg)
+    {
+        oper = new SCPOperatorTg(ms_context, scp_operator);
+    }
+    if (type == Keynodes::op_contASin)
+    {
+        oper = new SCPOperatorASin(ms_context, scp_operator);
+    }
+    if (type == Keynodes::op_contACos)
+    {
+        oper = new SCPOperatorACos(ms_context, scp_operator);
+    }
+    if (type == Keynodes::op_contATg)
+    {
+        oper = new SCPOperatorATg(ms_context, scp_operator);
+    }
+    if (type == Keynodes::op_contDivInt)
+    {
+        oper = new SCPOperatorDivInt(ms_context, scp_operator);
+    }
+    if (type == Keynodes::op_contDivRem)
+    {
+        oper = new SCPOperatorDivRem(ms_context, scp_operator);
+    }
     if (type == Keynodes::op_ifEq)
     {
         oper = new SCPOperatorIfEq(ms_context, scp_operator);
