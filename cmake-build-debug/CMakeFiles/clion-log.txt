@@ -1,0 +1,31 @@
+/snap/clion/129/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/tima/ostis/scp-machine
+-- Configuring done
+CMake Warning (dev) at /home/tima/ostis/sc-machine/cmake/codegen.cmake:61 (add_dependencies):
+  Policy CMP0046 is not set: Error on non-existent dependency in
+  add_dependencies.  Run "cmake --help-policy CMP0046" for policy details.
+  Use the cmake_policy command to set the policy and suppress this warning.
+
+  The dependency target "sc-code-generator" of target "scp-GenerateCode" does
+  not exist.
+Call Stack (most recent call first):
+  scp/CMakeLists.txt:17 (sc_codegen_ex)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at scp/CMakeLists.txt:14 (add_dependencies):
+  Policy CMP0046 is not set: Error on non-existent dependency in
+  add_dependencies.  Run "cmake --help-policy CMP0046" for policy details.
+  Use the cmake_policy command to set the policy and suppress this warning.
+
+  The dependency target "sc-kpm-common" of target "scp" does not exist.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at scp/CMakeLists.txt:14 (add_dependencies):
+  Policy CMP0046 is not set: Error on non-existent dependency in
+  add_dependencies.  Run "cmake --help-policy CMP0046" for policy details.
+  Use the cmake_policy command to set the policy and suppress this warning.
+
+  The dependency target "sc-memory-cpp" of target "scp" does not exist.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Generating done
+-- Build files have been written to: /home/tima/ostis/scp-machine/cmake-build-debug

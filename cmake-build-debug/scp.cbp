@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="scp"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\sc-machine\;CMake Files\..\sc-machine\cmake\;CMake Files\scp\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/tima/ostis/scp-machine/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/tima/ostis/scp-machine/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/tima/ostis/scp-machine/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="scp-GenerateCode">
+				<Option working_dir="/home/tima/ostis/scp-machine/cmake-build-debug/scp"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 scp-GenerateCode"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="scp">
+				<Option output="/home/tima/ostis/sc-machine/bin/extensions/libscp.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/tima/ostis/scp-machine/cmake-build-debug/scp"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DSC_PLATFORM_UNIX"/>
+					<Add option="-DSCP_MATH"/>
+					<Add option="-DSCP_STRING"/>
+					<Add directory="/home/tima/ostis/sc-machine/sc-memory"/>
+					<Add directory="/home/tima/ostis/sc-machine"/>
+					<Add directory="/home/tima/ostis/scp-machine/scp"/>
+					<Add directory="/usr/include/glib-2.0"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/glib-2.0/include"/>
+					<Add directory="/home/tima/ostis/scp-machine/scp/generated"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 scp"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="scp/fast">
+				<Option output="/home/tima/ostis/sc-machine/bin/extensions/libscp.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/tima/ostis/scp-machine/cmake-build-debug/scp"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DSC_PLATFORM_UNIX"/>
+					<Add option="-DSCP_MATH"/>
+					<Add option="-DSCP_STRING"/>
+					<Add directory="/home/tima/ostis/sc-machine/sc-memory"/>
+					<Add directory="/home/tima/ostis/sc-machine"/>
+					<Add directory="/home/tima/ostis/scp-machine/scp"/>
+					<Add directory="/usr/include/glib-2.0"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/glib-2.0/include"/>
+					<Add directory="/home/tima/ostis/scp-machine/scp/generated"/>
+					<Add directory="/usr/include/c++/9"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/9"/>
+					<Add directory="/usr/include/c++/9/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/9/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 scp/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/tima/ostis/scp-machine/cmake-build-debug/scp/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/concurrent_queue.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseEl.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseEl.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseElStr3.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseElStr3.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseElStr5.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseElStr5.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseSetStr3.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseSetStr3.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseSetStr5.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/erase_operators/SCPOperatorEraseSetStr5.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/gen_operators/SCPOperatorGenEl.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/gen_operators/SCPOperatorGenEl.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/gen_operators/SCPOperatorGenElStr3.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/gen_operators/SCPOperatorGenElStr3.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/gen_operators/SCPOperatorGenElStr5.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/gen_operators/SCPOperatorGenElStr5.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scp.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpAgentProcessor.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpEraseOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpGenOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpIfOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpKeynodes.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpMathOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpPrintOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpProcessControlOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpProcessCreator.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpProcessDestroyer.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpProgramExecutionSyncronizer.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpSearchOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpStringOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/generated/scpVarValueOperatorInterpreter.generated.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/if_operators/SCPOperatorIfCoin.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/if_operators/SCPOperatorIfCoin.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/if_operators/SCPOperatorIfType.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/if_operators/SCPOperatorIfType.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/if_operators/SCPOperatorIfVarAssign.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/if_operators/SCPOperatorIfVarAssign.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorACos.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorACos.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorASin.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorASin.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorATg.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorATg.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContAdd.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContAdd.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContDiv.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContDiv.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContLn.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContLn.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContMult.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContMult.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContPow.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContPow.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContSub.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorContSub.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorCos.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorCos.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorDivInt.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorDivInt.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorDivRem.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorDivRem.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorIfEq.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorIfEq.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorIfGr.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorIfGr.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorSin.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorSin.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorTg.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/math_operators/SCPOperatorTg.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/print_operators/SCPOperatorPrint.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/print_operators/SCPOperatorPrint.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/print_operators/SCPOperatorPrintEl.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/print_operators/SCPOperatorPrintEl.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorCall.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorCall.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorReturn.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorReturn.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorSysWait.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorSysWait.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorWaitReturn.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/process_control_operators/SCPOperatorWaitReturn.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scp.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scp.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpAgentEvent.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpAgentEvent.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpAgentProcessor.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpAgentProcessor.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpEraseOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpEraseOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpGenOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpGenOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpIfOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpIfOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpKeynodes.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpKeynodes.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpMathOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpMathOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperand.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperand.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperator.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperator.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperatorSet.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperatorSet.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperatorStr.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpOperatorStr.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpParameter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpParameter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpPrintOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpPrintOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProcessControlOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProcessControlOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProcessCreator.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProcessCreator.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProcessDestroyer.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProcessDestroyer.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProgramExecutionSyncronizer.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpProgramExecutionSyncronizer.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpSearchOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpSearchOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpStringOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpStringOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpUtils.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpUtils.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpVarValueOperatorInterpreter.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpVarValueOperatorInterpreter.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpWaitEvent.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/scpWaitEvent.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchElStr3.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchElStr3.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchElStr5.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchElStr5.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchSetStr3.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchSetStr3.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchSetStr5.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/search_operators/SCPOperatorSearchSetStr5.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorContStringConcat.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorContStringConcat.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringEndsWith.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringEndsWith.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringIfEq.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringIfEq.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringIfGr.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringIfGr.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringLen.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringLen.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringReplace.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringReplace.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringSlice.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringSlice.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringSplit.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringSplit.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringStartsWith.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringStartsWith.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringSub.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringSub.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringToLowerCase.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringToLowerCase.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringToUpperCase.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/string_operators/SCPOperatorStringToUpperCase.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/var_value_operators/SCPOperatorVarAssign.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/var_value_operators/SCPOperatorVarAssign.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/var_value_operators/SCPOperatorVarErase.cpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/var_value_operators/SCPOperatorVarErase.hpp">
+			<Option target="scp"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/../sc-machine/cmake/codegen.cmake">
+			<Option virtualFolder="CMake Files\..\sc-machine\cmake\"/>
+		</Unit>
+		<Unit filename="/home/tima/ostis/scp-machine/scp/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\scp\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
