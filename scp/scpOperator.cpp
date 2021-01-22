@@ -51,12 +51,16 @@ sc_result SCPOperator::ResetValues()
 
 sc_result SCPOperator::CheckNullValues()
 {
+    int k=0;
     for (std::vector<SCPOperand*>::iterator i = operands.begin(); i != operands.end(); ++i)
     {
+        k++;
         if (!(*i))
         {
 #ifdef SCP_DEBUG
-            Utils::logSCPError(ms_context, "One or more operands missed", addr);
+           // Utils::logSCPError(ms_context, "One or more operands missed", addr);
+           // std::cout<<"NUMBER: "<<k<<std::endl;
+            Utils::printInfo(ms_context, addr);
 #endif
             FinishExecutionWithError();
             return SC_RESULT_ERROR_INVALID_PARAMS;

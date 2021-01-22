@@ -80,7 +80,6 @@ sc_result SCPOperatorCall::Parse()
             params[operand->GetOrder() - 1] = operand;
         }
     }
-
     return SC_RESULT_OK;
 }
 
@@ -127,10 +126,13 @@ sc_result SCPOperatorCall::Execute()
     else
         return SC_RESULT_ERROR_INVALID_PARAMS;
 
+
     ScIterator5Ptr iter_params = ms_context->Iterator5(process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program_node);
     while (iter_params->Next())
     {
         SCPParameter *param = new SCPParameter(ms_context, iter_params->Get(1));
+        //std::cout << (int)param->GetOrder() << std::endl;
+        //Utils::printInfo(ms_context, iter_params->Get(1));
         if (!(param->GetOrder() > 0 && expected_params[param->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG

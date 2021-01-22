@@ -108,7 +108,6 @@ _<= nrel_decomposition_of_action:: _... (*
 					_-> rrel_1:: rrel_fixed:: rrel_scp_var:: _curr_arc;;
 					_-> rrel_2:: rrel_fixed:: rrel_scp_var:: _answer;;
 					*);;
-			
 			_-> rrel_3:: rrel_assign:: rrel_scp_var:: _descr;;
 						
 			_=> nrel_goto:: _..operator9;;

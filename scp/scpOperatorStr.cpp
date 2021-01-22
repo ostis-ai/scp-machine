@@ -55,10 +55,14 @@ SCPOperatorElStr2::SCPOperatorElStr2(const std::unique_ptr<ScMemoryContext>& ctx
 sc_result SCPOperatorElStr2::Parse()
 {
     SCPOperator::Parse();
+   // Utils::printInfo(ms_context, addr);
     ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
+       // std::cout << "ok" << std::endl;
         SCPOperand* operand = new SCPOperand(ms_context, iter_operator->Get(1));
+        //Utils::printInfo(ms_context, iter_operator->Get(1));
+
         if (!(operand->GetOrder() > 0 && operand->GetOrder() < 3 && operands[operand->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG

@@ -4,7 +4,6 @@ cmake_minimum_required (VERSION 2.8)
 get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
 
 set(CMAKE_BUILD_TYPE Debug)
-
 set(SC_BIN_PATH "${PARENT_DIR}/sc-machine/bin/")
 set(SC_MACHINE_ROOT "${PARENT_DIR}/sc-machine/")
 set(SC_MEMORY_SRC "${SC_MACHINE_ROOT}/sc-memory/")

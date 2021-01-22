@@ -26,7 +26,7 @@ public:
     static ScAddr msAgentKeynode;
 
 private:
-    void deleteSCPVarsSet(ScAddr & setAddr);
+    void deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAddr);
 
 };
 
