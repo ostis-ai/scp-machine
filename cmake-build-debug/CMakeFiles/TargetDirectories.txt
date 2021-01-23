@@ -1,6 +1,0 @@
-/home/tima/ostis/scp-machine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/tima/ostis/scp-machine/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/tima/ostis/scp-machine/cmake-build-debug/scp/CMakeFiles/rebuild_cache.dir
-/home/tima/ostis/scp-machine/cmake-build-debug/scp/CMakeFiles/edit_cache.dir
-/home/tima/ostis/scp-machine/cmake-build-debug/scp/CMakeFiles/scp-GenerateCode.dir
-/home/tima/ostis/scp-machine/cmake-build-debug/scp/CMakeFiles/scp.dir
