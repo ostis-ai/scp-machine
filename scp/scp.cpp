@@ -21,6 +21,7 @@
 #include "scpAgentProcessor.hpp"
 #include "scpAgentEvent.hpp"
 #include "scpWaitEvent.hpp"
+#include "scpFinishedInterpretationActionProcessor.hpp"
 
 using namespace scp;
 
@@ -48,6 +49,7 @@ sc_result scpModule::InitializeImpl()
     SC_AGENT_REGISTER(ASCPProcessControlOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPAgentActivator)
     SC_AGENT_REGISTER(ASCPAgentDeactivator)
+    SC_AGENT_REGISTER(ASCPFinishedInterpretationActionProcessor)
     SC_AGENT_REGISTER(ASCPMathOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPStringOperatorInterpreter)
 
@@ -75,6 +77,7 @@ sc_result scpModule::ShutdownImpl()
     SC_AGENT_UNREGISTER(ASCPAgentDeactivator)
     SC_AGENT_UNREGISTER(ASCPMathOperatorInterpreter)
     SC_AGENT_UNREGISTER(ASCPStringOperatorInterpreter)
+    SC_AGENT_UNREGISTER(ASCPFinishedInterpretationActionProcessor)
 
     SCPAgentEvent::unregister_all_scp_agents();
     SCPWaitEvent::unregister_all_sys_wait();
