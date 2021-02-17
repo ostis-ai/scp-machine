@@ -20,3 +20,4 @@ manifest.json
 
 .vscode
 __pycache__
+.idea

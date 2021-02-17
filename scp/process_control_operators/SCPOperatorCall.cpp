@@ -131,8 +131,6 @@ sc_result SCPOperatorCall::Execute()
     while (iter_params->Next())
     {
         SCPParameter *param = new SCPParameter(ms_context, iter_params->Get(1));
-        //std::cout << (int)param->GetOrder() << std::endl;
-        //Utils::printInfo(ms_context, iter_params->Get(1));
         if (!(param->GetOrder() > 0 && expected_params[param->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG
