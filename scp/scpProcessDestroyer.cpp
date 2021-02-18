@@ -50,7 +50,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
                 while (it_pairs->Next())
                 {
                     ScAddr curr_pair = it_pairs->Get(2);
-                    deleteSCPVarsSet(curr_pair);
+                    deleteSCPVarsSet(curr_pair, process);
                     ms_context->EraseElement(curr_pair);
                 }
                 ms_context->EraseElement(curr_operand);
@@ -64,13 +64,13 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
                 if (ms_context->HelperCheckArc(Keynodes::rrel_scp_const, it_operand->Get(1), ScType::EdgeAccessConstPosPerm))
                 {
                     ScAddr curr_operand = it_operand->Get(2);
-                    deleteSCPVarsSet(curr_operand);
+                    deleteSCPVarsSet(curr_operand, process);
                     ms_context->EraseElement(curr_operand);
                 }
             }
         }
 
-        deleteSCPVarsSet(curr_operator);
+        deleteSCPVarsSet(curr_operator, process);
         ms_context->EraseElement(curr_operator);
     }
 
@@ -80,14 +80,18 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
     return SC_RESULT_OK;
 }
 
-void ASCPProcessDestroyer::deleteSCPVarsSet(ScAddr & setAddr)
+void ASCPProcessDestroyer::deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAddr)
 {
     ScAddrVector elems;
     ScIterator5Ptr it_operand = ms_context->Iterator5(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_var);
     while (it_operand->Next())
     {
         ScAddr elem = it_operand->Get(2);
-        elems.push_back(elem);
+        ScIterator5Ptr it_params = ms_context->Iterator5(processAddr, ScType::EdgeAccessConstPosPerm, elem, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_out);
+        if (!it_params->Next())
+        {
+            elems.push_back(elem);
+        }
     }
     for (size_t i = 0; i < elems.size(); i++ )
     {

@@ -5,7 +5,7 @@
 #include "sc-memory/cpp/kpm/sc_agent.hpp"
 #include "scpKeynodes.hpp"
 
-#include "SCPMathOperatorInterpreter.generated.hpp"
+#include "generated/scpMathOperatorInterpreter.generated.hpp"
 
 namespace scp
 {

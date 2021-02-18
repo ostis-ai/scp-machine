@@ -38,6 +38,11 @@ public:
     void FinishExecutionSuccessfully();
     void FinishExecutionUnsuccessfully();
     void FinishExecutionWithError();
+    static void ClearExecutionState(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr);
+    static void FinishExecution(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr);
+    static void FinishExecutionSuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr);
+    static void FinishExecutionUnsuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr);
+    static void FinishExecutionWithError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr);
 };
 
 }

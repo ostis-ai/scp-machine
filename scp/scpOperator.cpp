@@ -51,12 +51,16 @@ sc_result SCPOperator::ResetValues()
 
 sc_result SCPOperator::CheckNullValues()
 {
+    int k=0;
     for (std::vector<SCPOperand*>::iterator i = operands.begin(); i != operands.end(); ++i)
     {
+        k++;
         if (!(*i))
         {
 #ifdef SCP_DEBUG
-            Utils::logSCPError(ms_context, "One or more operands missed", addr);
+            // Utils::logSCPError(ms_context, "One or more operands missed", addr);
+            // std::cout<<"NUMBER: "<<k<<std::endl;
+            Utils::printInfo(ms_context, addr);
 #endif
             FinishExecutionWithError();
             return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -78,8 +82,33 @@ sc_result SCPOperator::Execute()
 
 void SCPOperator::ClearExecutionState()
 {
+    SCPOperator::ClearExecutionState(ms_context, addr);
+}
+
+void SCPOperator::FinishExecution()
+{
+    SCPOperator::FinishExecution(ms_context, addr);
+}
+
+void SCPOperator::FinishExecutionSuccessfully()
+{
+    SCPOperator::FinishExecutionSuccessfully(ms_context, addr);
+}
+
+void SCPOperator::FinishExecutionUnsuccessfully()
+{
+    SCPOperator::FinishExecutionUnsuccessfully(ms_context, addr);
+}
+
+void SCPOperator::FinishExecutionWithError()
+{
+    SCPOperator::FinishExecutionWithError(ms_context, addr);
+}
+
+void SCPOperator::ClearExecutionState(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
+{
     std::vector<ScAddr> arcs;
-    ScIterator3Ptr iter=ms_context->Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, addr);
+    ScIterator3Ptr iter=ctx->Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, oper_addr);
     while (iter->Next())
     {
         if (iter->Get(0)==Keynodes::active_action)
@@ -94,33 +123,33 @@ void SCPOperator::ClearExecutionState()
             arcs.push_back(iter->Get(1));
     }
     for (std::vector<ScAddr>::iterator i = arcs.begin(); i != arcs.end(); ++i)
-        ms_context->EraseElement(*i);
+        ctx->EraseElement(*i);
 }
 
-void SCPOperator::FinishExecution()
+void SCPOperator::FinishExecution(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, addr);
+    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_addr);
 }
 
-void SCPOperator::FinishExecutionSuccessfully()
+void SCPOperator::FinishExecutionSuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
-    ClearExecutionState();
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, addr);
-    FinishExecution();
+    ClearExecutionState(ctx, oper_addr);
+    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_addr);
+    FinishExecution(ctx, oper_addr);
 }
 
-void SCPOperator::FinishExecutionUnsuccessfully()
+void SCPOperator::FinishExecutionUnsuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
-    ClearExecutionState();
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, addr);
-    FinishExecution();
+    ClearExecutionState(ctx, oper_addr);
+    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, oper_addr);
+    FinishExecution(ctx, oper_addr);
 }
 
-void SCPOperator::FinishExecutionWithError()
+void SCPOperator::FinishExecutionWithError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
-    ClearExecutionState();
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, addr);
-    FinishExecution();
+    ClearExecutionState(ctx, oper_addr);
+    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, oper_addr);
+    FinishExecution(ctx, oper_addr);
 }
 
 SCPOperator::~SCPOperator()

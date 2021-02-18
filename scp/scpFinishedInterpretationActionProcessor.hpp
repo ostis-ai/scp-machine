@@ -11,22 +11,19 @@
 #include "sc-memory/cpp/kpm/sc_agent.hpp"
 #include "scpKeynodes.hpp"
 
-#include "scpProcessDestroyer.generated.hpp"
+#include "scpFinishedInterpretationActionProcessor.generated.hpp"
 
 namespace scp
 {
 
-class ASCPProcessDestroyer : public ScAgent
+class ASCPFinishedInterpretationActionProcessor : public ScAgent
 {
     SC_CLASS(Agent, Event(Keynodes::question_finished, ScEvent::Type::AddOutputEdge))
     SC_GENERATED_BODY()
 
 public:
-    SC_PROPERTY(Keynode("sc_agent_of_scp_process_destruction"), ForceCreate)
+    SC_PROPERTY(Keynode("sc_agent_of_finished_scp_interpretation_action_processing"), ForceCreate)
     static ScAddr msAgentKeynode;
-
-private:
-    void deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAddr);
 
 };
 

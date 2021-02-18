@@ -11,9 +11,6 @@
 #include "sc-memory/cpp/sc_wait.hpp"
 #include <iostream>
 
-//!TODO Eliminate time dependency
-#define WAIT_TIMEOUT 59999
-
 namespace scp {
 
 //genEl
@@ -53,23 +50,11 @@ sc_result SCPOperatorWaitReturn::Execute()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    auto check = [](ScAddr const & listenAddr,
-                    ScAddr const & edgeAddr,
-                    ScAddr const & otherAddr)
-    {
-        return otherAddr==Keynodes::question_finished;
-    };
-
-    //!TODO Fix first parameter pass
-    ScWaitCondition<ScEventAddInputEdge> waiter((ScMemoryContext&)ms_context, operands[0]->GetValue(), SC_WAIT_CHECK(check));
-    if (waiter.Wait(WAIT_TIMEOUT))
+    if (ms_context->HelperCheckArc(Keynodes::question_finished, operands[0]->GetValue(), ScType::EdgeAccessConstPosPerm))
     {
         FinishExecutionSuccessfully();
     }
-    else
-    {
-        FinishExecutionUnsuccessfully();
-    }
+
     return SC_RESULT_OK;
 }
 }

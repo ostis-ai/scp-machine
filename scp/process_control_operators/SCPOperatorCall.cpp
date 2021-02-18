@@ -80,7 +80,6 @@ sc_result SCPOperatorCall::Parse()
             params[operand->GetOrder() - 1] = operand;
         }
     }
-
     return SC_RESULT_OK;
 }
 
@@ -126,6 +125,7 @@ sc_result SCPOperatorCall::Execute()
         process_node = iter_temp->Get(2);
     else
         return SC_RESULT_ERROR_INVALID_PARAMS;
+
 
     ScIterator5Ptr iter_params = ms_context->Iterator5(process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program_node);
     while (iter_params->Next())
