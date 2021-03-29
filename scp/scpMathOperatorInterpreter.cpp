@@ -20,7 +20,7 @@
 #include "math_operators/SCPOperatorContPow.hpp"
 #include "math_operators/SCPOperatorContDiv.hpp"
 
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 #include <string>
 

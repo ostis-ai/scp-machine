@@ -12,7 +12,7 @@
 #include "erase_operators/SCPOperatorEraseElStr5.hpp"
 #include "erase_operators/SCPOperatorEraseSetStr3.hpp"
 #include "erase_operators/SCPOperatorEraseSetStr5.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {

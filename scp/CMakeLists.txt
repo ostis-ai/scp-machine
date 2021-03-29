@@ -11,7 +11,7 @@ add_definitions(-DSCP_STRING)
 include_directories(${SCP_SRC} ${SC_MEMORY_SRC} ${GLIB2_INCLUDE_DIRS})
 
 add_library(scp SHARED ${SOURCES} ${HEADERS})
-add_dependencies(scp sc-memory-cpp sc-kpm-common)
-target_link_libraries(scp sc-memory-cpp sc-kpm-common)
+add_dependencies(scp sc-memory sc-kpm-common)
+target_link_libraries(scp sc-memory sc-kpm-common)
 
 sc_codegen_ex(scp ${SCP_SRC} "${SCP_SRC}/generated")

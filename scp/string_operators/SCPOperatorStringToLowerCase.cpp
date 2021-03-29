@@ -7,9 +7,9 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringToLowerCase.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
-#include "sc-memory/cpp/sc_stream.hpp"
-#include <sc-memory/cpp/sc_link.hpp>
+#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_stream.hpp"
+#include <sc-memory/sc-memory/sc_link.hpp>
 #include <iostream>
 #include <cstring>
 #include <boost/algorithm/string.hpp>
@@ -67,7 +67,7 @@ sc_result SCPOperatorStringToLowerCase::Execute()
             ScStreamPtr streamPtr = Utils::StreamFromString(boost::to_lower_copy(str1));
             ScAddr answerLink = ms_context->CreateLink();
 
-            ms_context->SetLinkContent(answerLink, *streamPtr);
+            ms_context->SetLinkContent(answerLink, streamPtr);
 
             Utils::printOperatorAnswer(ms_context, operands[0], answerLink);
 

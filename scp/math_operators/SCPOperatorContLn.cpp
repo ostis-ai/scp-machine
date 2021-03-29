@@ -8,11 +8,10 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorContLn.hpp"
-#include "sc-kpm/scp/scp_lib/scp_utils.h"
-#include "sc-memory/sc_helper.h"
-#include "sc-memory/sc_memory_headers.h"
-#include "sc-memory/cpp/sc_stream.hpp"
-#include "sc-memory/cpp/sc_link.hpp"
+#include "sc-core/sc_helper.h"
+#include "sc-core/sc_memory_headers.h"
+#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc-memory/sc_link.hpp"
 #include <iostream>
 #include <math.h>
 
@@ -129,7 +128,7 @@ sc_result SCPOperatorContLn::Execute()
 
     ScStreamPtr streamPtr = Utils::StreamFromString(answer_str);
     ScAddr answerLink = ms_context->CreateLink();
-    ms_context->SetLinkContent(answerLink, *streamPtr);
+    ms_context->SetLinkContent(answerLink, streamPtr);
 
     ScAddr elem1, elem3, elem5, arc1;
     elem1.Reset();

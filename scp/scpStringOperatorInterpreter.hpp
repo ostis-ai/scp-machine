@@ -1,8 +1,8 @@
 #pragma once
 
-#include "sc-memory/cpp/sc_addr.hpp"
-#include "sc-memory/cpp/sc_object.hpp"
-#include "sc-memory/cpp/kpm/sc_agent.hpp"
+#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc-memory/sc_object.hpp"
+#include "sc-memory/sc-memory/kpm/sc_agent.hpp"
 #include "scpKeynodes.hpp"
 
 #include "scpStringOperatorInterpreter.generated.hpp"

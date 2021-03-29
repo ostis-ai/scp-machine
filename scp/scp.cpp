@@ -1,9 +1,9 @@
 
 #include <iostream>
-#include "sc-memory/cpp/sc_addr.hpp"
-#include "sc-memory/cpp/sc_object.hpp"
-#include "sc-memory/cpp/kpm/sc_agent.hpp"
-#include "sc-memory/cpp/sc_event.hpp"
+#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc-memory/sc_object.hpp"
+#include "sc-memory/sc-memory/kpm/sc_agent.hpp"
+#include "sc-memory/sc-memory/sc_event.hpp"
 #include "scp.hpp"
 #include "scpKeynodes.hpp"
 #include "scpProcessCreator.hpp"

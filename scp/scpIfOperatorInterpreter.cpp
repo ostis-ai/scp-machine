@@ -10,7 +10,7 @@
 #include "if_operators/SCPOperatorIfCoin.hpp"
 #include "if_operators/SCPOperatorIfType.hpp"
 #include "if_operators/SCPOperatorIfVarAssign.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp

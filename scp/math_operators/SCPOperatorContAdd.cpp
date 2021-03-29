@@ -7,8 +7,8 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorContAdd.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
-#include "sc-memory/cpp/sc_stream.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_stream.hpp"
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -142,7 +142,7 @@ sc_result SCPOperatorContAdd::Execute()
 
     ScStreamPtr streamPtr = Utils::StreamFromString(answer_str);
     ScAddr answerLink = ms_context->CreateLink();
-    ms_context->SetLinkContent(answerLink, *streamPtr);
+    ms_context->SetLinkContent(answerLink, streamPtr);
 
     ScAddr elem1, elem3, elem5, arc1;
     elem1.Reset();

@@ -8,7 +8,7 @@
 #include "scpUtils.hpp"
 #include "SCPOperatorSysWait.hpp"
 #include "scpWaitEvent.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp

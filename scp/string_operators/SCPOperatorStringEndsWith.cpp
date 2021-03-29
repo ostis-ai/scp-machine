@@ -7,9 +7,9 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringEndsWith.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
-#include "sc-memory/cpp/sc_stream.hpp"
-#include <sc-memory/cpp/sc_link.hpp>
+#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_stream.hpp"
+#include <sc-memory/sc-memory/sc_link.hpp>
 #include <iostream>
 #include <cstring>
 

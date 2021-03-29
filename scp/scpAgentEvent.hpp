@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "sc-memory/cpp/sc_addr.hpp"
-#include "sc-memory/cpp/sc_event.hpp"
+#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc-memory/sc_event.hpp"
 #include "concurrent_queue.hpp"
 
 namespace scp {

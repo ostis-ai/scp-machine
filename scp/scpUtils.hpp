@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "sc-memory/cpp/sc_memory.hpp"
-#include "sc-memory/cpp/sc_stream.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_stream.hpp"
 #include "scpOperand.hpp"
 
 #include <string>
