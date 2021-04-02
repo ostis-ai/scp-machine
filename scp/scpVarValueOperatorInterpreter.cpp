@@ -9,7 +9,7 @@
 #include "scpVarValueOperatorInterpreter.hpp"
 #include "var_value_operators/SCPOperatorVarAssign.hpp"
 #include "var_value_operators/SCPOperatorVarErase.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp

@@ -8,11 +8,10 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorSin.hpp"
-#include "sc-kpm/scp/scp_lib/scp_utils.h"
-#include "sc-memory/sc_helper.h"
-#include "sc-memory/sc_memory_headers.h"
-#include "sc-memory/cpp/sc_stream.hpp"
-#include "sc-memory/cpp/sc_link.hpp"
+#include "sc-core/sc_helper.h"
+#include "sc-core/sc_memory_headers.h"
+#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc-memory/sc_link.hpp"
 #include <iostream>
 #include <math.h>
 #include <regex>
@@ -141,7 +140,7 @@ sc_result SCPOperatorSIn::Execute()
     arc1.Reset();
 
     elem5 = Keynodes::nrel_scp_var_value;
-    ms_context->SetLinkContent(answer_link, *streamPtr);
+    ms_context->SetLinkContent(answer_link, streamPtr);
     elem3 = answer_link;
     elem1 = operands[0]->CreateNodeOrLink();
 

@@ -6,10 +6,10 @@
 
 #include "scpUtils.hpp"
 #include "scpKeynodes.hpp"
-#include "sc-memory/sc_helper.h"
-#include "sc-memory/sc_memory_headers.h"
-#include "sc-memory/cpp/sc_stream.hpp"
-#include "sc-memory/cpp/sc_link.hpp"
+#include "sc-core/sc_helper.h"
+#include "sc-core/sc_memory_headers.h"
+#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc-memory/sc_link.hpp"
 #include "scpOperand.hpp"
 
 #include <regex>
@@ -184,8 +184,8 @@ void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAd
 
 bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
@@ -203,8 +203,8 @@ bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
 
 int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         std::string intInit = "int: ";
@@ -223,8 +223,8 @@ int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
 
 string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
@@ -239,8 +239,8 @@ string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const
 
 bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
@@ -261,8 +261,8 @@ bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
 
 int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         std::string intInit = "uint: ";
@@ -282,8 +282,8 @@ int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
 
 bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
@@ -304,8 +304,8 @@ bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr co
 
 float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         std::string intInit = "float:";
@@ -323,8 +323,8 @@ float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr 
 
 bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
@@ -346,8 +346,8 @@ bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
 
 double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
 {
-    ScStream stream;
-    if (ctx->GetLinkContent(elemAddr, stream))
+    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    if (stream)
     {
         std::string string;
         std::string intInit = "double: ";

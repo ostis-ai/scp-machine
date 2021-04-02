@@ -6,7 +6,7 @@
 
 #include "scpKeynodes.hpp"
 #include "SCPOperatorVarErase.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp

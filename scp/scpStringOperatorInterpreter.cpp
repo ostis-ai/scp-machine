@@ -21,7 +21,7 @@
 #include "string_operators/SCPOperatorStringSub.hpp"
 #include "string_operators/SCPOperatorStringIfEq.hpp"
 #include "string_operators/SCPOperatorStringIfGr.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp

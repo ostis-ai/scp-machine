@@ -9,7 +9,7 @@
 #include "scpPrintOperatorInterpreter.hpp"
 #include "print_operators/SCPOperatorPrintEl.hpp"
 #include "print_operators/SCPOperatorPrint.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp

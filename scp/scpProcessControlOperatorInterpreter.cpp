@@ -11,7 +11,7 @@
 #include "process_control_operators/SCPOperatorSysWait.hpp"
 #include "process_control_operators/SCPOperatorCall.hpp"
 #include "process_control_operators/SCPOperatorWaitReturn.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {

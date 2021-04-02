@@ -11,7 +11,7 @@
 #include "search_operators/SCPOperatorSearchElStr5.hpp"
 #include "search_operators/SCPOperatorSearchSetStr3.hpp"
 #include "search_operators/SCPOperatorSearchSetStr5.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {

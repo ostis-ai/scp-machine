@@ -7,8 +7,8 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorPrint.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
-#include "sc-memory/cpp/sc_stream.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_stream.hpp"
 #include <iostream>
 
 namespace scp
@@ -54,8 +54,8 @@ sc_result SCPOperatorPrint::Execute()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    ScStream stream;
-    if (ms_context->GetLinkContent(operands[0]->GetValue(), stream))
+    ScStreamPtr stream = ms_context->GetLinkContent(operands[0]->GetValue());
+    if (stream)
     {
         std::string str;
         if (ScStreamConverter::StreamToString(stream, str))

@@ -7,9 +7,9 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringSplit.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
-#include "sc-memory/cpp/sc_stream.hpp"
-#include <sc-memory/cpp/sc_link.hpp>
+#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_stream.hpp"
+#include <sc-memory/sc-memory/sc_link.hpp>
 #include <iostream>
 #include <cstring>
 #include <algorithm>
@@ -85,7 +85,7 @@ sc_result SCPOperatorStringSplit::Execute()
             ScStreamPtr streamPtr = Utils::StreamFromString(output[i]);
             ScAddr answerLink = ms_context->CreateLink();
 
-            ms_context->SetLinkContent(answerLink, *streamPtr);
+            ms_context->SetLinkContent(answerLink, streamPtr);
 
             ms_context->CreateArc(sc_type_arc_pos_const_perm, setNode, answerLink);
             cout << output[i] << endl;

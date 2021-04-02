@@ -4,7 +4,7 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "sc-memory/cpp/sc_addr.hpp"
+#include "sc-memory/sc-memory/sc_addr.hpp"
 #include "scp.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"

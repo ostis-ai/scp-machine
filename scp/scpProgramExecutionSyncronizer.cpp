@@ -6,7 +6,7 @@
 
 #include "scpUtils.hpp"
 #include "scpProgramExecutionSyncronizer.hpp"
-#include "sc-memory/cpp/sc_memory.hpp"
+#include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {
