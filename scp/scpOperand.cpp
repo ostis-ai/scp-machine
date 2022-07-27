@@ -71,7 +71,7 @@ void SCPOperand::ResetValue()
 void SCPOperand::SetValue(ScAddr value)
 {
     value_addr = value;
-    ms_context->CreateArc(SC_TYPE(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
+    ms_context->CreateArc(ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
 }
 
 ScAddr SCPOperand::CreateNodeOrLink()
@@ -80,7 +80,7 @@ ScAddr SCPOperand::CreateNodeOrLink()
         value_addr = ms_context->CreateLink();
     else
         value_addr = ms_context->CreateNode(element_type);
-    ms_context->CreateArc(SC_TYPE(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
+    ms_context->CreateArc(ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
     return value_addr;
 }
 
