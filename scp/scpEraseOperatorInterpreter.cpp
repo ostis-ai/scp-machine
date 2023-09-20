@@ -23,7 +23,7 @@ SC_AGENT_IMPLEMENTATION(ASCPEraseOperatorInterpreter)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
+    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
 
     ScAddr type;
     if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))

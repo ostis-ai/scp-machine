@@ -154,8 +154,8 @@ sc_result SCPOperatorContAdd::Execute()
     elem5 = Keynodes::nrel_scp_var_value;
     elem3 = answerLink;
     elem1 = operands[0]->CreateNodeOrLink();
-    arc1 = ms_context->CreateArc(sc_type_arc_common, elem1, elem3);
-    ms_context->CreateArc(sc_type_arc_pos_const_perm, elem5, arc1);
+    arc1 = ms_context->CreateEdge(sc_type_arc_common, elem1, elem3);
+    ms_context->CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
     operands[0]->SetValue(elem1);
 
     std::cout << "SCPOperatorContAdd execute(): end \n";

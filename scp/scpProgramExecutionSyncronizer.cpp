@@ -17,20 +17,20 @@ SC_AGENT_IMPLEMENTATION(ASCPProgramExecutionSyncronizer)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetArcEnd(edgeAddr);
+    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
 
-    if (ms_context->HelperCheckArc(Keynodes::question_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (ms_context->HelperCheckEdge(Keynodes::question_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_error);
         return SC_RESULT_OK;
     }
-    if (ms_context->HelperCheckArc(Keynodes::question_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (ms_context->HelperCheckEdge(Keynodes::question_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_then);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);
         return SC_RESULT_OK;
     }
-    if (ms_context->HelperCheckArc(Keynodes::question_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (ms_context->HelperCheckEdge(Keynodes::question_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_else);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);
@@ -46,7 +46,7 @@ void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr &scp_operat
     while (iter_error->Next())
     {
         ScAddr next_op = iter_error->Get(2);
-        ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
+        ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
     }
 }
 

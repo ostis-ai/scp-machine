@@ -125,7 +125,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                 operands[1]->SetValue(iter->Get(1));
                 found = SC_TRUE;
             }
-            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+            ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
         }
 
         if (SC_TRUE == found)
@@ -157,7 +157,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     operands[0]->SetValue(iter->Get(0));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
             }
             if (set_operands[1] != nullptr)
             {
@@ -174,7 +174,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             found = SC_TRUE;
         }
@@ -208,7 +208,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[2] != nullptr)
             {
@@ -225,7 +225,7 @@ sc_result SCPOperatorSearchSetStr3::Execute()
                     }
                     operands[2]->SetValue(iter->Get(2));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
             }
             found = SC_TRUE;
         }

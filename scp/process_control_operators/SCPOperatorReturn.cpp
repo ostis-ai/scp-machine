@@ -51,9 +51,9 @@ sc_result SCPOperatorReturn::Execute()
         ScIterator5Ptr iter3 = ms_context->Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, process_node, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_result);
         if (iter3->Next())
         {
-            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, iter3->Get(0));
+            ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, iter3->Get(0));
         }
-        ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, process_node);
+        ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, process_node);
     }
     return SC_RESULT_OK;
 }

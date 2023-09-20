@@ -84,28 +84,28 @@ sc_result SCPOperatorGenElStr3::Execute()
     {
         elem1 = operands[0]->GetValue();
         elem3 = operands[2]->GetValue();
-        operands[1]->SetValue(ms_context->CreateArc(operands[1]->GetType(), elem1, elem3));
+        operands[1]->SetValue(ms_context->CreateEdge(operands[1]->GetType(), elem1, elem3));
         break;
     }
     case 0x001:
     {
         elem1 = operands[0]->CreateNodeOrLink();
         elem3 = operands[2]->GetValue();
-        operands[1]->SetValue(ms_context->CreateArc(operands[1]->GetType(), elem1, elem3));
+        operands[1]->SetValue(ms_context->CreateEdge(operands[1]->GetType(), elem1, elem3));
         break;
     }
     case 0x100:
     {
         elem1 = operands[0]->GetValue();
         elem3 = operands[2]->CreateNodeOrLink();
-        operands[1]->SetValue(ms_context->CreateArc(operands[1]->GetType(), elem1, elem3));
+        operands[1]->SetValue(ms_context->CreateEdge(operands[1]->GetType(), elem1, elem3));
         break;
     }
     case 0x000:
     {
         elem1 = operands[0]->CreateNodeOrLink();
         elem3 = operands[2]->CreateNodeOrLink();
-        operands[1]->SetValue(ms_context->CreateArc(operands[1]->GetType(), elem1, elem3));
+        operands[1]->SetValue(ms_context->CreateEdge(operands[1]->GetType(), elem1, elem3));
         break;
     }
     default:

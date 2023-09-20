@@ -67,8 +67,8 @@ sc_result SCPWaitEvent::Run(sc_event const* evt, sc_addr edge, sc_addr other_el)
     ScMemoryContext& ctx = (ScMemoryContext&)scpModule::s_default_ctx;
     ScAddr oper_node = ScAddr(resolve_sc_addr_from_pointer(sc_event_get_data(evt)));
 
-    ctx.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_node);
-    ctx.CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_node);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_node);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_node);
 
     auto checker = [&oper_node](SCPWaitEvent * event)
     {
