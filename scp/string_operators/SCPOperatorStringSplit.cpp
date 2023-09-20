@@ -87,7 +87,7 @@ sc_result SCPOperatorStringSplit::Execute()
 
             ms_context->SetLinkContent(answerLink, streamPtr);
 
-            ms_context->CreateArc(sc_type_arc_pos_const_perm, setNode, answerLink);
+            ms_context->CreateEdge(sc_type_arc_pos_const_perm, setNode, answerLink);
             cout << output[i] << endl;
         }
 

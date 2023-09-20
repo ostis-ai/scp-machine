@@ -18,9 +18,9 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr action = ms_context->GetArcEnd(edgeAddr);
+    ScAddr action = ms_context->GetEdgeTarget(edgeAddr);
 
-    if (!ms_context->HelperCheckArc(Keynodes::question_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm))
+    if (!ms_context->HelperCheckEdge(Keynodes::question_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm))
         return SC_RESULT_ERROR_INVALID_PARAMS;
 
     ScAddr program, params;
@@ -81,16 +81,16 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
         ScIterator5Ptr oper_iter = ms_context->Iterator5(iter_temp->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
         if (oper_iter->Next())
         {
-            ScAddr arc = ms_context->CreateArc(ScType::EdgeDCommonConst, action, const_process_node);
-            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_result, arc);
-            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, oper_iter->Get(2));
+            ScAddr arc = ms_context->CreateEdge(ScType::EdgeDCommonConst, action, const_process_node);
+            ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_result, arc);
+            ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, oper_iter->Get(2));
         }
         else
         {
 #ifdef SCP_DEBUG
             Utils::logSCPError(ms_context, "Missed initial scp-operator", program);
 #endif
-            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
+            ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
         }
     }
     else
@@ -98,7 +98,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
 #ifdef SCP_DEBUG
         Utils::logSCPError(ms_context, "Missed scp-process decomposition", program);
 #endif
-        ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
+        ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
     }
 
     return SC_RESULT_OK;

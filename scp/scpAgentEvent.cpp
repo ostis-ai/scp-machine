@@ -102,7 +102,7 @@ void SCPAgentEvent::register_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, Sc
         ScIterator5Ptr iter_agent = ctx->Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, iter_impl->Get(0), ScType::EdgeAccessConstPosPerm, Keynodes::nrel_inclusion);
         while (iter_agent->Next())
         {
-            if (ctx->HelperCheckArc(Keynodes::abstract_sc_agent, iter_agent->Get(0), ScType::EdgeAccessConstPosPerm))
+            if (ctx->HelperCheckEdge(Keynodes::abstract_sc_agent, iter_agent->Get(0), ScType::EdgeAccessConstPosPerm))
             {
                 abstract_agent = iter_agent->Get(0);
                 scp_agent = iter_impl->Get(0);
@@ -123,7 +123,7 @@ void SCPAgentEvent::register_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, Sc
         ScIterator3Ptr iter_proc2 = ctx->Iterator3(iter_proc->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
         while (iter_proc2->Next())
         {
-            if (ctx->HelperCheckArc(Keynodes::agent_scp_program, iter_proc2->Get(2), ScType::EdgeAccessConstPosPerm))
+            if (ctx->HelperCheckEdge(Keynodes::agent_scp_program, iter_proc2->Get(2), ScType::EdgeAccessConstPosPerm))
             {
                 agent_proc = iter_proc2->Get(2);
                 break;
@@ -143,8 +143,8 @@ void SCPAgentEvent::register_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, Sc
     ScIterator5Ptr iter_event = ctx->Iterator5(abstract_agent, ScType::EdgeDCommonConst, ScType::Const, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_primary_initiation_condition);
     if (iter_event->Next())
     {
-        event_type_node = ctx->GetArcBegin(iter_event->Get(2));
-        event_node = ctx->GetArcEnd(iter_event->Get(2));
+        event_type_node = ctx->GetEdgeSource(iter_event->Get(2));
+        event_node = ctx->GetEdgeTarget(iter_event->Get(2));
     }
     else
         return;
@@ -164,7 +164,7 @@ void SCPAgentEvent::unregister_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, 
         ScIterator5Ptr iter_agent = ctx->Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, iter_impl->Get(0), ScType::EdgeAccessConstPosPerm, Keynodes::nrel_inclusion);
         while (iter_agent->Next())
         {
-            if (ctx->HelperCheckArc(Keynodes::abstract_sc_agent, iter_agent->Get(0), ScType::EdgeAccessConstPosPerm))
+            if (ctx->HelperCheckEdge(Keynodes::abstract_sc_agent, iter_agent->Get(0), ScType::EdgeAccessConstPosPerm))
             {
                 abstract_agent = iter_agent->Get(0);
                 scp_agent = iter_impl->Get(0);
@@ -185,7 +185,7 @@ void SCPAgentEvent::unregister_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, 
         ScIterator3Ptr iter_proc2 = ctx->Iterator3(iter_proc->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
         while (iter_proc2->Next())
         {
-            if (ctx->HelperCheckArc(Keynodes::agent_scp_program, iter_proc2->Get(2), ScType::EdgeAccessConstPosPerm))
+            if (ctx->HelperCheckEdge(Keynodes::agent_scp_program, iter_proc2->Get(2), ScType::EdgeAccessConstPosPerm))
             {
                 agent_proc = iter_proc2->Get(2);
                 break;
@@ -223,24 +223,24 @@ sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr 
     ScAddr inp_arc(edge);
 
     ScAddr scp_quest = scpModule::s_default_ctx->CreateNode(ScType::NodeConst);
-    ScAddr arc1 = scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, proc_addr);
-    scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
+    ScAddr arc1 = scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, proc_addr);
+    scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
 
     ScAddr scp_params = scpModule::s_default_ctx->CreateNode(ScType::NodeConst);
-    arc1 = scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, scp_params, proc_addr);
-    scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
+    arc1 = scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, scp_params, proc_addr);
+    scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
 
-    arc1 = scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, scp_params, inp_arc);
-    scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
+    arc1 = scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, scp_params, inp_arc);
+    scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
 
-    arc1 = scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, scp_params);
-    scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
+    arc1 = scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, scp_params);
+    scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
 
-    arc1 = scpModule::s_default_ctx->CreateArc(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
-    scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
+    arc1 = scpModule::s_default_ctx->CreateEdge(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
+    scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
 
-    scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
-    scpModule::s_default_ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
+    scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
+    scpModule::s_default_ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
 
     return SC_RESULT_OK;
 }

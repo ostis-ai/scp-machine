@@ -196,28 +196,28 @@ sc_result SCPOperatorCall::Execute()
                     FinishExecutionWithError();
                     return SC_RESULT_ERROR_INVALID_PARAMS;
                 }
-                arc = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetValue());
+                arc = ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetValue());
             }
             else
             {
-                arc = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetAddr());
+                arc = ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetAddr());
             }
-            ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, role_rel, arc);
+            ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, role_rel, arc);
         }
     }
 
     ScAddr scp_quest = ms_context->CreateNode(ScType::NodeConst);
-    ScAddr arc1 = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, program_node);
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
+    ScAddr arc1 = ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, program_node);
+    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
 
-    arc1 = ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, scp_quest, params_set);
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
+    arc1 = ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, params_set);
+    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
 
-    arc1 = ms_context->CreateArc(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
+    arc1 = ms_context->CreateEdge(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
+    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
 
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
-    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
+    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
+    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
 
     operands[2]->SetValue(scp_quest);
 

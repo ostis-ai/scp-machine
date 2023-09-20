@@ -50,7 +50,7 @@ sc_result SCPOperatorWaitReturn::Execute()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    if (ms_context->HelperCheckArc(Keynodes::question_finished, operands[0]->GetValue(), ScType::EdgeAccessConstPosPerm))
+    if (ms_context->HelperCheckEdge(Keynodes::question_finished, operands[0]->GetValue(), ScType::EdgeAccessConstPosPerm))
     {
         FinishExecutionSuccessfully();
     }

@@ -16,7 +16,7 @@ namespace scp {
 
 SCPOperand::SCPOperand(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): arc_addr(addr_), ms_context(ctx_)
 {
-    addr = ms_context->GetArcEnd(arc_addr);
+    addr = ms_context->GetEdgeTarget(arc_addr);
     resolveModifiers();
     value_addr.Reset();
     if (operand_type == SCP_CONST)
@@ -71,7 +71,7 @@ void SCPOperand::ResetValue()
 void SCPOperand::SetValue(ScAddr value)
 {
     value_addr = value;
-    ms_context->CreateArc(ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
+    ms_context->CreateEdge(ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
 }
 
 ScAddr SCPOperand::CreateNodeOrLink()
@@ -80,7 +80,7 @@ ScAddr SCPOperand::CreateNodeOrLink()
         value_addr = ms_context->CreateLink();
     else
         value_addr = ms_context->CreateNode(element_type);
-    ms_context->CreateArc(ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
+    ms_context->CreateEdge(ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
     return value_addr;
 }
 
@@ -188,7 +188,7 @@ void SCPOperand::resolveModifiers()
     while (iter->Next())
     {
         ScAddr modifier = iter->Get(0);
-        if (ms_context->HelperCheckArc(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+        if (ms_context->HelperCheckEdge(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
         {
             resolveOrder(modifier);
             continue;
@@ -256,22 +256,22 @@ void SCPOperand::resolveModifiers()
         }
         if (modifier == Keynodes::rrel_struct)
         {
-            element_type = ScType(element_type | sc_type_node_struct);
+            element_type = ScType(*element_type | sc_type_node_struct);
             continue;
         }
         if (modifier == Keynodes::rrel_norole_relation)
         {
-            element_type = ScType(element_type | sc_type_node_norole);
+            element_type = ScType(*element_type | sc_type_node_norole);
             continue;
         }
         if (modifier == Keynodes::rrel_role_relation)
         {
-            element_type = ScType(element_type | sc_type_node_role);
+            element_type = ScType(*element_type | sc_type_node_role);
             continue;
         }
         if (modifier == Keynodes::rrel_class)
         {
-            element_type = ScType(element_type | sc_type_node_class);
+            element_type = ScType(*element_type | sc_type_node_class);
             continue;
         }
 
@@ -295,27 +295,27 @@ void SCPOperand::resolveModifiers()
         }
         if (modifier == Keynodes::rrel_temp)
         {
-            element_type = ScType(element_type | sc_type_arc_access | sc_type_arc_temp);
+            element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_temp);
             continue;
         }
         if (modifier == Keynodes::rrel_perm)
         {
-            element_type = ScType(element_type | sc_type_arc_access | sc_type_arc_perm);
+            element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_perm);
             continue;
         }
         if (modifier == Keynodes::rrel_pos)
         {
-            element_type = ScType(element_type | sc_type_arc_access | sc_type_arc_pos);
+            element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_pos);
             continue;
         }
         if (modifier == Keynodes::rrel_neg)
         {
-            element_type = ScType(element_type | sc_type_arc_access | sc_type_arc_neg);
+            element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_neg);
             continue;
         }
         if (modifier == Keynodes::rrel_fuz)
         {
-            element_type = ScType(element_type | sc_type_arc_access | sc_type_arc_fuz);
+            element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_fuz);
             continue;
         }
         if (modifier == Keynodes::rrel_pos_const_perm)

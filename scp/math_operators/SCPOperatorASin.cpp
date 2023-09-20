@@ -141,8 +141,8 @@ sc_result SCPOperatorASin::Execute()
     elem3 = answer_link;
     elem1 = operands[0]->CreateNodeOrLink();
 
-    arc1 = ms_context->CreateArc(sc_type_arc_common, elem1, elem3);
-    ms_context->CreateArc(sc_type_arc_pos_const_perm, elem5, arc1);
+    arc1 = ms_context->CreateEdge(sc_type_arc_common, elem1, elem3);
+    ms_context->CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
     Utils::printInfo(ms_context, elem5);
     Utils::printInfo(ms_context, elem3);
     Utils::printInfo(ms_context, elem1);
