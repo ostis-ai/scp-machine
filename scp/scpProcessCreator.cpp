@@ -55,7 +55,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
     while (iter_temp->Next())
     {
         ScAddr order;
-        if (Utils::resolveOrderRoleRelation(ms_context, iter_temp->Get(1), order));
+        if (Utils::resolveOrderRoleRelation(ms_context, iter_temp->Get(1), order))
         {
             iter_param = ms_context->Iterator5(params, ScType::EdgeAccessConstPosPerm, ScType(0), ScType::EdgeAccessConstPosPerm, order);
             if (!iter_param->Next())
@@ -65,16 +65,14 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
 #endif
                 continue;
             }
-            //!TODO Eliminate name dependency
-            gen_params.Add(ms_context->HelperGetSystemIdtf(iter_temp->Get(2)), iter_param->Get(2));
+            gen_params.Add(iter_temp->Get(2), iter_param->Get(2));
         }
     }
 
     ScTemplateGenResult result;
     ms_context->HelperGenTemplate(program_templ, result, gen_params);
 
-    //!TODO Eliminate name dependency
-    ScAddr const_process_node = result[ms_context->HelperGetSystemIdtf(process_node)];
+    ScAddr const_process_node = result[process_node];
     iter_temp = ms_context->Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, const_process_node, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_decomposition_of_action);
     if (iter_temp->Next())
     {
