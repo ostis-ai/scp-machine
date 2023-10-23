@@ -184,7 +184,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[2] != nullptr)
             {
@@ -201,7 +201,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[2]->SetValue(iter->Get(2));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
             }
             if (set_operands[3] != nullptr)
             {
@@ -218,7 +218,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[3]->SetValue(iter->Get(3));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
             }
             if (set_operands[4] != nullptr)
             {
@@ -235,7 +235,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[4]->SetValue(iter->Get(4));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
             }
             found = SC_TRUE;
         }
@@ -276,7 +276,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                         }
                         operands[0]->SetValue(elem0);
                     }
-                    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set0, elem0);
+                    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set0, elem0);
                 }
                 if (set_operands[1] != nullptr)
                 {
@@ -293,7 +293,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                         }
                         operands[1]->SetValue(iter->Get(1));
                     }
-                    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
                 }
                 if (set_operands[2] != nullptr)
                 {
@@ -310,7 +310,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                         }
                         operands[2]->SetValue(elem2);
                     }
-                    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set2, elem2);
+                    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set2, elem2);
                 }
                 if (set_operands[3] != nullptr)
                 {
@@ -327,7 +327,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                         }
                         operands[3]->SetValue(iter->Get(3));
                     }
-                    ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+                    ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
                 }
                 found = SC_TRUE;
             }
@@ -362,7 +362,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[0]->SetValue(iter->Get(0));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
             }
             if (set_operands[1] != nullptr)
             {
@@ -379,7 +379,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[3] != nullptr)
             {
@@ -396,7 +396,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[3]->SetValue(iter->Get(3));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
             }
             if (set_operands[4] != nullptr)
             {
@@ -413,7 +413,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[4]->SetValue(iter->Get(4));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
             }
             found = SC_TRUE;
         }
@@ -446,7 +446,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[3] != nullptr)
             {
@@ -463,7 +463,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[3]->SetValue(iter->Get(3));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
             }
             if (set_operands[4] != nullptr)
             {
@@ -480,7 +480,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[4]->SetValue(iter->Get(4));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
             }
             found = SC_TRUE;
         }
@@ -513,7 +513,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[0]->SetValue(iter->Get(0));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
             }
             if (set_operands[1] != nullptr)
             {
@@ -530,7 +530,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[3] != nullptr)
             {
@@ -547,7 +547,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[3]->SetValue(iter->Get(3));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
             }
             found = SC_TRUE;
         }
@@ -580,7 +580,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[2] != nullptr)
             {
@@ -597,7 +597,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[2]->SetValue(iter->Get(2));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
             }
             if (set_operands[3] != nullptr)
             {
@@ -614,7 +614,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[3]->SetValue(iter->Get(3));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
             }
             found = SC_TRUE;
         }
@@ -648,7 +648,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[1]->SetValue(iter->Get(1));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
             }
             if (set_operands[3] != nullptr)
             {
@@ -665,7 +665,7 @@ sc_result SCPOperatorSearchSetStr5::Execute()
                     }
                     operands[3]->SetValue(iter->Get(3));
                 }
-                ms_context->CreateArc(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+                ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
             }
             found = SC_TRUE;
         }

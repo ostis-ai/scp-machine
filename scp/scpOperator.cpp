@@ -128,27 +128,27 @@ void SCPOperator::ClearExecutionState(const std::unique_ptr<ScMemoryContext>& ct
 
 void SCPOperator::FinishExecution(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
-    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_addr);
+    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_addr);
 }
 
 void SCPOperator::FinishExecutionSuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_addr);
+    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 
 void SCPOperator::FinishExecutionUnsuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, oper_addr);
+    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 
 void SCPOperator::FinishExecutionWithError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx->CreateArc(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, oper_addr);
+    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 

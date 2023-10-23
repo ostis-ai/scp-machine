@@ -16,7 +16,7 @@ namespace scp {
 
 SCPParameter::SCPParameter(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): arc_addr(addr_), ms_context(ctx_)
 {
-    addr = ms_context->GetArcEnd(arc_addr);
+    addr = ms_context->GetEdgeTarget(arc_addr);
     resolveModifiers();
 }
 
@@ -100,7 +100,7 @@ void SCPParameter::resolveModifiers()
     while (iter->Next())
     {
         ScAddr modifier = iter->Get(0);
-        if (ms_context->HelperCheckArc(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+        if (ms_context->HelperCheckEdge(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
         {
             resolveOrder(modifier);
             continue;

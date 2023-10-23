@@ -19,8 +19,8 @@ SC_AGENT_IMPLEMENTATION(ASCPFinishedInterpretationActionProcessor)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_action = ms_context->GetArcEnd(edgeAddr);
-    if (!ms_context->HelperCheckArc(Keynodes::question_scp_interpretation_request, scp_action, ScType::EdgeAccessConstPosPerm))
+    ScAddr scp_action = ms_context->GetEdgeTarget(edgeAddr);
+    if (!ms_context->HelperCheckEdge(Keynodes::question_scp_interpretation_request, scp_action, ScType::EdgeAccessConstPosPerm))
         return SC_RESULT_ERROR_INVALID_PARAMS;
 
     ScAddr wait_operator;
@@ -30,7 +30,7 @@ SC_AGENT_IMPLEMENTATION(ASCPFinishedInterpretationActionProcessor)
     while (iter->Next())
     {
         wait_operator = iter->Get(0);
-        if (!ms_context->HelperCheckArc(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm) || !ms_context->HelperCheckArc(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
+        if (!ms_context->HelperCheckEdge(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm) || !ms_context->HelperCheckEdge(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
             continue;
         SCPOperator::FinishExecutionSuccessfully(ms_context, wait_operator);
     }
@@ -43,7 +43,7 @@ SC_AGENT_IMPLEMENTATION(ASCPFinishedInterpretationActionProcessor)
         while (iter5->Next())
         {
             wait_operator = iter5->Get(0);
-            if (!ms_context->HelperCheckArc(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm) || !ms_context->HelperCheckArc(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
+            if (!ms_context->HelperCheckEdge(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm) || !ms_context->HelperCheckEdge(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
                 continue;
             SCPOperator::FinishExecutionSuccessfully(ms_context, wait_operator);
         }

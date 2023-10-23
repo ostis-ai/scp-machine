@@ -19,9 +19,9 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr process = ms_context->GetArcEnd(edgeAddr);
+    ScAddr process = ms_context->GetEdgeTarget(edgeAddr);
 
-    if (!ms_context->HelperCheckArc(Keynodes::scp_process, process, ScType::EdgeAccessConstPosPerm))
+    if (!ms_context->HelperCheckEdge(Keynodes::scp_process, process, ScType::EdgeAccessConstPosPerm))
         return SC_RESULT_ERROR_INVALID_PARAMS;
 
     ScAddr decomp_node;
@@ -35,14 +35,14 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
     {
         ScAddr curr_operator = it_oper->Get(2);
 
-        if (ms_context->HelperCheckArc(Keynodes::op_sys_search, curr_operator, ScType::EdgeAccessConstPosPerm)
-                || ms_context->HelperCheckArc(Keynodes::op_sys_gen, curr_operator, ScType::EdgeAccessConstPosPerm))
+        if (ms_context->HelperCheckEdge(Keynodes::op_sys_search, curr_operator, ScType::EdgeAccessConstPosPerm)
+                || ms_context->HelperCheckEdge(Keynodes::op_sys_gen, curr_operator, ScType::EdgeAccessConstPosPerm))
         {
             ScIterator5Ptr it_operand = ms_context->Iterator5(curr_operator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_const);
             while (it_operand->Next())
             {
-                if (!(ms_context->HelperCheckArc(Keynodes::rrel_2, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)
-                        || ms_context->HelperCheckArc(Keynodes::rrel_3, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)))
+                if (!(ms_context->HelperCheckEdge(Keynodes::rrel_2, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)
+                        || ms_context->HelperCheckEdge(Keynodes::rrel_3, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)))
                     continue;
 
                 ScAddr curr_operand = it_operand->Get(2);
@@ -56,12 +56,12 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
                 ms_context->EraseElement(curr_operand);
             }
         }
-        if (ms_context->HelperCheckArc(Keynodes::op_call, curr_operator, ScType::EdgeAccessConstPosPerm))
+        if (ms_context->HelperCheckEdge(Keynodes::op_call, curr_operator, ScType::EdgeAccessConstPosPerm))
         {
             ScIterator5Ptr it_operand = ms_context->Iterator5(curr_operator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2);
             if (it_operand->Next())
             {
-                if (ms_context->HelperCheckArc(Keynodes::rrel_scp_const, it_operand->Get(1), ScType::EdgeAccessConstPosPerm))
+                if (ms_context->HelperCheckEdge(Keynodes::rrel_scp_const, it_operand->Get(1), ScType::EdgeAccessConstPosPerm))
                 {
                     ScAddr curr_operand = it_operand->Get(2);
                     deleteSCPVarsSet(curr_operand, process);

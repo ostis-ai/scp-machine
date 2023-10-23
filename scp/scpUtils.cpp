@@ -25,7 +25,7 @@ namespace Utils {
 
 bool addToSet(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& setAddr, ScAddr const& elAddr)
 {
-    if (ctx->HelperCheckArc(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
+    if (ctx->HelperCheckEdge(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
         return false;
 
     ScAddr arcAddr = ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, elAddr);
@@ -48,7 +48,7 @@ bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, ScAdd
     ScIterator3Ptr it = ctx->Iterator3(ScType::NodeConst, ScType::EdgeAccess, arcAddr);
     while (it->Next())
     {
-        if (ctx->HelperCheckArc(Keynodes::order_role_relation, it->Get(0), ScType::EdgeAccessConstPosPerm))
+        if (ctx->HelperCheckEdge(Keynodes::order_role_relation, it->Get(0), ScType::EdgeAccessConstPosPerm))
         {
             relationAddr = it->Get(0);
             return true;
@@ -114,7 +114,7 @@ bool resolveOperatorType(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
     ScIterator3Ptr it = ctx->Iterator3(ScType::NodeConst, ScType::EdgeAccess, operatorAddr);
     while (it->Next())
     {
-        if (ctx->HelperCheckArc(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::EdgeAccessConstPosPerm))
+        if (ctx->HelperCheckEdge(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::EdgeAccessConstPosPerm))
         {
             operatorType = it->Get(0);
             return true;
@@ -137,9 +137,9 @@ void printSystemIdentifier(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
     else
     {
         cout << "(";
-        printSystemIdentifier(ctx, ctx->GetArcBegin(elemAddr));
+        printSystemIdentifier(ctx, ctx->GetEdgeSource(elemAddr));
         cout << "->";
-        printSystemIdentifier(ctx, ctx->GetArcEnd(elemAddr));
+        printSystemIdentifier(ctx, ctx->GetEdgeTarget(elemAddr));
         cout << ")";
     }
 }
@@ -404,8 +404,8 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         elem3 = linkAddr;
         elem1 = nodeAddr->CreateNodeOrLink();
 
-        arc1 = ctx->CreateArc(sc_type_arc_common, elem1, elem3);
-        ctx->CreateArc(sc_type_arc_pos_const_perm, elem5, arc1);
+        arc1 = ctx->CreateEdge(sc_type_arc_common, elem1, elem3);
+        ctx->CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
         printInfo(ctx, elem5);
         printInfo(ctx, elem3);
         printInfo(ctx, elem1);
