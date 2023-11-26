@@ -16,6 +16,7 @@ ScAddr Keynodes::abstract_sc_agent;
 
 ScAddr Keynodes::nrel_sc_agent_program;
 ScAddr Keynodes::nrel_inclusion;
+ScAddr Keynodes::nrel_sc_agent_action_class;
 ScAddr Keynodes::nrel_primary_initiation_condition;
 ScAddr Keynodes::question_scp_interpretation_request;
 ScAddr Keynodes::question_initiated;

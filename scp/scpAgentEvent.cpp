@@ -7,7 +7,6 @@
 #include "sc-memory/sc-memory/sc_addr.hpp"
 #include "scp.hpp"
 #include "scpKeynodes.hpp"
-#include "scpUtils.hpp"
 #include "scpAgentEvent.hpp"
 
 #include <iostream>
@@ -51,7 +50,6 @@ sc_event_type SCPAgentEvent::ConvertEventType(ScEvent::Type type)
 
     SC_THROW_EXCEPTION(utils::ExceptionNotImplemented,
                        "Unsupported event type " + std::to_string(int(type)));
-    return SC_EVENT_UNKNOWN;
 }
 
 ScEvent::Type SCPAgentEvent::resolve_event_type(ScAddr const& event_type_node)
@@ -73,14 +71,6 @@ ScEvent::Type SCPAgentEvent::resolve_event_type(ScAddr const& event_type_node)
         return ScEvent::Type::EraseElement;
 
     return ScEvent::Type::AddOutputEdge;
-}
-
-sc_addr SCPAgentEvent::resolve_sc_addr_from_pointer(sc_pointer data)
-{
-    sc_addr elem;
-    elem.offset = SC_ADDR_LOCAL_OFFSET_FROM_INT((int)(long)(data));
-    elem.seg = SC_ADDR_LOCAL_SEG_FROM_INT((int)(long)(data));
-    return elem;
 }
 
 void SCPAgentEvent::register_all_scp_agents(std::unique_ptr<ScMemoryContext>& ctx)
@@ -111,11 +101,17 @@ void SCPAgentEvent::register_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, Sc
         }
     }
     if (!scp_agent.IsValid())
-        return;
+    {
+      SCP_LOG_ERROR("Not found sc-agent for scp-agent \"" << ctx->HelperGetSystemIdtf(agent_node) << "\"");
+      return;
+    }
     if (!abstract_agent.IsValid())
-        return;
+    {
+      SCP_LOG_ERROR("Not found abstract agent for scp-agent \"" << ctx->HelperGetSystemIdtf(agent_node) << "\"");
+      return;
+    }
 
-    //Find program
+    // Find program
     ScAddr agent_proc;
     ScIterator5Ptr iter_proc = ctx->Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, scp_agent, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_sc_agent_program);
     while (iter_proc->Next())
@@ -131,14 +127,20 @@ void SCPAgentEvent::register_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, Sc
         }
     }
     if (!agent_proc.IsValid())
-        return;
+    {
+      SCP_LOG_ERROR("Not found program for sc-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
+      return;
+    }
 
-    //Old SCP program check
+    // Old SCP program check
     iter_proc = ctx->Iterator5(agent_proc, ScType::EdgeAccessConstPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_key_sc_element);
     if (!iter_proc->Next())
-        return;
+    {
+      SCP_LOG_ERROR("Not found process variable in program for sc-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
+      return;
+    }
 
-    //Find event
+    // Find event
     ScAddr event_type_node, event_node;
     ScIterator5Ptr iter_event = ctx->Iterator5(abstract_agent, ScType::EdgeDCommonConst, ScType::Const, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_primary_initiation_condition);
     if (iter_event->Next())
@@ -147,12 +149,22 @@ void SCPAgentEvent::register_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, Sc
         event_node = ctx->GetEdgeTarget(iter_event->Get(2));
     }
     else
-        return;
+    {
+      SCP_LOG_ERROR("Not found primary initiation condition for sc-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
+      return;
+    }
 
-    SCPAgentEvent* event = new SCPAgentEvent(ctx, event_node, resolve_event_type(event_type_node), agent_proc);
+    ScAddr action_addr;
+    ScIterator5Ptr iter_action = ctx->Iterator5(abstract_agent, ScType::EdgeDCommonConst, ScType::Const, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_sc_agent_action_class);
+    if (iter_action->Next())
+      action_addr = iter_action->Get(2);
+    else
+      SCP_LOG_WARNING("Not found action class for sc-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
+
+    auto * event = new SCPAgentEvent(ctx, event_node, resolve_event_type(event_type_node), action_addr, agent_proc);
     scp_agent_events.push(event);
 
-    std::cout << "REGISTERED SCP AGENT: " << ctx->HelperGetSystemIdtf(abstract_agent) << std::endl;
+    SCP_LOG_INFO("Register scp-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
 }
 
 void SCPAgentEvent::unregister_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, ScAddr& agent_node)
@@ -173,11 +185,17 @@ void SCPAgentEvent::unregister_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, 
         }
     }
     if (!scp_agent.IsValid())
+    {
+        SCP_LOG_ERROR("Not found sc-agent for scp-agent \"" << ctx->HelperGetSystemIdtf(agent_node) << "\"");
         return;
+    }
     if (!abstract_agent.IsValid())
+    {
+        SCP_LOG_ERROR("Not found abstract agent for scp-agent \"" << ctx->HelperGetSystemIdtf(agent_node) << "\"");
         return;
+    }
 
-    //Find program
+    // Find program
     ScAddr agent_proc;
     ScIterator5Ptr iter_proc = ctx->Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, scp_agent, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_sc_agent_program);
     while (iter_proc->Next())
@@ -193,18 +211,21 @@ void SCPAgentEvent::unregister_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, 
         }
     }
     if (!agent_proc.IsValid())
+    {
+        SCP_LOG_ERROR("Not found program for sc-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
         return;
+    }
 
     auto checker = [&agent_proc](SCPAgentEvent * event)
     {
         return event->GetProcAddr() == agent_proc;
     };
 
-    SCPAgentEvent* event;
+    SCPAgentEvent * event;
     if (scp_agent_events.extract(checker, event))
     {
         delete event;
-        std::cout << "UNREGISTERED SCP AGENT: " << ctx->HelperGetSystemIdtf(abstract_agent) << std::endl;
+        SCP_LOG_INFO("Unregister scp-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
     }
 }
 
@@ -219,7 +240,13 @@ sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr 
             return SC_RESULT_OK;
     }
 
-    ScAddr proc_addr = ScAddr(resolve_sc_addr_from_pointer(sc_event_get_data(evt)));
+    auto * data = (ScAddr *)sc_event_get_data(evt);
+    ScAddr action_addr = data[0];
+
+    if (action_addr.IsValid() && !scpModule::s_default_ctx->HelperCheckEdge(action_addr, other_el, ScType::EdgeAccessConstPosPerm))
+      return SC_RESULT_OK;
+
+    ScAddr proc_addr = data[1];
     ScAddr inp_arc(edge);
 
     ScAddr scp_quest = scpModule::s_default_ctx->CreateNode(ScType::NodeConst);
@@ -245,20 +272,33 @@ sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr 
     return SC_RESULT_OK;
 }
 
-SCPAgentEvent::SCPAgentEvent(const std::unique_ptr<ScMemoryContext>& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& proc_addr)
+SCPAgentEvent::SCPAgentEvent(const std::unique_ptr<ScMemoryContext>& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& actionClass, const ScAddr& procAddr)
 {
-    m_event = sc_event_new_ex(ctx->GetRealContext(), *addr, ConvertEventType(eventType), (sc_pointer)SC_ADDR_LOCAL_TO_INT(*proc_addr), runSCPAgent, NULL);
+    auto * data = new ScAddr[2];
+    data[0] = actionClass;
+    data[1] = procAddr;
+    m_event = sc_event_new_ex(
+        ctx->GetRealContext(),
+        *addr,
+        ConvertEventType(eventType),
+        data,
+        runSCPAgent,
+        nullptr);
 }
 
 ScAddr SCPAgentEvent::GetProcAddr()
 {
-    return ScAddr(resolve_sc_addr_from_pointer(sc_event_get_data(m_event)));
+    auto * data = (ScAddr *)sc_event_get_data(m_event);
+    return data[1];
 }
 
 SCPAgentEvent::~SCPAgentEvent()
 {
     if (m_event)
+    {
+        delete[] (ScAddr *)sc_event_get_data(m_event);
         sc_event_destroy(m_event);
+    }
 }
 
 }

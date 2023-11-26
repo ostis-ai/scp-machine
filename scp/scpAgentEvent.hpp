@@ -18,7 +18,6 @@ class SCPAgentEvent
 private:
     sc_result static runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr other_el);
     sc_event_type ConvertEventType(ScEvent::Type type);
-    sc_addr static resolve_sc_addr_from_pointer(sc_pointer data);
     ScEvent::Type static resolve_event_type(ScAddr const& event_type_node);
     sc_event* m_event;
 
@@ -28,7 +27,7 @@ public:
     void static register_all_scp_agents(std::unique_ptr<ScMemoryContext>& ctx);
     void static register_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, ScAddr& agent_node);
     void static unregister_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, ScAddr& agent_node);
-    SCPAgentEvent(const std::unique_ptr<ScMemoryContext>& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& proc_addr);
+    SCPAgentEvent(const std::unique_ptr<ScMemoryContext>& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& actionClass, const ScAddr& procAddr);
     ScAddr GetProcAddr();
     ~SCPAgentEvent();
 };
