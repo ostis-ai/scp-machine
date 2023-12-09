@@ -5,7 +5,6 @@
 */
 
 #include "scpKeynodes.hpp"
-#include "scpUtils.hpp"
 #include "SCPOperatorReturn.hpp"
 #include "sc-memory/sc-memory/sc_memory.hpp"
 #include <iostream>

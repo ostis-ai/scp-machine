@@ -15,64 +15,6 @@ namespace scp {
 
 concurrent_deque<SCPAgentEvent*> SCPAgentEvent::scp_agent_events;
 
-void SCPAgentEvent::unregister_all_scp_agents()
-{
-    while (!scp_agent_events.empty())
-    {
-        SCPAgentEvent* event = scp_agent_events.front();
-        scp_agent_events.pop();
-        delete event;
-    }
-}
-
-sc_event_type SCPAgentEvent::ConvertEventType(ScEvent::Type type)
-{
-    switch (type)
-    {
-        case ScEvent::Type::AddOutputEdge:
-            return SC_EVENT_ADD_OUTPUT_ARC;
-
-        case ScEvent::Type::AddInputEdge:
-            return SC_EVENT_ADD_INPUT_ARC;
-
-        case ScEvent::Type::RemoveOutputEdge:
-            return SC_EVENT_REMOVE_OUTPUT_ARC;
-
-        case ScEvent::Type::RemoveInputEdge:
-            return SC_EVENT_REMOVE_INPUT_ARC;
-
-        case ScEvent::Type::EraseElement:
-            return SC_EVENT_REMOVE_ELEMENT;
-
-        case ScEvent::Type::ContentChanged:
-            return SC_EVENT_CONTENT_CHANGED;
-    }
-
-    SC_THROW_EXCEPTION(utils::ExceptionNotImplemented,
-                       "Unsupported event type " + std::to_string(int(type)));
-}
-
-ScEvent::Type SCPAgentEvent::resolve_event_type(ScAddr const& event_type_node)
-{
-    if (event_type_node == Keynodes::sc_event_add_output_arc)
-        return ScEvent::Type::AddOutputEdge;
-    if (event_type_node == Keynodes::sc_event_add_input_arc)
-        return ScEvent::Type::AddInputEdge;
-
-    if (event_type_node == Keynodes::sc_event_remove_output_arc)
-        return ScEvent::Type::RemoveOutputEdge;
-    if (event_type_node == Keynodes::sc_event_remove_input_arc)
-        return ScEvent::Type::RemoveInputEdge;
-
-    if (event_type_node == Keynodes::sc_event_content_changed)
-        return ScEvent::Type::ContentChanged;
-
-    if (event_type_node == Keynodes::sc_event_remove_element)
-        return ScEvent::Type::EraseElement;
-
-    return ScEvent::Type::AddOutputEdge;
-}
-
 void SCPAgentEvent::register_all_scp_agents(std::unique_ptr<ScMemoryContext>& ctx)
 {
     ScIterator3Ptr iter_agent = ctx->Iterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
@@ -80,6 +22,16 @@ void SCPAgentEvent::register_all_scp_agents(std::unique_ptr<ScMemoryContext>& ct
     {
         ScAddr agent = iter_agent->Get(2);
         register_scp_agent(ctx, agent);
+    }
+}
+
+void SCPAgentEvent::unregister_all_scp_agents(std::unique_ptr<ScMemoryContext>& ctx)
+{
+    while (!scp_agent_events.empty())
+    {
+        SCPAgentEvent* event = scp_agent_events.front();
+        scp_agent_events.pop();
+        delete event;
     }
 }
 
@@ -227,6 +179,54 @@ void SCPAgentEvent::unregister_scp_agent(std::unique_ptr<ScMemoryContext>& ctx, 
         delete event;
         SCP_LOG_INFO("Unregister scp-agent \"" << ctx->HelperGetSystemIdtf(abstract_agent) << "\"");
     }
+}
+
+sc_event_type SCPAgentEvent::ConvertEventType(ScEvent::Type type)
+{
+    switch (type)
+    {
+        case ScEvent::Type::AddOutputEdge:
+            return SC_EVENT_ADD_OUTPUT_ARC;
+
+        case ScEvent::Type::AddInputEdge:
+            return SC_EVENT_ADD_INPUT_ARC;
+
+        case ScEvent::Type::RemoveOutputEdge:
+            return SC_EVENT_REMOVE_OUTPUT_ARC;
+
+        case ScEvent::Type::RemoveInputEdge:
+            return SC_EVENT_REMOVE_INPUT_ARC;
+
+        case ScEvent::Type::EraseElement:
+            return SC_EVENT_REMOVE_ELEMENT;
+
+        case ScEvent::Type::ContentChanged:
+            return SC_EVENT_CONTENT_CHANGED;
+    }
+
+    SC_THROW_EXCEPTION(utils::ExceptionNotImplemented,
+                       "Unsupported event type " + std::to_string(int(type)));
+}
+
+ScEvent::Type SCPAgentEvent::resolve_event_type(ScAddr const& event_type_node)
+{
+    if (event_type_node == Keynodes::sc_event_add_output_arc)
+        return ScEvent::Type::AddOutputEdge;
+    if (event_type_node == Keynodes::sc_event_add_input_arc)
+        return ScEvent::Type::AddInputEdge;
+
+    if (event_type_node == Keynodes::sc_event_remove_output_arc)
+        return ScEvent::Type::RemoveOutputEdge;
+    if (event_type_node == Keynodes::sc_event_remove_input_arc)
+        return ScEvent::Type::RemoveInputEdge;
+
+    if (event_type_node == Keynodes::sc_event_content_changed)
+        return ScEvent::Type::ContentChanged;
+
+    if (event_type_node == Keynodes::sc_event_remove_element)
+        return ScEvent::Type::EraseElement;
+
+    return ScEvent::Type::AddOutputEdge;
 }
 
 sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr other_el)

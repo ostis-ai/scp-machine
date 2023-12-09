@@ -13,7 +13,7 @@
 
 namespace scp {
 
-//genEl
+//waitReturn
 SCPOperatorWaitReturn::SCPOperatorWaitReturn(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
 {
 }

@@ -4,13 +4,11 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "scpKeynodes.hpp"
-#include "scpUtils.hpp"
 #include "scpAgentProcessor.hpp"
 #include "sc-memory/sc-memory/sc_memory.hpp"
-#include <iostream>
 
 namespace scp {
+
 ScAddr ASCPAgentActivator::msAgentKeynode;
 ScAddr ASCPAgentDeactivator::msAgentKeynode;
 

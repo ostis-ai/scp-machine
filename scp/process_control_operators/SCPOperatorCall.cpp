@@ -63,7 +63,7 @@ sc_result SCPOperatorCall::Parse()
     ScIterator3Ptr iter_param = ms_context->Iterator3(param_set, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_param->Next())
     {
-        SCPOperand *operand = new SCPOperand(ms_context, iter_param->Get(1));
+        auto * operand = new SCPOperand(ms_context, iter_param->Get(1));
         if (!(operand->GetOrder() > 0 && params[operand->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG
@@ -130,7 +130,7 @@ sc_result SCPOperatorCall::Execute()
     ScIterator5Ptr iter_params = ms_context->Iterator5(process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program_node);
     while (iter_params->Next())
     {
-        SCPParameter *param = new SCPParameter(ms_context, iter_params->Get(1));
+        auto * param = new SCPParameter(ms_context, iter_params->Get(1));
         if (!(param->GetOrder() > 0 && expected_params[param->GetOrder() - 1] == nullptr))
         {
 #ifdef SCP_DEBUG
@@ -150,7 +150,7 @@ sc_result SCPOperatorCall::Execute()
 
     ScAddr params_set = ms_context->CreateNode(ScType::NodeConst);
 
-    for (uint8_t i = 0; i < expected_params.size(); i++)
+    for (size_t i = 0; i < expected_params.size(); i++)
     {
         if (expected_params[i] != nullptr)
         {
@@ -234,13 +234,13 @@ sc_result SCPOperatorCall::Execute()
 
 SCPOperatorCall::~SCPOperatorCall()
 {
-    for (std::vector<SCPOperand*>::iterator i = params.begin(); i != params.end(); ++i)
+    for (auto & param : params)
     {
-        delete *i;
+        delete param;
     }
-    for (std::vector<SCPParameter*>::iterator i = expected_params.begin(); i != expected_params.end(); ++i)
+    for (auto & expected_param : expected_params)
     {
-        delete *i;
+        delete expected_param;
     }
 }
 

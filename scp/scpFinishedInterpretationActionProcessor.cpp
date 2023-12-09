@@ -5,13 +5,12 @@
 */
 
 #include "scpKeynodes.hpp"
-#include "scpUtils.hpp"
 #include "scpOperator.hpp"
 #include "scpFinishedInterpretationActionProcessor.hpp"
 #include "sc-memory/sc-memory/sc_memory.hpp"
-#include <iostream>
 
 namespace scp {
+
 ScAddr ASCPFinishedInterpretationActionProcessor::msAgentKeynode;
 
 SC_AGENT_IMPLEMENTATION(ASCPFinishedInterpretationActionProcessor)
@@ -32,7 +31,9 @@ SC_AGENT_IMPLEMENTATION(ASCPFinishedInterpretationActionProcessor)
         wait_operator = iter->Get(0);
         if (!ms_context->HelperCheckEdge(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm) || !ms_context->HelperCheckEdge(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
             continue;
+
         SCPOperator::FinishExecutionSuccessfully(ms_context, wait_operator);
+        break;
     }
 
     //SCP_VAR case
@@ -45,7 +46,9 @@ SC_AGENT_IMPLEMENTATION(ASCPFinishedInterpretationActionProcessor)
             wait_operator = iter5->Get(0);
             if (!ms_context->HelperCheckEdge(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm) || !ms_context->HelperCheckEdge(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
                 continue;
+
             SCPOperator::FinishExecutionSuccessfully(ms_context, wait_operator);
+            break;
         }
     }
 

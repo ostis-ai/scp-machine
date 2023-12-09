@@ -51,7 +51,6 @@ sc_event_type SCPWaitEvent::ConvertEventType(ScEvent::Type type)
 
     SC_THROW_EXCEPTION(utils::ExceptionNotImplemented,
                        "Unsupported event type " + std::to_string(int(type)));
-    return SC_EVENT_UNKNOWN;
 }
 
 sc_addr SCPWaitEvent::resolve_sc_addr_from_pointer(sc_pointer data)
@@ -64,7 +63,7 @@ sc_addr SCPWaitEvent::resolve_sc_addr_from_pointer(sc_pointer data)
 
 sc_result SCPWaitEvent::Run(sc_event const* evt, sc_addr edge, sc_addr other_el)
 {
-    ScMemoryContext& ctx = (ScMemoryContext&)scpModule::s_default_ctx;
+    auto & ctx = (ScMemoryContext&)scpModule::s_default_ctx;
     ScAddr oper_node = ScAddr(resolve_sc_addr_from_pointer(sc_event_get_data(evt)));
 
     ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_node);
@@ -86,12 +85,13 @@ sc_result SCPWaitEvent::Run(sc_event const* evt, sc_addr edge, sc_addr other_el)
 
 SCPWaitEvent::SCPWaitEvent(const std::unique_ptr<ScMemoryContext>& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& param_addr)
 {
-    m_event = sc_event_new_ex(ctx->GetRealContext(), *addr, ConvertEventType(eventType), (sc_pointer)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, NULL);
+    m_event = sc_event_new_ex(
+        ctx->GetRealContext(), *addr, ConvertEventType(eventType), (sc_pointer)(sc_uint64)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, nullptr);
 }
 
 ScAddr SCPWaitEvent::GetParamAddr()
 {
-    return ScAddr(resolve_sc_addr_from_pointer(sc_event_get_data(m_event)));
+    return resolve_sc_addr_from_pointer(sc_event_get_data(m_event));
 }
 
 SCPWaitEvent::~SCPWaitEvent()

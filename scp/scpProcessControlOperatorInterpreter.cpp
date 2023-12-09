@@ -28,7 +28,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
     if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
-    SCPOperator* oper = nullptr;
+    SCPOperator* oper;
     if (type == Keynodes::op_return)
     {
         oper = new SCPOperatorReturn(ms_context, scp_operator);

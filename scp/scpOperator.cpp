@@ -31,11 +31,11 @@ ScAddr SCPOperator::GetAddr()
 
 sc_result SCPOperator::ResetValues()
 {
-    for (std::vector<SCPOperand*>::iterator i = operands.begin(); i != operands.end(); ++i)
+    for (auto & operand : operands)
     {
-        if ((*i)->IsAssign())
+        if (operand->IsAssign())
         {
-            if ((*i)->IsSCPConst())
+            if (operand->IsSCPConst())
             {
 #ifdef SCP_DEBUG
                 Utils::logSCPError(ms_context, "SCP CONST must have FIXED modifier", addr);
@@ -43,7 +43,7 @@ sc_result SCPOperator::ResetValues()
                 FinishExecutionWithError();
                 return SC_RESULT_ERROR_INVALID_PARAMS;
             }
-            (*i)->ResetValue();
+            operand->ResetValue();
         }
     }
     return SC_RESULT_OK;
@@ -51,15 +51,12 @@ sc_result SCPOperator::ResetValues()
 
 sc_result SCPOperator::CheckNullValues()
 {
-    int k=0;
-    for (std::vector<SCPOperand*>::iterator i = operands.begin(); i != operands.end(); ++i)
+    for (auto & operand : operands)
     {
-        k++;
-        if (!(*i))
+        if (!operand)
         {
 #ifdef SCP_DEBUG
-            // Utils::logSCPError(ms_context, "One or more operands missed", addr);
-            // std::cout<<"NUMBER: "<<k<<std::endl;
+            Utils::logSCPError(ms_context, "One or more operands missed", addr);
             Utils::printInfo(ms_context, addr);
 #endif
             FinishExecutionWithError();
@@ -122,8 +119,8 @@ void SCPOperator::ClearExecutionState(const std::unique_ptr<ScMemoryContext>& ct
         if (iter->Get(0)==Keynodes::question_finished_with_error)
             arcs.push_back(iter->Get(1));
     }
-    for (std::vector<ScAddr>::iterator i = arcs.begin(); i != arcs.end(); ++i)
-        ctx->EraseElement(*i);
+    for (auto & arc : arcs)
+        ctx->EraseElement(arc);
 }
 
 void SCPOperator::FinishExecution(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
@@ -154,9 +151,9 @@ void SCPOperator::FinishExecutionWithError(const std::unique_ptr<ScMemoryContext
 
 SCPOperator::~SCPOperator()
 {
-    for (std::vector<SCPOperand*>::iterator i = operands.begin(); i != operands.end(); ++i)
+    for (auto & operand : operands)
     {
-        delete *i;
+        delete operand;
     }
 }
 
