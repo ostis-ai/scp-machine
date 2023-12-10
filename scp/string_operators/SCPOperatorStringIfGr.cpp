@@ -67,9 +67,6 @@ sc_result SCPOperatorStringIfGr::Execute()
         string str1 = Utils::scLinkGetString(ms_context, operands[0]->GetValue());
         string str2 = Utils::scLinkGetString(ms_context, operands[1]->GetValue());
 
-            size_t len1 = str1.length();
-            size_t len2 = str2.length();
-
             if(0 < strcmp(str1.c_str(), str2.c_str()))
             {
                 FinishExecutionSuccessfully();

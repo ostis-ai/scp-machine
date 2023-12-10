@@ -80,7 +80,7 @@ sc_result SCPOperatorStringSplit::Execute()
             }
             output.push_back(str1.substr(previous, current - previous));
         ScAddr setNode = ms_context->CreateNode(ScType::NodeConst);
-        for (int i = 0; i < output.size(); i++)
+        for (size_t i = 0; i < output.size(); i++)
         {
             ScStreamPtr streamPtr = Utils::StreamFromString(output[i]);
             ScAddr answerLink = ms_context->CreateLink();
