@@ -71,8 +71,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
         }
 
         deleteSCPVarsSet(curr_operator, process);
-        // TODO: fix deletion arc from active_action to operator waitReturn
-        //ms_context->EraseElement(curr_operator);
+        ms_context->EraseElement(curr_operator);
     }
 
     ms_context->EraseElement(decomp_node);
