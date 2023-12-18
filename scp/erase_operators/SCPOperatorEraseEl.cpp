@@ -4,7 +4,6 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorEraseEl.hpp"
 #include "sc-memory/sc-memory/sc_memory.hpp"

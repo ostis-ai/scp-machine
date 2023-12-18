@@ -80,7 +80,7 @@ sc_result SCPOperatorSysWait::Execute()
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    SCPWaitEvent* event = new SCPWaitEvent(ms_context, operands[1]->GetValue(), resolve_event_type(operands[0]->GetValue()), addr);
+    auto * event = new SCPWaitEvent(ms_context, operands[1]->GetValue(), resolve_event_type(operands[0]->GetValue()), addr);
     SCPWaitEvent::sys_wait_events.push(event);
 
     return SC_RESULT_OK;

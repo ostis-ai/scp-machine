@@ -78,8 +78,8 @@ sc_result SCPOperatorStringSlice::Execute()
         string startIndexStr = Utils::scLinkGetString(ms_context, operands[2]->GetValue());
         string endIndexStr = Utils::scLinkGetString(ms_context, operands[3]->GetValue());
 
-        int startIndex;
-        int endIndex;
+        size_t startIndex;
+  size_t endIndex;
 
         string intInit = "int: ";
 
@@ -116,7 +116,7 @@ sc_result SCPOperatorStringSlice::Execute()
         }
 
 
-        if(startIndex < 0 || startIndex > input.length())
+        if (startIndex < 0 || startIndex > input.length())
         {
             cout << "StartIndex is out of range" << endl;
             FinishExecutionUnsuccessfully();

@@ -93,9 +93,10 @@ void ASCPProcessDestroyer::deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAd
             elems.push_back(elem);
         }
     }
-    for (size_t i = 0; i < elems.size(); i++ )
+
+    for (auto const & elem : elems)
     {
-        ms_context->EraseElement(elems[i]);
+        ms_context->EraseElement(elem);
     }
 }
 

@@ -42,16 +42,15 @@ sc_result scpModule::InitializeImpl()
     SC_AGENT_REGISTER(ASCPEraseOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPSearchOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPIfOperatorInterpreter)
-    SC_AGENT_REGISTER(ASCPStringOperatorInterpreter);
-    SC_AGENT_REGISTER(ASCPPrintOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPVarValueOperatorInterpreter)
+    SC_AGENT_REGISTER(ASCPPrintOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPProgramExecutionSyncronizer)
     SC_AGENT_REGISTER(ASCPProcessControlOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPAgentActivator)
     SC_AGENT_REGISTER(ASCPAgentDeactivator)
-    SC_AGENT_REGISTER(ASCPFinishedInterpretationActionProcessor)
     SC_AGENT_REGISTER(ASCPMathOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPStringOperatorInterpreter)
+    SC_AGENT_REGISTER(ASCPFinishedInterpretationActionProcessor)
 
     s_default_ctx.reset(new ScMemoryContext(sc_access_lvl_make_min));
     SCPAgentEvent::register_all_scp_agents(s_default_ctx);
@@ -79,7 +78,7 @@ sc_result scpModule::ShutdownImpl()
     SC_AGENT_UNREGISTER(ASCPStringOperatorInterpreter)
     SC_AGENT_UNREGISTER(ASCPFinishedInterpretationActionProcessor)
 
-    SCPAgentEvent::unregister_all_scp_agents();
+    SCPAgentEvent::unregister_all_scp_agents(s_default_ctx);
     SCPWaitEvent::unregister_all_sys_wait();
     s_default_ctx.reset();
 

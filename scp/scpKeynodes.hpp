@@ -37,6 +37,9 @@ public:
     SC_PROPERTY(Keynode("nrel_inclusion"), ForceCreate)
     static ScAddr nrel_inclusion;
 
+    SC_PROPERTY(Keynode("nrel_sc_agent_action_class"), ForceCreate)
+    static ScAddr nrel_sc_agent_action_class;
+
     SC_PROPERTY(Keynode("nrel_primary_initiation_condition"), ForceCreate)
     static ScAddr nrel_primary_initiation_condition;
 

@@ -11,6 +11,12 @@
 
 #include "scp.generated.hpp"
 
+#define SCP_PREFIX "[scp-machine] "
+#define SCP_LOG_INFO(...) SC_LOG_INFO(SCP_PREFIX << __VA_ARGS__)
+#define SCP_LOG_DEBUG(...) SC_LOG_DEBUG(SCP_PREFIX __VA_ARGS__)
+#define SCP_LOG_WARNING(...) SC_LOG_WARNING(SCP_PREFIX __VA_ARGS__)
+#define SCP_LOG_ERROR(...) SC_LOG_ERROR(SCP_PREFIX __VA_ARGS__)
+
 class scpModule : public ScModule
 {
     SC_CLASS(LoadOrder(50))

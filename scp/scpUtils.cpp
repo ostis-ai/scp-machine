@@ -7,15 +7,12 @@
 #include "scpUtils.hpp"
 #include "scpKeynodes.hpp"
 #include "sc-core/sc_helper.h"
-#include "sc-core/sc_memory_headers.h"
 #include "sc-memory/sc-memory/sc_stream.hpp"
-#include "sc-memory/sc-memory/sc_link.hpp"
 #include "scpOperand.hpp"
 
 #include <regex>
 #include <string>
 #include <iostream>
-#include <regex>
 
 
 using namespace std;
@@ -64,49 +61,40 @@ bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, uint8
     {
         case 1:
             relationAddr = Keynodes::rrel_1;
-            return true;
             break;
         case 2:
             relationAddr = Keynodes::rrel_2;
-            return true;
             break;
         case 3:
             relationAddr = Keynodes::rrel_3;
-            return true;
             break;
         case 4:
             relationAddr = Keynodes::rrel_4;
-            return true;
             break;
         case 5:
             relationAddr = Keynodes::rrel_5;
-            return true;
             break;
         case 6:
             relationAddr = Keynodes::rrel_6;
-            return true;
             break;
         case 7:
             relationAddr = Keynodes::rrel_7;
-            return true;
             break;
         case 8:
             relationAddr = Keynodes::rrel_8;
-            return true;
             break;
         case 9:
             relationAddr = Keynodes::rrel_9;
-            return true;
             break;
         case 10:
             relationAddr = Keynodes::rrel_10;
-            return true;
             break;
         default:
             relationAddr.Reset();
-            return false;
             break;
     }
+
+    return relationAddr.IsValid();
 }
 
 bool resolveOperatorType(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& operatorAddr, ScAddr& operatorType)
@@ -129,7 +117,7 @@ void printSystemIdentifier(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
     if (ctx->GetElementType(elemAddr).IsNode() || ctx->GetElementType(elemAddr).IsLink())
     {
         string s = ctx->HelperGetSystemIdtf(elemAddr);
-        if (s == "")
+        if (s.empty())
             cout << elemAddr.GetRealAddr().seg << "|" << elemAddr.GetRealAddr().offset;
         else
             cout << s;
@@ -149,7 +137,7 @@ void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAd
     int c_in = 0, c_out = 0;
     assert(ctx->IsElement(elemAddr));
     printSystemIdentifier(ctx, elemAddr);
-    cout << endl;;
+    cout << endl;
 
     cout << "Input arcs:\n";
     ScIterator3Ptr it = ctx->Iterator3(ScType(0), ScType(0), elemAddr);
@@ -190,10 +178,12 @@ bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
-            if(string.find("int:") != std::string::npos){
+            if (string.find("int:") != std::string::npos)
+            {
                 return true;
             }
-            else{
+            else
+            {
                 return false;
             }
         }
@@ -219,6 +209,8 @@ int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
             return convertedInt;
         }
     }
+
+    return 0;
 }
 
 string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
@@ -233,7 +225,7 @@ string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const
         }
     }
 
-    return nullptr;
+    return {};
 }
 
 
@@ -245,13 +237,12 @@ bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
-            if(string.find("uint:") != std::string::npos){
-
-                std::cout << "EEEEYE!!!";
-
+            if (string.find("uint:") != std::string::npos)
+            {
                 return true;
             }
-            else{
+            else
+            {
                 return false;
             }
         }
@@ -278,6 +269,8 @@ int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
             return convertedInt;
         }
     }
+
+    return 0;
 }
 
 bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
@@ -288,17 +281,17 @@ bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr co
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
-            if(string.find("float:") != std::string::npos){
-
-                std::cout << "EEEEYE!!!";
-
+            if (string.find("float:") != std::string::npos)
+            {
                 return true;
             }
-            else{
+            else
+            {
                 return false;
             }
         }
     }
+
     return false;
 }
 
@@ -319,6 +312,8 @@ float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr 
             return convertedFloat;
         }
     }
+
+    return 0;
 }
 
 bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
@@ -329,14 +324,12 @@ bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
         std::string string;
         if (ScStreamConverter::StreamToString(stream, string))
         {
-
-            //FinishExecutionSuccessfully();
-            if(string.find("double:") != std::string::npos){
-                std::cout << "EEEEYE!!!";
-
+            if (string.find("double:") != std::string::npos)
+            {
                 return true;
             }
-            else{
+            else
+            {
                 return false;
             }
         }
@@ -361,6 +354,8 @@ double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAdd
             return convertedDouble;
         }
     }
+
+    return 0;
 }
 
 
@@ -370,9 +365,7 @@ ScStreamMemory::ScStreamMemory(MemoryBufferPtr const & buff)
 {
 }
 
-ScStreamMemory::~ScStreamMemory()
-{
-}
+ScStreamMemory::~ScStreamMemory() = default;
 
 ScStreamPtr StreamFromString(std::string const & str)
 {
@@ -385,9 +378,9 @@ string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
     string input = scLinkGetString(ctx, elemAddr);
     regex integer_expr("(\\+|-)?[[:digit:]]+");
 
-    string result = "";
+    string result;
 
-    if(input.find("int:") != std::string::npos && regex_match(input, integer_expr)) result = input;
+    if( input.find("int:") != std::string::npos && regex_match(input, integer_expr)) result = input;
     return result;
 }
 
@@ -409,7 +402,6 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         printInfo(ctx, elem5);
         printInfo(ctx, elem3);
         printInfo(ctx, elem1);
-        std::cout << ctx->IsElement(elem1);
         nodeAddr->SetValue(elem1);
 }
 
