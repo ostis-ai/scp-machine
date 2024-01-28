@@ -6,6 +6,7 @@ git clone https://github.com/ostis-ai/scp-machine.git
 
 ## Build scp-machine
 Before build scp-machine make sure that sc-machine is assembled. Sc-machine and scp-machine must be allocated in the same folder.
+Sc-machine version to use: 0.9.0-Unlock
 
 ```sh
 ./scripts/build_scp_machine.sh #You can also pass all CMake generation arguments there
