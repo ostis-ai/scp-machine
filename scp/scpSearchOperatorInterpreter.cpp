@@ -11,6 +11,7 @@
 #include "search_operators/SCPOperatorSearchElStr5.hpp"
 #include "search_operators/SCPOperatorSearchSetStr3.hpp"
 #include "search_operators/SCPOperatorSearchSetStr5.hpp"
+#include "search_operators/SCPOperatorSysSearch.hpp"
 #include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
@@ -44,6 +45,10 @@ SC_AGENT_IMPLEMENTATION(ASCPSearchOperatorInterpreter)
     if (type == Keynodes::op_searchSetStr5)
     {
         oper = new SCPOperatorSearchSetStr5(m_memoryCtx, scp_operator);
+    }
+    if (type == Keynodes::op_sys_search)
+    {
+        oper = new SCPOperatorSysSearch(m_memoryCtx, scp_operator);
     }
     if (oper == nullptr)
         return SC_RESULT_ERROR_INVALID_PARAMS;

@@ -10,6 +10,7 @@
 #include "gen_operators/SCPOperatorGenEl.hpp"
 #include "gen_operators/SCPOperatorGenElStr3.hpp"
 #include "gen_operators/SCPOperatorGenElStr5.hpp"
+#include "gen_operators/SCPOperatorSysGen.hpp"
 #include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
@@ -39,6 +40,10 @@ SC_AGENT_IMPLEMENTATION(ASCPGenOperatorInterpreter)
     if (type == Keynodes::op_genElStr5)
     {
         oper = new SCPOperatorGenElStr5(m_memoryCtx, scp_operator);
+    }
+    if (type == Keynodes::op_sys_gen)
+    {
+        oper = new SCPOperatorSysGen(m_memoryCtx, scp_operator);
     }
     if (oper == nullptr)
         return SC_RESULT_ERROR_INVALID_PARAMS;
