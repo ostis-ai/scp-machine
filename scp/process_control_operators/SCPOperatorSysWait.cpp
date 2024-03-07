@@ -8,7 +8,7 @@
 #include "scpUtils.hpp"
 #include "SCPOperatorSysWait.hpp"
 #include "scpWaitEvent.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp
@@ -35,7 +35,7 @@ ScEvent::Type SCPOperatorSysWait::resolve_event_type(ScAddr const & event_type_n
     return ScEvent::Type::AddOutputEdge;
 }
 
-SCPOperatorSysWait::SCPOperatorSysWait(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorSysWait::SCPOperatorSysWait(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
@@ -57,7 +57,7 @@ sc_result SCPOperatorSysWait::Execute()
     if (!(operands[0]->IsFixed() && operands[1]->IsFixed()))
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Both operands must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Both operands must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -65,7 +65,7 @@ sc_result SCPOperatorSysWait::Execute()
     if (!operands[0]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 1 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 1 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -74,13 +74,13 @@ sc_result SCPOperatorSysWait::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 2 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 2 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    auto * event = new SCPWaitEvent(ms_context, operands[1]->GetValue(), resolve_event_type(operands[0]->GetValue()), addr);
+    auto * event = new SCPWaitEvent(m_memoryCtx, operands[1]->GetValue(), resolve_event_type(operands[0]->GetValue()), addr);
     SCPWaitEvent::sys_wait_events.push(event);
 
     return SC_RESULT_OK;

@@ -7,14 +7,14 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorPrint.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
-#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_stream.hpp"
 #include <iostream>
 
 namespace scp
 {
 
-SCPOperatorPrint::SCPOperatorPrint(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr, sc_bool newline_): SCPOperatorElStr1(ctx, addr)
+SCPOperatorPrint::SCPOperatorPrint(ScMemoryContext &ctx, ScAddr addr, sc_bool newline_): SCPOperatorElStr1(ctx, addr)
 {
     newline = newline_;
 }
@@ -40,7 +40,7 @@ sc_result SCPOperatorPrint::Execute()
     if (!operands[0]->IsFixed())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -48,13 +48,13 @@ sc_result SCPOperatorPrint::Execute()
     if (!operands[0]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    ScStreamPtr stream = ms_context->GetLinkContent(operands[0]->GetValue());
+    ScStreamPtr stream =m_memoryCtx.GetLinkContent(operands[0]->GetValue());
     if (stream)
     {
         std::string str;

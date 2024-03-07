@@ -11,7 +11,7 @@
 #include "process_control_operators/SCPOperatorSysWait.hpp"
 #include "process_control_operators/SCPOperatorCall.hpp"
 #include "process_control_operators/SCPOperatorWaitReturn.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {
@@ -22,28 +22,28 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator = m_memoryCtx.GetEdgeTarget(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper;
     if (type == Keynodes::op_return)
     {
-        oper = new SCPOperatorReturn(ms_context, scp_operator);
+        oper = new SCPOperatorReturn(m_memoryCtx, scp_operator);
     }
     else if (type == Keynodes::op_sys_wait)
     {
-        oper = new SCPOperatorSysWait(ms_context, scp_operator);
+        oper = new SCPOperatorSysWait(m_memoryCtx, scp_operator);
     }
     else if (type == Keynodes::op_call)
     {
-        oper = new SCPOperatorCall(ms_context, scp_operator);
+        oper = new SCPOperatorCall(m_memoryCtx, scp_operator);
     }
     else if (type == Keynodes::op_waitReturn)
     {
-        oper = new SCPOperatorWaitReturn(ms_context, scp_operator);
+        oper = new SCPOperatorWaitReturn(m_memoryCtx, scp_operator);
     }
     else
         return SC_RESULT_ERROR_INVALID_PARAMS;

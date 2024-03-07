@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
-#include "sc-memory/sc-memory/sc_object.hpp"
-#include "sc-memory/sc-memory/kpm/sc_agent.hpp"
+#include "sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_object.hpp"
+#include "sc-memory/kpm/sc_agent.hpp"
 #include "scpKeynodes.hpp"
 #include "scpOperatorStr.hpp"
 
@@ -21,7 +21,7 @@ private:
     ScEvent::Type resolve_event_type(ScAddr const & event_type_node);
 
 public:
-    SCPOperatorSysWait(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
+    SCPOperatorSysWait(ScMemoryContext &ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

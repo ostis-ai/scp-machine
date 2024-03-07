@@ -6,7 +6,7 @@
 
 #include "scpUtils.hpp"
 #include "scpProgramExecutionSyncronizer.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {
@@ -17,20 +17,20 @@ SC_AGENT_IMPLEMENTATION(ASCPProgramExecutionSyncronizer)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
-    if (ms_context->HelperCheckEdge(Keynodes::question_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.HelperCheckEdge(Keynodes::question_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_error);
         return SC_RESULT_OK;
     }
-    if (ms_context->HelperCheckEdge(Keynodes::question_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.HelperCheckEdge(Keynodes::question_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_then);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);
         return SC_RESULT_OK;
     }
-    if (ms_context->HelperCheckEdge(Keynodes::question_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.HelperCheckEdge(Keynodes::question_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_else);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);
@@ -42,11 +42,11 @@ SC_AGENT_IMPLEMENTATION(ASCPProgramExecutionSyncronizer)
 
 void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr &scp_operator, ScAddr &relation)
 {
-    ScIterator5Ptr iter_error = ms_context->Iterator5(scp_operator, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
+    ScIterator5Ptr iter_error =m_memoryCtx.Iterator5(scp_operator, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
     while (iter_error->Next())
     {
         ScAddr next_op = iter_error->Get(2);
-        ms_context->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
+       m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
     }
 }
 

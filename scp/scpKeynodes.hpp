@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
-#include "sc-memory/sc-memory/sc_object.hpp"
+#include <sc-memory/sc_addr.hpp>
+#include <sc-memory/sc_object.hpp>
 
 #include "scpKeynodes.generated.hpp"
 

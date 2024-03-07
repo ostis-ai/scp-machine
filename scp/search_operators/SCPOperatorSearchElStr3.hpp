@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
-#include "sc-memory/sc-memory/sc_object.hpp"
-#include "sc-memory/sc-memory/kpm/sc_agent.hpp"
+#include "sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_object.hpp"
+#include "sc-memory/kpm/sc_agent.hpp"
 #include "scpKeynodes.hpp"
 #include "scpOperatorStr.hpp"
 
@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorSearchElStr3: public SCPOperatorElStr3
 {
 public:
-    SCPOperatorSearchElStr3(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
+    SCPOperatorSearchElStr3(ScMemoryContext &ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

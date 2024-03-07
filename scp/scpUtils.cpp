@@ -7,7 +7,7 @@
 #include "scpUtils.hpp"
 #include "scpKeynodes.hpp"
 #include "sc-core/sc_helper.h"
-#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc_stream.hpp"
 #include "scpOperand.hpp"
 
 #include <regex>
@@ -20,32 +20,32 @@ using namespace std;
 namespace scp {
 namespace Utils {
 
-bool addToSet(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& setAddr, ScAddr const& elAddr)
+bool addToSet(ScMemoryContext& ctx, ScAddr const& setAddr, ScAddr const& elAddr)
 {
-    if (ctx->HelperCheckEdge(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
+    if (ctx.HelperCheckEdge(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
         return false;
 
-    ScAddr arcAddr = ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, elAddr);
+    ScAddr arcAddr = ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, elAddr);
     assert(arcAddr.IsValid());
     return true;
 }
 
-bool removeFromSet(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& setAddr, ScAddr const& elAddr)
+bool removeFromSet(ScMemoryContext& ctx, ScAddr const& setAddr, ScAddr const& elAddr)
 {
-    ScIterator3Ptr it = ctx->Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, elAddr);
+    ScIterator3Ptr it = ctx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, elAddr);
     bool result = false;
     while (it->Next())
-        ctx->EraseElement(it->Get(1));
+        ctx.EraseElement(it->Get(1));
 
     return result;
 }
 
-bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& arcAddr, ScAddr& relationAddr)
+bool resolveOrderRoleRelation(ScMemoryContext& ctx, ScAddr const& arcAddr, ScAddr& relationAddr)
 {
-    ScIterator3Ptr it = ctx->Iterator3(ScType::NodeConst, ScType::EdgeAccess, arcAddr);
+    ScIterator3Ptr it = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccess, arcAddr);
     while (it->Next())
     {
-        if (ctx->HelperCheckEdge(Keynodes::order_role_relation, it->Get(0), ScType::EdgeAccessConstPosPerm))
+        if (ctx.HelperCheckEdge(Keynodes::order_role_relation, it->Get(0), ScType::EdgeAccessConstPosPerm))
         {
             relationAddr = it->Get(0);
             return true;
@@ -55,7 +55,7 @@ bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, ScAdd
     return false;
 }
 
-bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, uint8_t const order, ScAddr& relationAddr)
+bool resolveOrderRoleRelation(ScMemoryContext& ctx, uint8_t const order, ScAddr& relationAddr)
 {
     switch (order)
     {
@@ -97,12 +97,12 @@ bool resolveOrderRoleRelation(const std::unique_ptr<ScMemoryContext>& ctx, uint8
     return relationAddr.IsValid();
 }
 
-bool resolveOperatorType(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& operatorAddr, ScAddr& operatorType)
+bool resolveOperatorType(ScMemoryContext& ctx, ScAddr const& operatorAddr, ScAddr& operatorType)
 {
-    ScIterator3Ptr it = ctx->Iterator3(ScType::NodeConst, ScType::EdgeAccess, operatorAddr);
+    ScIterator3Ptr it = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccess, operatorAddr);
     while (it->Next())
     {
-        if (ctx->HelperCheckEdge(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::EdgeAccessConstPosPerm))
+        if (ctx.HelperCheckEdge(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::EdgeAccessConstPosPerm))
         {
             operatorType = it->Get(0);
             return true;
@@ -112,11 +112,11 @@ bool resolveOperatorType(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
     return false;
 }
 
-void printSystemIdentifier(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+void printSystemIdentifier(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    if (ctx->GetElementType(elemAddr).IsNode() || ctx->GetElementType(elemAddr).IsLink())
+    if (ctx.GetElementType(elemAddr).IsNode() || ctx.GetElementType(elemAddr).IsLink())
     {
-        string s = ctx->HelperGetSystemIdtf(elemAddr);
+        string s = ctx.HelperGetSystemIdtf(elemAddr);
         if (s.empty())
             cout << elemAddr.GetRealAddr().seg << "|" << elemAddr.GetRealAddr().offset;
         else
@@ -125,27 +125,27 @@ void printSystemIdentifier(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
     else
     {
         cout << "(";
-        printSystemIdentifier(ctx, ctx->GetEdgeSource(elemAddr));
+        printSystemIdentifier(ctx, ctx.GetEdgeSource(elemAddr));
         cout << "->";
-        printSystemIdentifier(ctx, ctx->GetEdgeTarget(elemAddr));
+        printSystemIdentifier(ctx, ctx.GetEdgeTarget(elemAddr));
         cout << ")";
     }
 }
 
-void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+void printInfo(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
     int c_in = 0, c_out = 0;
-    assert(ctx->IsElement(elemAddr));
+    assert(ctx.IsElement(elemAddr));
     printSystemIdentifier(ctx, elemAddr);
     cout << endl;
 
     cout << "Input arcs:\n";
-    ScIterator3Ptr it = ctx->Iterator3(ScType(0), ScType(0), elemAddr);
+    ScIterator3Ptr it = ctx.Iterator3(ScType(0), ScType(0), elemAddr);
     while (it->Next())
     {
         c_in++;
         cout << "\t" << it->Get(1).GetRealAddr().seg << "|" << it->Get(1).GetRealAddr().offset;
-        if (ctx->GetElementType(it->Get(1)).BitAnd(sc_type_arc_access))
+        if (ctx.GetElementType(it->Get(1)).BitAnd(sc_type_arc_access))
             cout << " <- ";
         else
             cout << " <= ";
@@ -155,12 +155,12 @@ void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAd
     cout << "Total input arcs: " << c_in << endl;
 
     cout << "Output arcs:\n";
-    it = ctx->Iterator3(elemAddr, ScType(0), ScType(0));
+    it = ctx.Iterator3(elemAddr, ScType(0), ScType(0));
     while (it->Next())
     {
         c_out++;
         cout << "\t" << it->Get(1).GetRealAddr().seg << "|" << it->Get(1).GetRealAddr().offset;
-        if (ctx->GetElementType(it->Get(1)).BitAnd(sc_type_arc_access))
+        if (ctx.GetElementType(it->Get(1)).BitAnd(sc_type_arc_access))
             cout << " -> ";
         else
             cout << " => ";
@@ -170,9 +170,9 @@ void printInfo(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAd
     cout << "Total output arcs: " << c_out << endl;
 }
 
-bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+bool scLinkContentIsInt(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -191,9 +191,9 @@ bool scLinkContentIsInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
     return false;
 }
 
-int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+int scLinkGetContentInt(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -213,9 +213,9 @@ int scLinkGetContentInt(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
     return 0;
 }
 
-string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+string scLinkGetString(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -229,9 +229,9 @@ string scLinkGetString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const
 }
 
 
-bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+bool scLinkContentIsUint(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -250,9 +250,9 @@ bool scLinkContentIsUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
     return false;
 }
 
-int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+int scLinkGetContentUint(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -273,9 +273,9 @@ int scLinkGetContentUint(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr con
     return 0;
 }
 
-bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+bool scLinkContentIsFloat(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -295,9 +295,9 @@ bool scLinkContentIsFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr co
     return false;
 }
 
-float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+float scLinkGetContentFloat(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -316,9 +316,9 @@ float scLinkGetContentFloat(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr 
     return 0;
 }
 
-bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+bool scLinkContentIsDouble(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -337,9 +337,9 @@ bool scLinkContentIsDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr c
     return false;
 }
 
-double scLinkGetContentDouble(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+double scLinkGetContentDouble(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
-    ScStreamPtr stream = ctx->GetLinkContent(elemAddr);
+    ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
     if (stream)
     {
         std::string string;
@@ -373,7 +373,7 @@ ScStreamPtr StreamFromString(std::string const & str)
   return std::make_shared<ScStreamMemory>(buff);
 }
 
-string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr)
+string getIntegerString(ScMemoryContext& ctx, ScAddr const& elemAddr)
 {
     string input = scLinkGetString(ctx, elemAddr);
     regex integer_expr("(\\+|-)?[[:digit:]]+");
@@ -385,7 +385,7 @@ string getIntegerString(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr cons
 }
 
 
-void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand* nodeAddr, ScAddr const& linkAddr)
+void printOperatorAnswer(ScMemoryContext& ctx, SCPOperand* nodeAddr, ScAddr const& linkAddr)
 {
     ScAddr elem1, elem3, elem5, arc1;
         elem1.Reset();
@@ -397,8 +397,8 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
         elem3 = linkAddr;
         elem1 = nodeAddr->CreateNodeOrLink();
 
-        arc1 = ctx->CreateEdge(sc_type_arc_common, elem1, elem3);
-        ctx->CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
+        arc1 = ctx.CreateEdge(sc_type_arc_common, elem1, elem3);
+        ctx.CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
         printInfo(ctx, elem5);
         printInfo(ctx, elem3);
         printInfo(ctx, elem1);
@@ -406,7 +406,7 @@ void printOperatorAnswer(const std::unique_ptr<ScMemoryContext>& ctx, SCPOperand
 }
 
   
-std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr const& elemAddr){
+std::string scLinkPlainNumbers(ScMemoryContext& ctx, ScAddr const& elemAddr){
     std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
 
     std::regex integer_expr("(\\+|-)?[[:digit:]]+");
@@ -435,14 +435,14 @@ std::string scLinkPlainNumbers(const std::unique_ptr<ScMemoryContext>& ctx, ScAd
 }
 
 #ifdef SCP_DEBUG
-void logUnknownOperatorTypeError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr& addr)
+void logUnknownOperatorTypeError(ScMemoryContext& ctx, ScAddr& addr)
 {
     cout << "SCP Error: Unknown scp-operator type: ";
     printSystemIdentifier(ctx, addr);
     cout << endl;
 }
 
-void logSCPError(const std::unique_ptr<ScMemoryContext>& ctx, string text, ScAddr& addr)
+void logSCPError(ScMemoryContext& ctx, string text, ScAddr& addr)
 {
     cout << "SCP Error: " << text << ": ";
     printSystemIdentifier(ctx, addr);

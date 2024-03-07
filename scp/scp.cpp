@@ -1,9 +1,9 @@
 
 #include <iostream>
-#include "sc-memory/sc-memory/sc_addr.hpp"
-#include "sc-memory/sc-memory/sc_object.hpp"
-#include "sc-memory/sc-memory/kpm/sc_agent.hpp"
-#include "sc-memory/sc-memory/sc_event.hpp"
+#include "sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_object.hpp"
+#include "sc-memory/kpm/sc_agent.hpp"
+#include "sc-memory/sc_event.hpp"
 #include "scp.hpp"
 #include "scpKeynodes.hpp"
 #include "scpProcessCreator.hpp"
@@ -27,7 +27,7 @@ using namespace scp;
 
 SC_IMPLEMENT_MODULE(scpModule)
 
-std::unique_ptr<ScMemoryContext> scpModule::s_default_ctx;
+ScMemoryContext scpModule::s_default_ctx{ScAddr()};
 
 sc_result scpModule::InitializeImpl()
 {
@@ -52,7 +52,6 @@ sc_result scpModule::InitializeImpl()
     SC_AGENT_REGISTER(ASCPStringOperatorInterpreter)
     SC_AGENT_REGISTER(ASCPFinishedInterpretationActionProcessor)
 
-    s_default_ctx.reset(new ScMemoryContext(sc_access_lvl_make_min));
     SCPAgentEvent::register_all_scp_agents(s_default_ctx);
 
     return SC_RESULT_OK;
@@ -80,7 +79,6 @@ sc_result scpModule::ShutdownImpl()
 
     SCPAgentEvent::unregister_all_scp_agents(s_default_ctx);
     SCPWaitEvent::unregister_all_sys_wait();
-    s_default_ctx.reset();
 
     return SC_RESULT_OK;
 }

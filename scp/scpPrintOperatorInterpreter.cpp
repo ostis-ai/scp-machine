@@ -9,7 +9,7 @@
 #include "scpPrintOperatorInterpreter.hpp"
 #include "print_operators/SCPOperatorPrintEl.hpp"
 #include "print_operators/SCPOperatorPrint.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp
@@ -21,21 +21,21 @@ SC_AGENT_IMPLEMENTATION(ASCPPrintOperatorInterpreter)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_printEl)
     {
-        oper = new SCPOperatorPrintEl(ms_context, scp_operator);
+        oper = new SCPOperatorPrintEl(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_print || type == Keynodes::op_printNl)
     {
         sc_bool newline = (type == Keynodes::op_printNl);
-        oper = new SCPOperatorPrint(ms_context, scp_operator, newline);
+        oper = new SCPOperatorPrint(m_memoryCtx, scp_operator, newline);
     }
 
     if (oper == nullptr)

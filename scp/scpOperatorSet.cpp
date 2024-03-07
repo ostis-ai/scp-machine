@@ -4,7 +4,7 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
@@ -16,7 +16,7 @@
 namespace scp
 {
 
-SCPOperatorSetStr3::SCPOperatorSetStr3(const std::unique_ptr<ScMemoryContext> &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorSetStr3::SCPOperatorSetStr3(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(3);
     set_operands = std::vector<SCPOperand*>(3);
@@ -25,10 +25,10 @@ SCPOperatorSetStr3::SCPOperatorSetStr3(const std::unique_ptr<ScMemoryContext> &c
 sc_result SCPOperatorSetStr3::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator =m_memoryCtx.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
-        SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));
+        SCPOperand *operand = new SCPOperand(m_memoryCtx, iter_operator->Get(1));
         if (operand->GetSetOrder() > 0)
         {
             if (!(operand->GetSetOrder() < 4 && set_operands[operand->GetSetOrder() - 1] == nullptr))
@@ -37,7 +37,7 @@ sc_result SCPOperatorSetStr3::Parse()
                 std::stringstream ss;
                 ss << "Invalid set operand order ";
                 ss << (int)operand->GetSetOrder();
-                Utils::logSCPError(ms_context, ss.str(), addr);
+                Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
                 FinishExecutionWithError();
                 return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -55,7 +55,7 @@ sc_result SCPOperatorSetStr3::Parse()
             std::stringstream ss;
             ss << "Invalid operand order ";
             ss << (int)operand->GetOrder();
-            Utils::logSCPError(ms_context, ss.str(), addr);
+            Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
             FinishExecutionWithError();
             return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -82,7 +82,7 @@ sc_result SCPOperatorSetStr3::Parse()
                 std::stringstream ss;
                 ss << "SET operands must correspond to ASSIGN operands. Invalid operand ";
                 ss << i + 1;
-                Utils::logSCPError(ms_context, ss.str(), addr);
+                Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
                 FinishExecutionWithError();
                 return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -95,7 +95,7 @@ sc_result SCPOperatorSetStr3::Parse()
     else
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "SetStr operator must have at least one rrel_set_X operand", addr);
+        Utils::logSCPError(m_memoryCtx, "SetStr operator must have at least one rrel_set_X operand", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -110,7 +110,7 @@ SCPOperatorSetStr3::~SCPOperatorSetStr3()
     }
 }
 
-SCPOperatorSetStr5::SCPOperatorSetStr5(const std::unique_ptr<ScMemoryContext> &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
+SCPOperatorSetStr5::SCPOperatorSetStr5(ScMemoryContext &ctx_, ScAddr addr_): SCPOperator(ctx_, addr_)
 {
     operands = std::vector<SCPOperand*>(5);
     set_operands = std::vector<SCPOperand*>(5);
@@ -119,10 +119,10 @@ SCPOperatorSetStr5::SCPOperatorSetStr5(const std::unique_ptr<ScMemoryContext> &c
 sc_result SCPOperatorSetStr5::Parse()
 {
     SCPOperator::Parse();
-    ScIterator3Ptr iter_operator = ms_context->Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+    ScIterator3Ptr iter_operator =m_memoryCtx.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
     while (iter_operator->Next())
     {
-        SCPOperand *operand = new SCPOperand(ms_context, iter_operator->Get(1));
+        SCPOperand *operand = new SCPOperand(m_memoryCtx, iter_operator->Get(1));
         if (operand->GetSetOrder() > 0)
         {
             if (!(operand->GetSetOrder() < 6 && set_operands[operand->GetSetOrder() - 1] == nullptr))
@@ -131,7 +131,7 @@ sc_result SCPOperatorSetStr5::Parse()
                 std::stringstream ss;
                 ss << "Invalid set operand order ";
                 ss << (int)operand->GetSetOrder();
-                Utils::logSCPError(ms_context, ss.str(), addr);
+                Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
                 FinishExecutionWithError();
                 return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -149,7 +149,7 @@ sc_result SCPOperatorSetStr5::Parse()
             std::stringstream ss;
             ss << "Invalid operand order ";
             ss << (int)operand->GetOrder();
-            Utils::logSCPError(ms_context, ss.str(), addr);
+            Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
             FinishExecutionWithError();
             return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -172,7 +172,7 @@ sc_result SCPOperatorSetStr5::Parse()
                 std::stringstream ss;
                 ss << "SET operands must correspond to ASSIGN operands. Invalid operand ";
                 ss << i + 1;
-                Utils::logSCPError(ms_context, ss.str(), addr);
+                Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
                 FinishExecutionWithError();
                 return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -185,7 +185,7 @@ sc_result SCPOperatorSetStr5::Parse()
     else
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "SetStr operator must have at least one rrel_set_X operand", addr);
+        Utils::logSCPError(m_memoryCtx, "SetStr operator must have at least one rrel_set_X operand", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;

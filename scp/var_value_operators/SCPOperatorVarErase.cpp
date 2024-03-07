@@ -6,13 +6,13 @@
 
 #include "scpKeynodes.hpp"
 #include "SCPOperatorVarErase.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp
 {
 
-SCPOperatorVarErase::SCPOperatorVarErase(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
+SCPOperatorVarErase::SCPOperatorVarErase(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
 {
 }
 

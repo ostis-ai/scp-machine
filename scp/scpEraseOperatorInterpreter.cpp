@@ -12,7 +12,7 @@
 #include "erase_operators/SCPOperatorEraseElStr5.hpp"
 #include "erase_operators/SCPOperatorEraseSetStr3.hpp"
 #include "erase_operators/SCPOperatorEraseSetStr5.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {
@@ -23,32 +23,32 @@ SC_AGENT_IMPLEMENTATION(ASCPEraseOperatorInterpreter)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_eraseEl)
     {
-        oper = new SCPOperatorEraseEl(ms_context, scp_operator);
+        oper = new SCPOperatorEraseEl(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_eraseElStr3)
     {
-        oper = new SCPOperatorEraseElStr3(ms_context, scp_operator);
+        oper = new SCPOperatorEraseElStr3(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_eraseElStr5)
     {
-        oper = new SCPOperatorEraseElStr5(ms_context, scp_operator);
+        oper = new SCPOperatorEraseElStr5(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_eraseSetStr3)
     {
-        oper = new SCPOperatorEraseSetStr3(ms_context, scp_operator);
+        oper = new SCPOperatorEraseSetStr3(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_eraseSetStr5)
     {
-        oper = new SCPOperatorEraseSetStr5(ms_context, scp_operator);
+        oper = new SCPOperatorEraseSetStr5(m_memoryCtx, scp_operator);
     }
     if (oper == nullptr)
         return SC_RESULT_ERROR_INVALID_PARAMS;

@@ -4,7 +4,7 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
@@ -14,9 +14,9 @@
 
 namespace scp {
 
-SCPParameter::SCPParameter(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): arc_addr(addr_), ms_context(ctx_)
+SCPParameter::SCPParameter(ScMemoryContext& ctx_, ScAddr addr_): arc_addr(addr_), m_memoryCtx(ctx_)
 {
-    addr = ms_context->GetEdgeTarget(arc_addr);
+    addr =m_memoryCtx.GetEdgeTarget(arc_addr);
     resolveModifiers();
 }
 
@@ -96,11 +96,11 @@ void SCPParameter::resolveOrder(ScAddr modifier)
 
 void SCPParameter::resolveModifiers()
 {
-    ScIterator3Ptr iter = ms_context->Iterator3(ScType::NodeConst, ScType::EdgeAccessVarPosPerm, arc_addr);
+    ScIterator3Ptr iter =m_memoryCtx.Iterator3(ScType::NodeConst, ScType::EdgeAccessVarPosPerm, arc_addr);
     while (iter->Next())
     {
         ScAddr modifier = iter->Get(0);
-        if (ms_context->HelperCheckEdge(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+        if (m_memoryCtx.HelperCheckEdge(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
         {
             resolveOrder(modifier);
             continue;

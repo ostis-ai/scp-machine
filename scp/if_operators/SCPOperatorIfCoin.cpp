@@ -7,13 +7,13 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorIfCoin.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp
 {
 
-SCPOperatorIfCoin::SCPOperatorIfCoin(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorIfCoin::SCPOperatorIfCoin(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
@@ -35,7 +35,7 @@ sc_result SCPOperatorIfCoin::Execute()
     if (!(operands[0]->IsFixed() && operands[1]->IsFixed()))
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Both operands must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Both operands must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -43,7 +43,7 @@ sc_result SCPOperatorIfCoin::Execute()
     if (!operands[0]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 1 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 1 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -52,7 +52,7 @@ sc_result SCPOperatorIfCoin::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 2 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 2 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;

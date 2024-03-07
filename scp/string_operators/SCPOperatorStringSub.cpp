@@ -7,9 +7,9 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringSub.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
-#include "sc-memory/sc-memory/sc_stream.hpp"
-#include <sc-memory/sc-memory/sc_link.hpp>
+#include "sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_stream.hpp"
+#include <sc-memory/sc_link.hpp>
 #include <iostream>
 #include <cstring>
 
@@ -18,7 +18,7 @@ using namespace std;
 namespace scp
 {
 
-SCPOperatorStringSub::SCPOperatorStringSub(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
+SCPOperatorStringSub::SCPOperatorStringSub(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
 {
 }
 
@@ -40,7 +40,7 @@ sc_result SCPOperatorStringSub::Execute()
     if (!(operands[1]->IsFixed() && operands[2]->IsFixed()))
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Both operands must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Both operands must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -48,7 +48,7 @@ sc_result SCPOperatorStringSub::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 1 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 1 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -57,15 +57,15 @@ sc_result SCPOperatorStringSub::Execute()
     if (!operands[2]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 2 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 2 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
 
-        string str1 = Utils::scLinkGetString(ms_context, operands[1]->GetValue());
-        string str2 = Utils::scLinkGetString(ms_context, operands[2]->GetValue());
+        string str1 = Utils::scLinkGetString(m_memoryCtx, operands[1]->GetValue());
+        string str2 = Utils::scLinkGetString(m_memoryCtx, operands[2]->GetValue());
 
 
         size_t start_pos = str1.find(str2);
@@ -76,11 +76,11 @@ sc_result SCPOperatorStringSub::Execute()
         else
         {
             ScStreamPtr streamPtr = Utils::StreamFromString(to_string((start_pos)));
-            ScAddr answerLink = ms_context->CreateLink();
+            ScAddr answerLink =m_memoryCtx.CreateLink();
 
-            ms_context->SetLinkContent(answerLink, streamPtr);
+           m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 
-            Utils::printOperatorAnswer(ms_context, operands[0], answerLink);
+            Utils::printOperatorAnswer(m_memoryCtx, operands[0], answerLink);
 
             FinishExecutionSuccessfully();
 

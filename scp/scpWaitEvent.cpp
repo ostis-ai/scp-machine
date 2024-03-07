@@ -4,7 +4,7 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_addr.hpp"
 #include "scp.hpp"
 #include "scpWaitEvent.hpp"
 #include "scpKeynodes.hpp"
@@ -83,10 +83,10 @@ sc_result SCPWaitEvent::Run(sc_event const* evt, sc_addr edge, sc_addr other_el)
     return SC_RESULT_OK;
 }
 
-SCPWaitEvent::SCPWaitEvent(const std::unique_ptr<ScMemoryContext>& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& param_addr)
+SCPWaitEvent::SCPWaitEvent(ScMemoryContext& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& param_addr)
 {
     m_event = sc_event_new_ex(
-        ctx->GetRealContext(), *addr, ConvertEventType(eventType), (sc_pointer)(sc_uint64)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, nullptr);
+        ctx.GetRealContext(), *addr, ConvertEventType(eventType), (sc_pointer)(sc_uint64)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, nullptr);
 }
 
 ScAddr SCPWaitEvent::GetParamAddr()

@@ -11,7 +11,7 @@
 #include "search_operators/SCPOperatorSearchElStr5.hpp"
 #include "search_operators/SCPOperatorSearchSetStr3.hpp"
 #include "search_operators/SCPOperatorSearchSetStr5.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp {
@@ -22,28 +22,28 @@ SC_AGENT_IMPLEMENTATION(ASCPSearchOperatorInterpreter)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_searchElStr3)
     {
-        oper = new SCPOperatorSearchElStr3(ms_context, scp_operator);
+        oper = new SCPOperatorSearchElStr3(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_searchElStr5)
     {
-        oper = new SCPOperatorSearchElStr5(ms_context, scp_operator);
+        oper = new SCPOperatorSearchElStr5(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_searchSetStr3)
     {
-        oper = new SCPOperatorSearchSetStr3(ms_context, scp_operator);
+        oper = new SCPOperatorSearchSetStr3(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_searchSetStr5)
     {
-        oper = new SCPOperatorSearchSetStr5(ms_context, scp_operator);
+        oper = new SCPOperatorSearchSetStr5(m_memoryCtx, scp_operator);
     }
     if (oper == nullptr)
         return SC_RESULT_ERROR_INVALID_PARAMS;

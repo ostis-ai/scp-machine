@@ -7,13 +7,13 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorIfVarAssign.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp
 {
 
-SCPOperatorIfVarAssign::SCPOperatorIfVarAssign(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
+SCPOperatorIfVarAssign::SCPOperatorIfVarAssign(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr1(ctx, addr)
 {
 }
 
