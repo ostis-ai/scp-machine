@@ -59,7 +59,7 @@ Possible tags:
   * `[refactor]` - commits with some code refactoring;
   * `[changelog]` - use when you update changelog;
   * `[docs]` or `[doc]` - use when you update documentation;
-  * `[scripts]` - updates in the `sc-machine/scripts` files
+  * `[scripts]` - updates in the `scp-machine/scripts` files
   * `[ci]` - changes in `ci` configuration or scripts;
   * `[git]` - changes in `git` configuration;
 
