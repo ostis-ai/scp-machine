@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
-#include "sc-memory/sc-memory/sc_object.hpp"
-#include "sc-memory/sc-memory/kpm/sc_agent.hpp"
+#include "sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_object.hpp"
+#include "sc-memory/kpm/sc_agent.hpp"
 #include "concurrent_queue.hpp"
 #include "scpAgentEvent.hpp"
 #include "scpKeynodes.hpp"

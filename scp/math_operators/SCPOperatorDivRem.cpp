@@ -10,14 +10,14 @@
 #include "SCPOperatorDivRem.hpp"
 #include "sc-core/sc_helper.h"
 #include "sc-core/sc_memory_headers.h"
-#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc_stream.hpp"
 #include <iostream>
 #include <math.h>
 
 namespace scp
 {
 
-SCPOperatorDivRem::SCPOperatorDivRem(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
+SCPOperatorDivRem::SCPOperatorDivRem(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
 {
 }
 
@@ -40,7 +40,7 @@ sc_result SCPOperatorDivRem::Execute()
     if (!(operands[1]->IsFixed()))
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Second operand must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Second operand must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -49,7 +49,7 @@ sc_result SCPOperatorDivRem::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Second operand is FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Second operand is FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -58,7 +58,7 @@ sc_result SCPOperatorDivRem::Execute()
     if (!(operands[2]->IsFixed()))
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Third operand must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Third operand must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -67,7 +67,7 @@ sc_result SCPOperatorDivRem::Execute()
     if (!operands[2]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Third operand is FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Third operand is FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -76,52 +76,52 @@ sc_result SCPOperatorDivRem::Execute()
     int firstOperand;
     int secondOperand;
 
-    if (Utils::scLinkContentIsInt(ms_context, operands[1]->GetValue()) == true)
+    if (Utils::scLinkContentIsInt(m_memoryCtx, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is INT" << std::endl;
-        firstOperand = Utils::scLinkGetContentInt(ms_context, operands[1]->GetValue());
+        firstOperand = Utils::scLinkGetContentInt(m_memoryCtx, operands[1]->GetValue());
     }
 
-    if (Utils::scLinkContentIsUint(ms_context, operands[1]->GetValue()) == true)
+    if (Utils::scLinkContentIsUint(m_memoryCtx, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is UINT" << std::endl;
-        firstOperand = Utils::scLinkGetContentUint(ms_context, operands[1]->GetValue());
+        firstOperand = Utils::scLinkGetContentUint(m_memoryCtx, operands[1]->GetValue());
     }
 
-    if (Utils::scLinkContentIsFloat(ms_context, operands[1]->GetValue()) == true)
+    if (Utils::scLinkContentIsFloat(m_memoryCtx, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is FLOAT" << std::endl;
-        firstOperand = Utils::scLinkGetContentFloat(ms_context, operands[1]->GetValue());
+        firstOperand = Utils::scLinkGetContentFloat(m_memoryCtx, operands[1]->GetValue());
     }
 
-    if (Utils::scLinkContentIsDouble(ms_context, operands[1]->GetValue()) == true)
+    if (Utils::scLinkContentIsDouble(m_memoryCtx, operands[1]->GetValue()) == true)
     {
         std::cout << "Link is DOUBLE" << std::endl;
-        firstOperand = Utils::scLinkGetContentDouble(ms_context, operands[1]->GetValue());
+        firstOperand = Utils::scLinkGetContentDouble(m_memoryCtx, operands[1]->GetValue());
     }
 
-    if (Utils::scLinkContentIsInt(ms_context, operands[2]->GetValue()) == true)
+    if (Utils::scLinkContentIsInt(m_memoryCtx, operands[2]->GetValue()) == true)
     {
         std::cout << "Link is INT" << std::endl;
-        secondOperand = Utils::scLinkGetContentInt(ms_context, operands[2]->GetValue());
+        secondOperand = Utils::scLinkGetContentInt(m_memoryCtx, operands[2]->GetValue());
     }
 
-    if (Utils::scLinkContentIsUint(ms_context, operands[2]->GetValue()) == true)
+    if (Utils::scLinkContentIsUint(m_memoryCtx, operands[2]->GetValue()) == true)
     {
         std::cout << "Link is UINT" << std::endl;
-        secondOperand = Utils::scLinkGetContentUint(ms_context, operands[2]->GetValue());
+        secondOperand = Utils::scLinkGetContentUint(m_memoryCtx, operands[2]->GetValue());
     }
 
-    if (Utils::scLinkContentIsFloat(ms_context, operands[2]->GetValue()) == true)
+    if (Utils::scLinkContentIsFloat(m_memoryCtx, operands[2]->GetValue()) == true)
     {
         std::cout << "Link is FLOAT" << std::endl;
-        secondOperand = Utils::scLinkGetContentFloat(ms_context, operands[2]->GetValue());
+        secondOperand = Utils::scLinkGetContentFloat(m_memoryCtx, operands[2]->GetValue());
     }
 
-    if (Utils::scLinkContentIsDouble(ms_context, operands[2]->GetValue()) == true)
+    if (Utils::scLinkContentIsDouble(m_memoryCtx, operands[2]->GetValue()) == true)
     {
         std::cout << "Link is DOUBLE" << std::endl;
-        secondOperand = Utils::scLinkGetContentDouble(ms_context, operands[2]->GetValue());
+        secondOperand = Utils::scLinkGetContentDouble(m_memoryCtx, operands[2]->GetValue());
     }
 
     int ans =  div(firstOperand, secondOperand).rem;
@@ -130,7 +130,7 @@ sc_result SCPOperatorDivRem::Execute()
 
     std::cout << "Link: " << answer_str << std::endl;
 
-    ScAddr answer_link = ms_context->CreateLink();
+    ScAddr answer_link =m_memoryCtx.CreateLink();
     ScStreamPtr streamPtr = Utils::StreamFromString(answer_str);
 
     ScAddr elem1, elem3, elem5, arc1;
@@ -140,16 +140,16 @@ sc_result SCPOperatorDivRem::Execute()
     arc1.Reset();
 
     elem5 = Keynodes::nrel_scp_var_value;
-    ms_context->SetLinkContent(answer_link, streamPtr);
+   m_memoryCtx.SetLinkContent(answer_link, streamPtr);
     elem3 = answer_link;
     elem1 = operands[0]->CreateNodeOrLink();
 
-    arc1 = ms_context->CreateEdge(sc_type_arc_common, elem1, elem3);
-    ms_context->CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
-    Utils::printInfo(ms_context, elem5);
-    Utils::printInfo(ms_context, elem3);
-    Utils::printInfo(ms_context, elem1);
-    std::cout << ms_context->IsElement(elem1);
+    arc1 =m_memoryCtx.CreateEdge(sc_type_arc_common, elem1, elem3);
+   m_memoryCtx.CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
+    Utils::printInfo(m_memoryCtx, elem5);
+    Utils::printInfo(m_memoryCtx, elem3);
+    Utils::printInfo(m_memoryCtx, elem1);
+    std::cout <<m_memoryCtx.IsElement(elem1);
     operands[0]->SetValue(elem1);
 
     //int answer = div(firstOperand, secondOperand);

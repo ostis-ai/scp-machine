@@ -10,7 +10,7 @@
 #include "if_operators/SCPOperatorIfCoin.hpp"
 #include "if_operators/SCPOperatorIfType.hpp"
 #include "if_operators/SCPOperatorIfVarAssign.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp
@@ -22,24 +22,24 @@ SC_AGENT_IMPLEMENTATION(ASCPIfOperatorInterpreter)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_ifCoin)
     {
-        oper = new SCPOperatorIfCoin(ms_context, scp_operator);
+        oper = new SCPOperatorIfCoin(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_ifType)
     {
-        oper = new SCPOperatorIfType(ms_context, scp_operator);
+        oper = new SCPOperatorIfType(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_ifVarAssign)
     {
-        oper = new SCPOperatorIfVarAssign(ms_context, scp_operator);
+        oper = new SCPOperatorIfVarAssign(m_memoryCtx, scp_operator);
     }
 
     if (oper == nullptr)

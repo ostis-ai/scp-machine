@@ -7,9 +7,9 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringToUpperCase.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
-#include "sc-memory/sc-memory/sc_stream.hpp"
-#include <sc-memory/sc-memory/sc_link.hpp>
+#include "sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_stream.hpp"
+#include <sc-memory/sc_link.hpp>
 #include <iostream>
 #include <cstring>
 #include <boost/algorithm/string.hpp>
@@ -19,7 +19,7 @@ using namespace std;
 namespace scp
 {
 
-SCPOperatorStringToUpperCase::SCPOperatorStringToUpperCase(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorStringToUpperCase::SCPOperatorStringToUpperCase(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
@@ -41,7 +41,7 @@ sc_result SCPOperatorStringToUpperCase::Execute()
     if (!operands[1]->IsFixed())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -49,14 +49,14 @@ sc_result SCPOperatorStringToUpperCase::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 1 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 1 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
 
-        string str1 = Utils::scLinkGetString(ms_context, operands[1]->GetValue());
+        string str1 = Utils::scLinkGetString(m_memoryCtx, operands[1]->GetValue());
         if(str1=="")
         {
             cout << "Link content is empty!" << endl;
@@ -65,11 +65,11 @@ sc_result SCPOperatorStringToUpperCase::Execute()
         }
 
             ScStreamPtr streamPtr = Utils::StreamFromString(boost::to_upper_copy(str1));
-            ScAddr answerLink = ms_context->CreateLink();
+            ScAddr answerLink =m_memoryCtx.CreateLink();
 
-            ms_context->SetLinkContent(answerLink, streamPtr);
+           m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 
-            Utils::printOperatorAnswer(ms_context, operands[0], answerLink);
+            Utils::printOperatorAnswer(m_memoryCtx, operands[0], answerLink);
 
 
             FinishExecutionSuccessfully();

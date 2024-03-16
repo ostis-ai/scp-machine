@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 #include "scpOperand.hpp"
 #include "scpParameter.hpp"
@@ -30,7 +30,7 @@ private:
     std::vector<SCPParameter*> expected_params;
 
 public:
-    SCPOperatorCall(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr);
+    SCPOperatorCall(ScMemoryContext &ctx, ScAddr addr);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

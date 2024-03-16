@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
-#include "sc-memory/sc-memory/sc_object.hpp"
-#include "sc-memory/sc-memory/kpm/sc_agent.hpp"
+#include "sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_object.hpp"
+#include "sc-memory/kpm/sc_agent.hpp"
 #include "scpKeynodes.hpp"
 #include "scpOperatorStr.hpp"
 
@@ -21,7 +21,7 @@ private:
     sc_bool newline;
 
 public:
-    SCPOperatorPrint(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr, sc_bool newline_);
+    SCPOperatorPrint(ScMemoryContext &ctx, ScAddr addr, sc_bool newline_);
     std::string GetTypeName();
     sc_result Parse();
     sc_result Execute();

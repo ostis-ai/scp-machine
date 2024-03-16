@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 
 namespace scp {
@@ -38,10 +38,10 @@ private:
     void resolveSetOrder(ScAddr modifier);
     uint8_t order = 0;
     uint8_t set_order = 0;
-    const std::unique_ptr<ScMemoryContext>& ms_context;
+    ScMemoryContext& m_memoryCtx;
 
 public:
-    SCPOperand(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_);
+    SCPOperand(ScMemoryContext& ctx_, ScAddr addr_);
     ScAddr GetAddr();
     ScAddr GetValue();
     ScType GetType();

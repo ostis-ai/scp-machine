@@ -9,7 +9,7 @@
 #include "scpVarValueOperatorInterpreter.hpp"
 #include "var_value_operators/SCPOperatorVarAssign.hpp"
 #include "var_value_operators/SCPOperatorVarErase.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
 namespace scp
@@ -21,20 +21,20 @@ SC_AGENT_IMPLEMENTATION(ASCPVarValueOperatorInterpreter)
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_varAssign)
     {
-        oper = new SCPOperatorVarAssign(ms_context, scp_operator);
+        oper = new SCPOperatorVarAssign(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_varErase)
     {
-        oper = new SCPOperatorVarErase(ms_context, scp_operator);
+        oper = new SCPOperatorVarErase(m_memoryCtx, scp_operator);
     }
 
     if (oper == nullptr)

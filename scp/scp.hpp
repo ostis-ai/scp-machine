@@ -7,7 +7,7 @@
 #pragma once
 
 #include "sc-memory/sc_memory.hpp"
-#include "sc-memory/sc-memory/sc_module.hpp"
+#include "sc-memory/sc_module.hpp"
 
 #include "scp.generated.hpp"
 
@@ -26,6 +26,5 @@ class scpModule : public ScModule
     virtual sc_result ShutdownImpl() override;
 
 public:
-    static std::unique_ptr<ScMemoryContext> s_default_ctx;
-
+    static ScMemoryContext s_default_ctx;
 };

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 
 namespace scp {
@@ -19,13 +19,13 @@ private:
     bool isIn = false;
     bool isOut = false;
     uint8_t order = 0;
-    const std::unique_ptr<ScMemoryContext>& ms_context;
+    ScMemoryContext& m_memoryCtx;
 
     void resolveModifiers();
     void resolveOrder(ScAddr modifier);
 
 public:
-    SCPParameter(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_);
+    SCPParameter(ScMemoryContext& ctx_, ScAddr addr_);
     ScAddr GetAddr();
     uint8_t GetOrder();
     bool IsIn();

@@ -5,7 +5,7 @@
 */
 
 #include "scpKeynodes.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 
 namespace scp {
 

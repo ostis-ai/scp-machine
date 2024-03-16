@@ -7,9 +7,9 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringLen.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
-#include "sc-memory/sc-memory/sc_stream.hpp"
-#include <sc-memory/sc-memory/sc_link.hpp>
+#include "sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_stream.hpp"
+#include <sc-memory/sc_link.hpp>
 #include <iostream>
 #include <cstring>
 
@@ -18,7 +18,7 @@ using namespace std;
 namespace scp
 {
 
-SCPOperatorStringLen::SCPOperatorStringLen(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorStringLen::SCPOperatorStringLen(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
@@ -40,7 +40,7 @@ sc_result SCPOperatorStringLen::Execute()
     if (!operands[1]->IsFixed())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -48,23 +48,23 @@ sc_result SCPOperatorStringLen::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 1 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 1 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
 
-        string str1 = Utils::scLinkGetString(ms_context, operands[1]->GetValue());
+        string str1 = Utils::scLinkGetString(m_memoryCtx, operands[1]->GetValue());
 
             size_t len1 = str1.length();
 
             ScStreamPtr streamPtr = Utils::StreamFromString(to_string(len1));
-            ScAddr answerLink = ms_context->CreateLink();
+            ScAddr answerLink =m_memoryCtx.CreateLink();
 
-            ms_context->SetLinkContent(answerLink, streamPtr);
+           m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 
-            Utils::printOperatorAnswer(ms_context, operands[0], answerLink);
+            Utils::printOperatorAnswer(m_memoryCtx, operands[0], answerLink);
 
 
             FinishExecutionSuccessfully();

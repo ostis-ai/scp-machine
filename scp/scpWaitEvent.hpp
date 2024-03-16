@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
-#include "sc-memory/sc-memory/sc_event.hpp"
+#include "sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_event.hpp"
 #include "concurrent_queue.hpp"
 
 namespace scp {
@@ -24,7 +24,7 @@ private:
 public:
     static concurrent_deque<SCPWaitEvent*> sys_wait_events;
     void static unregister_all_sys_wait();
-    SCPWaitEvent(const std::unique_ptr<ScMemoryContext>& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& param_addr);
+    SCPWaitEvent(ScMemoryContext& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& param_addr);
     ScAddr GetParamAddr();
     ~SCPWaitEvent();
 };

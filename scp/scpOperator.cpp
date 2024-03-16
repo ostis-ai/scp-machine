@@ -4,7 +4,7 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "sc-memory/sc-memory/sc_addr.hpp"
+#include "sc-memory/sc_addr.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
@@ -15,7 +15,7 @@
 
 namespace scp {
 
-SCPOperator::SCPOperator(const std::unique_ptr<ScMemoryContext>& ctx_, ScAddr addr_): addr(addr_), ms_context(ctx_)
+SCPOperator::SCPOperator(ScMemoryContext& ctx_, ScAddr addr_): addr(addr_), m_memoryCtx(ctx_)
 {
 }
 
@@ -38,7 +38,7 @@ sc_result SCPOperator::ResetValues()
             if (operand->IsSCPConst())
             {
 #ifdef SCP_DEBUG
-                Utils::logSCPError(ms_context, "SCP CONST must have FIXED modifier", addr);
+                Utils::logSCPError(m_memoryCtx, "SCP CONST must have FIXED modifier", addr);
 #endif
                 FinishExecutionWithError();
                 return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -56,8 +56,8 @@ sc_result SCPOperator::CheckNullValues()
         if (!operand)
         {
 #ifdef SCP_DEBUG
-            Utils::logSCPError(ms_context, "One or more operands missed", addr);
-            Utils::printInfo(ms_context, addr);
+            Utils::logSCPError(m_memoryCtx, "One or more operands missed", addr);
+            Utils::printInfo(m_memoryCtx, addr);
 #endif
             FinishExecutionWithError();
             return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -79,33 +79,33 @@ sc_result SCPOperator::Execute()
 
 void SCPOperator::ClearExecutionState()
 {
-    SCPOperator::ClearExecutionState(ms_context, addr);
+    SCPOperator::ClearExecutionState(m_memoryCtx, addr);
 }
 
 void SCPOperator::FinishExecution()
 {
-    SCPOperator::FinishExecution(ms_context, addr);
+    SCPOperator::FinishExecution(m_memoryCtx, addr);
 }
 
 void SCPOperator::FinishExecutionSuccessfully()
 {
-    SCPOperator::FinishExecutionSuccessfully(ms_context, addr);
+    SCPOperator::FinishExecutionSuccessfully(m_memoryCtx, addr);
 }
 
 void SCPOperator::FinishExecutionUnsuccessfully()
 {
-    SCPOperator::FinishExecutionUnsuccessfully(ms_context, addr);
+    SCPOperator::FinishExecutionUnsuccessfully(m_memoryCtx, addr);
 }
 
 void SCPOperator::FinishExecutionWithError()
 {
-    SCPOperator::FinishExecutionWithError(ms_context, addr);
+    SCPOperator::FinishExecutionWithError(m_memoryCtx, addr);
 }
 
-void SCPOperator::ClearExecutionState(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
+void SCPOperator::ClearExecutionState(ScMemoryContext& ctx, ScAddr oper_addr)
 {
     std::vector<ScAddr> arcs;
-    ScIterator3Ptr iter=ctx->Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, oper_addr);
+    ScIterator3Ptr iter=ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, oper_addr);
     while (iter->Next())
     {
         if (iter->Get(0)==Keynodes::active_action)
@@ -120,32 +120,32 @@ void SCPOperator::ClearExecutionState(const std::unique_ptr<ScMemoryContext>& ct
             arcs.push_back(iter->Get(1));
     }
     for (auto & arc : arcs)
-        ctx->EraseElement(arc);
+        ctx.EraseElement(arc);
 }
 
-void SCPOperator::FinishExecution(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecution(ScMemoryContext& ctx, ScAddr oper_addr)
 {
-    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_addr);
 }
 
-void SCPOperator::FinishExecutionSuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecutionSuccessfully(ScMemoryContext& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 
-void SCPOperator::FinishExecutionUnsuccessfully(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecutionUnsuccessfully(ScMemoryContext& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 
-void SCPOperator::FinishExecutionWithError(const std::unique_ptr<ScMemoryContext>& ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecutionWithError(ScMemoryContext& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx->CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 

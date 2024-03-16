@@ -7,14 +7,14 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorIfEq.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
-#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_stream.hpp"
 #include <iostream>
 
 namespace scp
 {
 
-SCPOperatorIfEq::SCPOperatorIfEq(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
+SCPOperatorIfEq::SCPOperatorIfEq(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
 {
 }
 
@@ -37,7 +37,7 @@ sc_result SCPOperatorIfEq::Execute()
     if (!(operands[0]->IsFixed() && operands[1]->IsFixed()))
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Both operands must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Both operands must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -45,7 +45,7 @@ sc_result SCPOperatorIfEq::Execute()
     if (!operands[0]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 1 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 1 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -54,16 +54,16 @@ sc_result SCPOperatorIfEq::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 2 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 2 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    if (Utils::scLinkContentIsInt(ms_context, operands[0]->GetValue()) && Utils::scLinkContentIsInt(ms_context, operands[1]->GetValue()))
+    if (Utils::scLinkContentIsInt(m_memoryCtx, operands[0]->GetValue()) && Utils::scLinkContentIsInt(m_memoryCtx, operands[1]->GetValue()))
     {
         std::cout << "Links are int" << std::endl;
-        if (Utils::scLinkGetContentInt(ms_context, operands[0]->GetValue()) == Utils::scLinkGetContentInt(ms_context, operands[1]->GetValue()))
+        if (Utils::scLinkGetContentInt(m_memoryCtx, operands[0]->GetValue()) == Utils::scLinkGetContentInt(m_memoryCtx, operands[1]->GetValue()))
         {
             FinishExecutionSuccessfully();
         }
@@ -73,10 +73,10 @@ sc_result SCPOperatorIfEq::Execute()
         }
     }
 
-    else if (Utils::scLinkContentIsUint(ms_context, operands[0]->GetValue()) && Utils::scLinkContentIsUint(ms_context, operands[1]->GetValue()))
+    else if (Utils::scLinkContentIsUint(m_memoryCtx, operands[0]->GetValue()) && Utils::scLinkContentIsUint(m_memoryCtx, operands[1]->GetValue()))
     {
         std::cout << "Links are uint" << std::endl;
-        if (Utils::scLinkGetContentUint(ms_context, operands[0]->GetValue()) == Utils::scLinkGetContentUint(ms_context, operands[1]->GetValue()))
+        if (Utils::scLinkGetContentUint(m_memoryCtx, operands[0]->GetValue()) == Utils::scLinkGetContentUint(m_memoryCtx, operands[1]->GetValue()))
         {
             FinishExecutionSuccessfully();
         }
@@ -86,10 +86,10 @@ sc_result SCPOperatorIfEq::Execute()
         }
     }
 
-    else if (Utils::scLinkContentIsFloat(ms_context, operands[0]->GetValue()) && Utils::scLinkContentIsFloat(ms_context, operands[1]->GetValue()))
+    else if (Utils::scLinkContentIsFloat(m_memoryCtx, operands[0]->GetValue()) && Utils::scLinkContentIsFloat(m_memoryCtx, operands[1]->GetValue()))
     {
         std::cout << "Links are float" << std::endl;
-        if (Utils::scLinkGetContentFloat(ms_context, operands[0]->GetValue()) == Utils::scLinkGetContentFloat(ms_context, operands[1]->GetValue()))
+        if (Utils::scLinkGetContentFloat(m_memoryCtx, operands[0]->GetValue()) == Utils::scLinkGetContentFloat(m_memoryCtx, operands[1]->GetValue()))
         {
             FinishExecutionSuccessfully();
         }
@@ -99,10 +99,10 @@ sc_result SCPOperatorIfEq::Execute()
         }
     }
 
-    else if (Utils::scLinkContentIsDouble(ms_context, operands[0]->GetValue()) && Utils::scLinkContentIsDouble(ms_context, operands[1]->GetValue()))
+    else if (Utils::scLinkContentIsDouble(m_memoryCtx, operands[0]->GetValue()) && Utils::scLinkContentIsDouble(m_memoryCtx, operands[1]->GetValue()))
     {
         std::cout << "Links are double" << std::endl;
-        if (Utils::scLinkGetContentDouble(ms_context, operands[0]->GetValue()) == Utils::scLinkGetContentDouble(ms_context, operands[1]->GetValue()))
+        if (Utils::scLinkGetContentDouble(m_memoryCtx, operands[0]->GetValue()) == Utils::scLinkGetContentDouble(m_memoryCtx, operands[1]->GetValue()))
         {
             FinishExecutionSuccessfully();
         }
@@ -113,9 +113,9 @@ sc_result SCPOperatorIfEq::Execute()
     }
 
     else {
-        if(!Utils::scLinkPlainNumbers(ms_context, operands[0]->GetValue()).empty() && !Utils::scLinkPlainNumbers(ms_context, operands[1]->GetValue()).empty()){
-            std::string str1 = Utils::scLinkPlainNumbers(ms_context, operands[0]->GetValue());
-            std::string str2 = Utils::scLinkPlainNumbers(ms_context, operands[1]->GetValue());
+        if(!Utils::scLinkPlainNumbers(m_memoryCtx, operands[0]->GetValue()).empty() && !Utils::scLinkPlainNumbers(m_memoryCtx, operands[1]->GetValue()).empty()){
+            std::string str1 = Utils::scLinkPlainNumbers(m_memoryCtx, operands[0]->GetValue());
+            std::string str2 = Utils::scLinkPlainNumbers(m_memoryCtx, operands[1]->GetValue());
             std::string intInit = "int: ";
             std::string::size_type i1 = str1.find(intInit);
             std::string::size_type i2 = str2.find(intInit);
@@ -157,7 +157,7 @@ sc_result SCPOperatorIfEq::Execute()
         else{
             FinishExecutionUnsuccessfully();
             #ifdef SCP_DEBUG
-                Utils::logSCPError(ms_context, "Both operands are not numeric!", addr);
+                Utils::logSCPError(m_memoryCtx, "Both operands are not numeric!", addr);
             #endif
             return SC_RESULT_OK;
         }

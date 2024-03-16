@@ -7,15 +7,15 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorContPow.hpp"
-#include "sc-memory/sc-memory/sc_memory.hpp"
-#include "sc-memory/sc-memory/sc_stream.hpp"
+#include "sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_stream.hpp"
 #include <iostream>
 #include <math.h>
 
 namespace scp
 {
 
-SCPOperatorContPow::SCPOperatorContPow(const std::unique_ptr<ScMemoryContext> &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
+SCPOperatorContPow::SCPOperatorContPow(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr3(ctx, addr)
 {
 }
 
@@ -38,7 +38,7 @@ sc_result SCPOperatorContPow::Execute()
     if (!(operands[1]->IsFixed() && operands[2]->IsFixed()))
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Both operands must have FIXED modifier", addr);
+        Utils::logSCPError(m_memoryCtx, "Both operands must have FIXED modifier", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -46,7 +46,7 @@ sc_result SCPOperatorContPow::Execute()
     if (!operands[1]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 1 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 1 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -55,7 +55,7 @@ sc_result SCPOperatorContPow::Execute()
     if (!operands[2]->GetValue().IsValid())
     {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(ms_context, "Operand 2 has modifier FIXED, but has no value", addr);
+        Utils::logSCPError(m_memoryCtx, "Operand 2 has modifier FIXED, but has no value", addr);
 #endif
         FinishExecutionWithError();
         return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -63,47 +63,47 @@ sc_result SCPOperatorContPow::Execute()
 
     std::string answer_str;
 
-    if (Utils::scLinkContentIsInt(ms_context, operands[1]->GetValue()) && Utils::scLinkContentIsInt(ms_context, operands[2]->GetValue()))
+    if (Utils::scLinkContentIsInt(m_memoryCtx, operands[1]->GetValue()) && Utils::scLinkContentIsInt(m_memoryCtx, operands[2]->GetValue()))
     {
         std::cout << "Links are int" << std::endl;
-        int number1 = Utils::scLinkGetContentInt(ms_context, operands[1]->GetValue());
-        int number2 = Utils::scLinkGetContentInt(ms_context, operands[2]->GetValue());
+        int number1 = Utils::scLinkGetContentInt(m_memoryCtx, operands[1]->GetValue());
+        int number2 = Utils::scLinkGetContentInt(m_memoryCtx, operands[2]->GetValue());
         int answer = pow(number1, number2);
         answer_str = std::to_string(answer);
     }
 
-    if (Utils::scLinkContentIsUint(ms_context, operands[1]->GetValue()) && Utils::scLinkContentIsUint(ms_context, operands[2]->GetValue()))
+    if (Utils::scLinkContentIsUint(m_memoryCtx, operands[1]->GetValue()) && Utils::scLinkContentIsUint(m_memoryCtx, operands[2]->GetValue()))
     {
         std::cout << "Links are uint" << std::endl;
-        int number1 = Utils::scLinkGetContentUint(ms_context, operands[1]->GetValue());
-        int number2 = Utils::scLinkGetContentUint(ms_context, operands[2]->GetValue());
+        int number1 = Utils::scLinkGetContentUint(m_memoryCtx, operands[1]->GetValue());
+        int number2 = Utils::scLinkGetContentUint(m_memoryCtx, operands[2]->GetValue());
         int answer = number1 * number2;
         answer_str = std::to_string(answer);
 
     }
 
-    if (Utils::scLinkContentIsFloat(ms_context, operands[1]->GetValue()) && Utils::scLinkContentIsFloat(ms_context, operands[2]->GetValue()))
+    if (Utils::scLinkContentIsFloat(m_memoryCtx, operands[1]->GetValue()) && Utils::scLinkContentIsFloat(m_memoryCtx, operands[2]->GetValue()))
     {
         std::cout << "Links are float" << std::endl;
-        float number1 = Utils::scLinkGetContentFloat(ms_context, operands[1]->GetValue());
-        float number2 = Utils::scLinkGetContentFloat(ms_context, operands[2]->GetValue());
+        float number1 = Utils::scLinkGetContentFloat(m_memoryCtx, operands[1]->GetValue());
+        float number2 = Utils::scLinkGetContentFloat(m_memoryCtx, operands[2]->GetValue());
         float answer = (float)(pow(number1, number2));
         answer_str = std::to_string(answer);
     }
 
-    if (Utils::scLinkContentIsDouble(ms_context, operands[1]->GetValue()) && Utils::scLinkContentIsDouble(ms_context, operands[2]->GetValue()))
+    if (Utils::scLinkContentIsDouble(m_memoryCtx, operands[1]->GetValue()) && Utils::scLinkContentIsDouble(m_memoryCtx, operands[2]->GetValue()))
     {
         std::cout << "Links are double" << std::endl;
-        double number1 = Utils::scLinkGetContentDouble(ms_context, operands[1]->GetValue());
-        double number2 = Utils::scLinkGetContentDouble(ms_context, operands[2]->GetValue());
+        double number1 = Utils::scLinkGetContentDouble(m_memoryCtx, operands[1]->GetValue());
+        double number2 = Utils::scLinkGetContentDouble(m_memoryCtx, operands[2]->GetValue());
         double answer = (double)(pow(number1, number2));
         answer_str = std::to_string(answer);
     }
 
     if (answer_str.empty()){
-        if(!Utils::scLinkPlainNumbers(ms_context, operands[1]->GetValue()).empty() && !Utils::scLinkPlainNumbers(ms_context, operands[2]->GetValue()).empty()){
-            std::string str1 = Utils::scLinkPlainNumbers(ms_context, operands[1]->GetValue());
-            std::string str2 = Utils::scLinkPlainNumbers(ms_context, operands[2]->GetValue());
+        if(!Utils::scLinkPlainNumbers(m_memoryCtx, operands[1]->GetValue()).empty() && !Utils::scLinkPlainNumbers(m_memoryCtx, operands[2]->GetValue()).empty()){
+            std::string str1 = Utils::scLinkPlainNumbers(m_memoryCtx, operands[1]->GetValue());
+            std::string str2 = Utils::scLinkPlainNumbers(m_memoryCtx, operands[2]->GetValue());
             std::string intInit = "int: ";
             std::string::size_type i1 = str1.find(intInit);
             std::string::size_type i2 = str2.find(intInit);
@@ -137,15 +137,15 @@ sc_result SCPOperatorContPow::Execute()
         else{
             FinishExecutionUnsuccessfully();
             #ifdef SCP_DEBUG
-                Utils::logSCPError(ms_context, "Both operands are not numeric!", addr);
+                Utils::logSCPError(m_memoryCtx, "Both operands are not numeric!", addr);
             #endif
             return SC_RESULT_OK;
         }
     }
 
     ScStreamPtr streamPtr = Utils::StreamFromString(answer_str);
-    ScAddr answerLink = ms_context->CreateLink();
-    ms_context->SetLinkContent(answerLink, streamPtr);
+    ScAddr answerLink =m_memoryCtx.CreateLink();
+   m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 
     ScAddr elem1, elem3, elem5, arc1;
     elem1.Reset();
@@ -157,10 +157,10 @@ sc_result SCPOperatorContPow::Execute()
     elem5 = Keynodes::nrel_scp_var_value;
     elem3 = answerLink;
     elem1 = operands[0]->CreateNodeOrLink();
-    arc1 = ms_context->CreateEdge(sc_type_arc_common, elem1, elem3);
-    ms_context->CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
-    Utils::printInfo(ms_context, elem5);
-    Utils::printInfo(ms_context, elem3);
+    arc1 =m_memoryCtx.CreateEdge(sc_type_arc_common, elem1, elem3);
+   m_memoryCtx.CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
+    Utils::printInfo(m_memoryCtx, elem5);
+    Utils::printInfo(m_memoryCtx, elem3);
     operands[0]->SetValue(elem1);
 
     std::cout << "SCPOperatorContPow execute(): end";

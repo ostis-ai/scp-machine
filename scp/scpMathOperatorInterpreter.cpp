@@ -20,7 +20,7 @@
 #include "math_operators/SCPOperatorContPow.hpp"
 #include "math_operators/SCPOperatorContDiv.hpp"
 
-#include "sc-memory/sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 #include <string>
 
@@ -31,76 +31,76 @@ SC_AGENT_IMPLEMENTATION(ASCPMathOperatorInterpreter){
     if (!edgeAddr.IsValid())
         return SC_RESULT_ERROR;
 
-    ScAddr scp_operator = ms_context->GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(ms_context, scp_operator, type))
+    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
         return SC_RESULT_ERROR_INVALID_TYPE;
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_contSin)
     {
-        oper = new SCPOperatorSIn(ms_context, scp_operator);
+        oper = new SCPOperatorSIn(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contCos)
     {
-        oper = new SCPOperatorCos(ms_context, scp_operator);
+        oper = new SCPOperatorCos(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contTg)
     {
-        oper = new SCPOperatorTg(ms_context, scp_operator);
+        oper = new SCPOperatorTg(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contASin)
     {
-        oper = new SCPOperatorASin(ms_context, scp_operator);
+        oper = new SCPOperatorASin(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contACos)
     {
-        oper = new SCPOperatorACos(ms_context, scp_operator);
+        oper = new SCPOperatorACos(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contATg)
     {
-        oper = new SCPOperatorATg(ms_context, scp_operator);
+        oper = new SCPOperatorATg(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contDivInt)
     {
-        oper = new SCPOperatorDivInt(ms_context, scp_operator);
+        oper = new SCPOperatorDivInt(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contDivRem)
     {
-        oper = new SCPOperatorDivRem(ms_context, scp_operator);
+        oper = new SCPOperatorDivRem(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_ifEq)
     {
-        oper = new SCPOperatorIfEq(ms_context, scp_operator);
+        oper = new SCPOperatorIfEq(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contLn)
     {
-        oper = new SCPOperatorContLn(ms_context, scp_operator);
+        oper = new SCPOperatorContLn(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_ifGr)
     {
-        oper = new SCPOperatorIfGr(ms_context, scp_operator);
+        oper = new SCPOperatorIfGr(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contAdd)
     {
-        oper = new SCPOperatorContAdd(ms_context, scp_operator);
+        oper = new SCPOperatorContAdd(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contSub)
     {
-        oper = new SCPOperatorContSub(ms_context, scp_operator);
+        oper = new SCPOperatorContSub(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contMult)
     {
-        oper = new SCPOperatorContMult(ms_context, scp_operator);
+        oper = new SCPOperatorContMult(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contDiv)
     {
-        oper = new SCPOperatorContDiv(ms_context, scp_operator);
+        oper = new SCPOperatorContDiv(m_memoryCtx, scp_operator);
     }
     if (type == Keynodes::op_contPow)
     {
-        oper = new SCPOperatorContPow(ms_context, scp_operator);
+        oper = new SCPOperatorContPow(m_memoryCtx, scp_operator);
     }
 
     if (oper == nullptr){
