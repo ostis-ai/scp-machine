@@ -4,15 +4,11 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringToUpperCase.hpp"
 #include "sc-memory/sc_memory.hpp"
 #include "sc-memory/sc_stream.hpp"
-#include <sc-memory/sc_link.hpp>
 #include <iostream>
-#include <cstring>
-#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
@@ -57,14 +53,15 @@ sc_result SCPOperatorStringToUpperCase::Execute()
 
 
         string str1 = Utils::scLinkGetString(m_memoryCtx, operands[1]->GetValue());
-        if(str1=="")
+        if (str1=="")
         {
             cout << "Link content is empty!" << endl;
             FinishExecutionUnsuccessfully();
             return SC_RESULT_OK;
         }
 
-            ScStreamPtr streamPtr = Utils::StreamFromString(boost::to_upper_copy(str1));
+            utils::StringUtils::ToUpperCase(str1);
+            ScStreamPtr streamPtr = Utils::StreamFromString(str1);
             ScAddr answerLink =m_memoryCtx.CreateLink();
 
            m_memoryCtx.SetLinkContent(answerLink, streamPtr);

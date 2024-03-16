@@ -4,15 +4,11 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 #include "SCPOperatorStringToLowerCase.hpp"
 #include "sc-memory/sc_memory.hpp"
 #include "sc-memory/sc_stream.hpp"
-#include <sc-memory/sc_link.hpp>
 #include <iostream>
-#include <cstring>
-#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
@@ -64,7 +60,8 @@ sc_result SCPOperatorStringToLowerCase::Execute()
             return SC_RESULT_OK;
         }
 
-            ScStreamPtr streamPtr = Utils::StreamFromString(boost::to_lower_copy(str1));
+            utils::StringUtils::ToLowerCase(str1);
+            ScStreamPtr streamPtr = Utils::StreamFromString(str1);
             ScAddr answerLink =m_memoryCtx.CreateLink();
 
            m_memoryCtx.SetLinkContent(answerLink, streamPtr);
