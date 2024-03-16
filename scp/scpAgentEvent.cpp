@@ -9,6 +9,11 @@
 #include "scpKeynodes.hpp"
 #include "scpAgentEvent.hpp"
 
+extern "C"
+{
+#include "sc-core/sc-store/sc_event.h"
+}
+
 #include <iostream>
 
 namespace scp {
