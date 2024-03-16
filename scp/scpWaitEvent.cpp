@@ -10,6 +10,11 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
+extern "C"
+{
+#include "sc-store/sc_event.h"
+}
+
 #include <iostream>
 
 namespace scp {
