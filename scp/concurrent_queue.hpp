@@ -7,7 +7,7 @@
 #pragma once
 
 #include <deque>
-#include <boost/thread/mutex.hpp>
+#include <mutex>
 
 namespace scp
 {
@@ -16,49 +16,49 @@ template<typename Data>
 class concurrent_deque
 {
 private:
-    std::deque<Data> the_queue;
-    mutable boost::mutex the_mutex;
+    std::deque<Data> m_queue;
+    mutable std::mutex m_mutex;
 
 public:
     void push(const Data& data)
     {
-        boost::mutex::scoped_lock lock(the_mutex);
-        the_queue.push_back(data);
+        std::scoped_lock lock(m_mutex);
+        m_queue.push_back(data);
     }
 
     bool empty() const
     {
-        boost::mutex::scoped_lock lock(the_mutex);
-        return the_queue.empty();
+        std::scoped_lock lock(m_mutex);
+        return m_queue.empty();
     }
 
     Data& front()
     {
-        boost::mutex::scoped_lock lock(the_mutex);
-        return the_queue.front();
+        std::scoped_lock lock(m_mutex);
+        return m_queue.front();
     }
 
     Data const& front() const
     {
-        boost::mutex::scoped_lock lock(the_mutex);
-        return the_queue.front();
+        std::scoped_lock lock(m_mutex);
+        return m_queue.front();
     }
 
     void pop()
     {
-        boost::mutex::scoped_lock lock(the_mutex);
-        the_queue.pop_front();
+        std::scoped_lock lock(m_mutex);
+        m_queue.pop_front();
     }
 
     bool extract(std::function<bool (Data&)> checker, Data& result)
     {
-        boost::mutex::scoped_lock lock(the_mutex);
-        for (auto it = the_queue.begin(); it != the_queue.end(); )
+        std::scoped_lock lock(m_mutex);
+        for (auto it = m_queue.begin(); it != m_queue.end(); )
         {
             if (checker(*it))
             {
                 result = *it;
-                the_queue.erase(it);
+                m_queue.erase(it);
                 return true;
             }
             ++it;
