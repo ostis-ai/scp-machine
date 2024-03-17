@@ -16,4 +16,4 @@ BUILD_SCRIPTS="${SCP_MACHINE_CMAKE_PATH}/../sc-machine/scripts/build-scripts"
 "${BUILD_SCRIPTS}/build_cxx_project.sh" -p "${SCP_MACHINE_CMAKE_PATH}" -s "${SCP_MACHINE_CXX_SOURCES_PATH}" \
   -b "${SCP_MACHINE_BUILD_PATH}" --cmake-arg "-DSC_BIN_PATH=${BINARY_PATH}" "$@"
 
-stage "scp-machine was built successfully"
+stage "scp-machine is built successfully"
