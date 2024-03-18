@@ -27,7 +27,7 @@ using namespace scp;
 
 SC_IMPLEMENT_MODULE(scpModule)
 
-ScMemoryContext scpModule::s_default_ctx{ScAddr()};
+ScMemoryContext scpModule::s_default_ctx;
 
 sc_result scpModule::InitializeImpl()
 {
