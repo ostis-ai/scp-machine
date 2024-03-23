@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.11)
 project(scp-machine)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -18,8 +18,6 @@ set(SC_CODEGEN_TOOL "${SC_BIN_PATH}/sc-code-generator")
 set(SC_MEMORY_SRC "${SC_MACHINE_PATH}/sc-memory/")
 set(SC_KPM_SRC "${SC_MACHINE_PATH}/sc-kpm/")
 set(SC_TOOLS_SRC "${SC_MACHINE_PATH}/sc-tools/")
-
-include_directories(${SC_MEMORY_SRC} ${SC_KPM_SRC} ${SC_TOOLS_SRC})
 
 if(${WIN32})
     message(SEND_ERROR "scp-machine isn't supported on Windows OS.")

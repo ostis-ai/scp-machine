@@ -8,10 +8,14 @@ set(CMAKE_CXX_FLAGS_DEBUG "-DSCP_DEBUG")
 add_definitions(-DSCP_MATH)
 add_definitions(-DSCP_STRING)
 
-include_directories(${SCP_SRC} ${SC_MEMORY_SRC} ${GLIB2_INCLUDE_DIRS})
-
 add_library(scp SHARED ${SOURCES} ${HEADERS})
-add_dependencies(scp sc-memory sc-core sc-kpm-common)
-target_link_libraries(scp sc-memory sc-core sc-kpm-common)
+target_link_libraries(scp
+    LINK_PUBLIC sc-memory
+    LINK_PUBLIC sc-kpm-common
+)
+target_include_directories(scp
+    PUBLIC ${SCP_SRC}
+    PUBLIC ${SC_MEMORY_SRC}
+)
 
 sc_codegen_ex(scp ${SCP_SRC} "${SCP_SRC}/generated")
