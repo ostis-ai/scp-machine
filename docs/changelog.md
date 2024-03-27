@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Use common scripts to build project from ostis-scripts
 - Sys gen and sys search operators
 - Build script from sc-machine
 - Add README.md and info about build
