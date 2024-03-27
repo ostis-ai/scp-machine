@@ -1,0 +1,3 @@
+[submodule "scripts/ostis-scripts"]
+	path = scripts/ostis-scripts
+	url = https://github.com/ostis-ai/ostis-scripts.git
