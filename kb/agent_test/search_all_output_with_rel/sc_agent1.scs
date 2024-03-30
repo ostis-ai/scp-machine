@@ -11,6 +11,9 @@ sc_agent1
 => nrel_initiation_condition_and_result: 
 	(..sc_agent1_condition => ..sc_agent1_result);
 
+=> nrel_sc_agent_action_class:
+	test_action1;
+
 <= nrel_sc_agent_key_sc_elements: 
 	{
 	question_initiated;
