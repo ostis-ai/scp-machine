@@ -286,8 +286,16 @@ sc_result SCPOperatorSysSearch::Execute()
     m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, templateVarsToSearchResultsSetAddr, replacementPairAddr);
   }
 
-  FinishExecutionSuccessfully();
-  return SC_RESULT_OK;
+  if (searchResult.IsEmpty())
+  {
+    FinishExecutionUnsuccessfully();
+    return SC_RESULT_ERROR_NOT_FOUND;
+  }
+  else
+  {
+    FinishExecutionSuccessfully();
+    return SC_RESULT_OK;
+  }
 }
 
 }  // namespace scp
