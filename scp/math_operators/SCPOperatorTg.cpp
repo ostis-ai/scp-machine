@@ -127,27 +127,12 @@ sc_result SCPOperatorTg::Execute()
 
     std::cout << "Link: " << answer_str << std::endl;
 
-    ScAddr answer_link =m_memoryCtx.CreateLink();
+    ScAddr answerLink =m_memoryCtx.CreateLink();
     ScStreamPtr streamPtr = Utils::StreamFromString(answer_str);
+    m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 
-    ScAddr elem1, elem3, elem5, arc1;
-    elem1.Reset();
-    elem3.Reset();
-    elem5.Reset();
-    arc1.Reset();
-
-    elem5 = Keynodes::nrel_scp_var_value;
-   m_memoryCtx.SetLinkContent(answer_link, streamPtr);
-    elem3 = answer_link;
-    elem1 = operands[0]->CreateNodeOrLink();
-
-    arc1 =m_memoryCtx.CreateEdge(sc_type_arc_common, elem1, elem3);
-   m_memoryCtx.CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
-    Utils::printInfo(m_memoryCtx, elem5);
-    Utils::printInfo(m_memoryCtx, elem3);
-    Utils::printInfo(m_memoryCtx, elem1);
-    std::cout <<m_memoryCtx.IsElement(elem1);
-    operands[0]->SetValue(elem1);
+    operands[0]->ResetValue();
+    operands[0]->SetValue(answerLink);
 
     std::cout << "SCPOperatorSIn execute(): end";
     FinishExecutionSuccessfully();

@@ -151,6 +151,31 @@ void SCPOperand::resolveOrder(ScAddr modifier)
         order = 5;
         return;
     }
+    if (modifier == Keynodes::rrel_6)
+    {
+      order = 6;
+      return;
+    }
+    if (modifier == Keynodes::rrel_7)
+    {
+      order = 7;
+      return;
+    }
+    if (modifier == Keynodes::rrel_8)
+    {
+      order = 8;
+      return;
+    }
+    if (modifier == Keynodes::rrel_9)
+    {
+      order = 9;
+      return;
+    }
+    if (modifier == Keynodes::rrel_10)
+    {
+      order = 10;
+      return;
+    }
 }
 
 void SCPOperand::resolveSetOrder(ScAddr modifier)
