@@ -10,6 +10,7 @@ add_definitions(-DSCP_STRING)
 
 add_library(scp SHARED ${SOURCES} ${HEADERS})
 target_link_libraries(scp
+    LINK_PUBLIC sc-core
     LINK_PUBLIC sc-memory
     LINK_PUBLIC sc-kpm-common
 )
