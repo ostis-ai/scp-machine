@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add changelog
 - Cherry-pick scp-interpreter from https://github.com/ostis-dev/scp-machine
 
+### Changed
+
+- Rename questions to actions
+
 ### Fixed
 
 - SC-memory API usage
