@@ -216,7 +216,7 @@ sc_result SCPOperatorSysSearch::Execute()
     }
   }
 
-  std::unordered_map<ScAddr, ScAddr, ScAddrHashFunc<uint64_t>> templateVarAddrsToSearchResultAddrs;
+  std::unordered_map<ScAddr, ScAddr, ScAddrHashFunc> templateVarAddrsToSearchResultAddrs;
   searchResult.ForEach([
       this,
       &templateVarsSet,

@@ -216,7 +216,7 @@ sc_result SCPOperatorSysGen::Execute()
     }
   }
 
-  std::unordered_map<ScAddr, ScAddr, ScAddrHashFunc<uint64_t>> templateVarAddrsToGenerationResultAddrs;
+  std::unordered_map<ScAddr, ScAddr, ScAddrHashFunc> templateVarAddrsToGenerationResultAddrs;
   for (ScAddr const & templateVarAddr : templateVarsSet)
   {
     ScAddr generatedAddr;
