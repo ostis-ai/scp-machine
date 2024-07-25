@@ -6,7 +6,7 @@ sc_agent1
 <- abstract_sc_agent;
 
 => nrel_primary_initiation_condition: 
-	(sc_event_add_output_arc => question_initiated);
+	(sc_event_add_output_arc => action_initiated);
 
 => nrel_initiation_condition_and_result: 
 	(..sc_agent1_condition => ..sc_agent1_result);
@@ -16,8 +16,8 @@ sc_agent1
 
 <= nrel_sc_agent_key_sc_elements: 
 	{
-	question_initiated;
-	question;
+	action_initiated;
+	action;
 	test_action1
 	};
 
@@ -37,17 +37,17 @@ sc_agent1
 
 ..sc_agent1_condition
 = [*
-	test_action1 _-> .._question;;
-	question_initiated _-> .._question;;
-	question _-> .._question;;
-	.._question _-> .._parameter;;
+	test_action1 _-> .._action;;
+	action_initiated _-> .._action;;
+	action _-> .._action;;
+	.._action _-> .._parameter;;
 *];;
 
 ..sc_agent1_result
 = [*
-	test_action1 _-> .._question;;
-	question_finished _-> .._question;;
-	question _-> .._question;;
-	.._question _=> nrel_answer:: .._answer;;
-	.._question _-> .._parameter;;
+	test_action1 _-> .._action;;
+	action_finished _-> .._action;;
+	action _-> .._action;;
+	.._action _=> nrel_answer:: .._answer;;
+	.._action _-> .._parameter;;
 *];;

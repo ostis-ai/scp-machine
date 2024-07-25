@@ -18,7 +18,7 @@ namespace scp
 
 class ASCPProgramExecutionSyncronizer : public ScAgent
 {
-    SC_CLASS(Agent, Event(Keynodes::question_finished, ScEvent::Type::AddOutputEdge))
+    SC_CLASS(Agent, Event(Keynodes::action_finished, ScEvent::Type::AddOutputEdge))
     SC_GENERATED_BODY()
 
 public:

@@ -3,14 +3,14 @@
 @pair2 = (nrel_authors -> @pair0);;
 @pair3 = (SCPAction1 -> ..node0);;
 @pair4 = (rrel_2 -> @pair3);;
-@pair5 = (question_scp_interpretation_request -> SCPAction1);;
+@pair5 = (action_scp_interpretation_request -> SCPAction1);;
 @pair6 = (SCPAction1 -> Math_Test);;
 @pair7 = (rrel_1 -> @pair6);;
 @pair8 = (..node0 -> _event);;
 @pair9 = (rrel_1 -> @pair8);;
-question_scp_interpretation_request <- sc_node_class;;
+action_scp_interpretation_request <- sc_node_class;;
 _event <- sc_node;;
-question_initiated <- sc_node_class;;
+action_initiated <- sc_node_class;;
 set1 <- sc_node;;
 ui_start_sc_element <- sc_node;;
 nrel_authors <- sc_node_norole_relation;;

@@ -216,8 +216,8 @@ sc_result SCPOperatorCall::Execute()
     arc1 =m_memoryCtx.CreateEdge(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
 
-   m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
-   m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
+   m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_scp_interpretation_request, scp_quest);
+   m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_initiated, scp_quest);
 
     operands[2]->SetValue(scp_quest);
 

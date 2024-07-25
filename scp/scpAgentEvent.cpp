@@ -271,8 +271,8 @@ sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr 
     arc1 = scpModule::s_default_ctx.CreateEdge(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
     scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
 
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_scp_interpretation_request, scp_quest);
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_initiated, scp_quest);
+    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_scp_interpretation_request, scp_quest);
+    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_initiated, scp_quest);
 
     return SC_RESULT_OK;
 }

@@ -19,18 +19,18 @@ SC_AGENT_IMPLEMENTATION(ASCPProgramExecutionSyncronizer)
 
     ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::question_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.HelperCheckEdge(Keynodes::action_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_error);
         return SC_RESULT_OK;
     }
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::question_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.HelperCheckEdge(Keynodes::action_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_then);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);
         return SC_RESULT_OK;
     }
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::question_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.HelperCheckEdge(Keynodes::action_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_else);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);

@@ -1,4 +1,4 @@
-question_scp_interpretation_request
+action_scp_interpretation_request
 	=> nrel_scg_representation: ..scgNode0;;
 ..scgNode0
 	=> nrel_x: [329.208];
@@ -10,7 +10,7 @@ _event
 	=> nrel_x: [447];
 	=> nrel_y: [480.75];
 	=> nrel_idtf_pos: [0];;
-question_initiated
+action_initiated
 	=> nrel_scg_representation: ..scgNode2;;
 ..scgNode2
 	=> nrel_x: [379.5];
