@@ -43,23 +43,23 @@ public:
     SC_PROPERTY(Keynode("nrel_primary_initiation_condition"), ForceCreate)
     static ScAddr nrel_primary_initiation_condition;
 
-    SC_PROPERTY(Keynode("question_scp_interpretation_request"), ForceCreate)
-    static ScAddr question_scp_interpretation_request;
+    SC_PROPERTY(Keynode("action_scp_interpretation_request"), ForceCreate)
+    static ScAddr action_scp_interpretation_request;
 
-    SC_PROPERTY(Keynode("question_initiated"), ForceCreate)
-    static ScAddr question_initiated;
+    SC_PROPERTY(Keynode("action_initiated"), ForceCreate)
+    static ScAddr action_initiated;
 
-    SC_PROPERTY(Keynode("question_finished"), ForceCreate)
-    static ScAddr question_finished;
+    SC_PROPERTY(Keynode("action_finished"), ForceCreate)
+    static ScAddr action_finished;
 
-    SC_PROPERTY(Keynode("question_finished_successfully"), ForceCreate)
-    static ScAddr question_finished_successfully;
+    SC_PROPERTY(Keynode("action_finished_successfully"), ForceCreate)
+    static ScAddr action_finished_successfully;
 
-    SC_PROPERTY(Keynode("question_finished_unsuccessfully"), ForceCreate)
-    static ScAddr question_finished_unsuccessfully;
+    SC_PROPERTY(Keynode("action_finished_unsuccessfully"), ForceCreate)
+    static ScAddr action_finished_unsuccessfully;
 
-    SC_PROPERTY(Keynode("question_finished_with_error"), ForceCreate)
-    static ScAddr question_finished_with_error;
+    SC_PROPERTY(Keynode("action_finished_with_error"), ForceCreate)
+    static ScAddr action_finished_with_error;
 
     SC_PROPERTY(Keynode("scp_process"), ForceCreate)
     static ScAddr scp_process;

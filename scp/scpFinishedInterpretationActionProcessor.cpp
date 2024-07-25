@@ -19,7 +19,7 @@ SC_AGENT_IMPLEMENTATION(ASCPFinishedInterpretationActionProcessor)
         return SC_RESULT_ERROR;
 
     ScAddr scp_action =m_memoryCtx.GetEdgeTarget(edgeAddr);
-    if (!m_memoryCtx.HelperCheckEdge(Keynodes::question_scp_interpretation_request, scp_action, ScType::EdgeAccessConstPosPerm))
+    if (!m_memoryCtx.HelperCheckEdge(Keynodes::action_scp_interpretation_request, scp_action, ScType::EdgeAccessConstPosPerm))
         return SC_RESULT_ERROR_INVALID_PARAMS;
 
     ScAddr wait_operator;

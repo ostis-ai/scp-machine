@@ -110,13 +110,13 @@ void SCPOperator::ClearExecutionState(ScMemoryContext& ctx, ScAddr oper_addr)
     {
         if (iter->Get(0)==Keynodes::active_action)
             arcs.push_back(iter->Get(1));
-        if (iter->Get(0)==Keynodes::question_finished)
+        if (iter->Get(0)==Keynodes::action_finished)
             arcs.push_back(iter->Get(1));
-        if (iter->Get(0)==Keynodes::question_finished_successfully)
+        if (iter->Get(0)==Keynodes::action_finished_successfully)
             arcs.push_back(iter->Get(1));
-        if (iter->Get(0)==Keynodes::question_finished_unsuccessfully)
+        if (iter->Get(0)==Keynodes::action_finished_unsuccessfully)
             arcs.push_back(iter->Get(1));
-        if (iter->Get(0)==Keynodes::question_finished_with_error)
+        if (iter->Get(0)==Keynodes::action_finished_with_error)
             arcs.push_back(iter->Get(1));
     }
     for (auto & arc : arcs)
@@ -125,27 +125,27 @@ void SCPOperator::ClearExecutionState(ScMemoryContext& ctx, ScAddr oper_addr)
 
 void SCPOperator::FinishExecution(ScMemoryContext& ctx, ScAddr oper_addr)
 {
-    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, oper_addr);
 }
 
 void SCPOperator::FinishExecutionSuccessfully(ScMemoryContext& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_successfully, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 
 void SCPOperator::FinishExecutionUnsuccessfully(ScMemoryContext& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_unsuccessfully, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_unsuccessfully, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 
 void SCPOperator::FinishExecutionWithError(ScMemoryContext& ctx, ScAddr oper_addr)
 {
     ClearExecutionState(ctx, oper_addr);
-    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished_with_error, oper_addr);
+    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_with_error, oper_addr);
     FinishExecution(ctx, oper_addr);
 }
 

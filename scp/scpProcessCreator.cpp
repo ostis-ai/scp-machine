@@ -20,7 +20,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
 
     ScAddr action =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
-    if (!m_memoryCtx.HelperCheckEdge(Keynodes::question_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm))
+    if (!m_memoryCtx.HelperCheckEdge(Keynodes::action_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm))
         return SC_RESULT_ERROR_INVALID_PARAMS;
 
     ScAddr program, params;
@@ -88,7 +88,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
 #ifdef SCP_DEBUG
             Utils::logSCPError(m_memoryCtx, "Missed initial scp-operator", program);
 #endif
-           m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
+           m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, const_process_node);
         }
     }
     else
@@ -96,7 +96,7 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessCreator)
 #ifdef SCP_DEBUG
         Utils::logSCPError(m_memoryCtx, "Missed scp-process decomposition", program);
 #endif
-       m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::question_finished, const_process_node);
+       m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, const_process_node);
     }
 
     return SC_RESULT_OK;

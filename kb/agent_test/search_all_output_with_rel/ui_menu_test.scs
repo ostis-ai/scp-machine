@@ -10,7 +10,7 @@ ui_menu_test
 		test_action1 _-> _... 
 		(*
 			_-> ui_arg_1;;	
-			_<- question;;
+			_<- action;;
 		*);;
 	*];
 
