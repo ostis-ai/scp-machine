@@ -15,60 +15,61 @@
 #include "sc-memory/sc_memory.hpp"
 #include <iostream>
 
-namespace scp {
-ScAddr ASCPEraseOperatorInterpreter::msAgentKeynode;
-
-ScResult ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
+namespace scp
 {
-    if (!event.GetArc().IsValid())
-        return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
+ScResult
+ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+                                        ScAction & action)
+{
+  if (!event.GetArc().IsValid())
+    return action.FinishUnsuccessfully();
 
-    ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
-        return action.FinishUnsuccessfully();
+  ScAddr scp_operator = event.GetOtherElement();
 
-    SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_eraseEl)
-    {
-        oper = new SCPOperatorEraseEl(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_eraseElStr3)
-    {
-        oper = new SCPOperatorEraseElStr3(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_eraseElStr5)
-    {
-        oper = new SCPOperatorEraseElStr5(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_eraseSetStr3)
-    {
-        oper = new SCPOperatorEraseSetStr3(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_eraseSetStr5)
-    {
-        oper = new SCPOperatorEraseSetStr5(m_context, scp_operator);
-    }
-    if (oper == nullptr)
-        return action.FinishUnsuccessfully();
+  ScAddr type;
+  if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+    return action.FinishUnsuccessfully();
+
+  SCPOperator * oper = nullptr;
+  if (type == Keynodes::op_eraseEl)
+  {
+    oper = new SCPOperatorEraseEl(m_context, scp_operator);
+  }
+  if (type == Keynodes::op_eraseElStr3)
+  {
+    oper = new SCPOperatorEraseElStr3(m_context, scp_operator);
+  }
+  if (type == Keynodes::op_eraseElStr5)
+  {
+    oper = new SCPOperatorEraseElStr5(m_context, scp_operator);
+  }
+  if (type == Keynodes::op_eraseSetStr3)
+  {
+    oper = new SCPOperatorEraseSetStr3(m_context, scp_operator);
+  }
+  if (type == Keynodes::op_eraseSetStr5)
+  {
+    oper = new SCPOperatorEraseSetStr5(m_context, scp_operator);
+  }
+  if (oper == nullptr)
+    return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
-    std::cout << oper->GetTypeName() << std::endl;
+  std::cout << oper->GetTypeName() << std::endl;
 #endif
-    sc_result parse_result = oper->Parse();
-    if (parse_result != SC_RESULT_OK)
-    {
-        delete oper;
-        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
-    }
-    else
-    {
-        sc_result execute_result;
-        execute_result = oper->Execute();
-        delete oper;
-        return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
-    }
+  sc_result parse_result = oper->Parse();
+  if (parse_result != SC_RESULT_OK)
+  {
+    delete oper;
+    return action.FinishUnsuccessfully();
+  } else
+  {
+    sc_result execute_result;
+    execute_result = oper->Execute();
+    delete oper;
+    return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+  }
 }
 
 ScAddr ASCPEraseOperatorInterpreter::GetActionClass() const

@@ -4,25 +4,20 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
+#include "scpProcessDestroyer.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpProcessDestroyer.hpp"
-#include "sc-memory/sc_memory.hpp"
+
 #include <iostream>
 
 namespace scp
 {
-ScAddr ASCPProcessDestroyer::msAgentKeynode;
-
 ScResult ASCPProcessDestroyer::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
         return action.FinishUnsuccessfully();
 
-    ScAddr process =m_context.GetEdgeTarget(event.GetArc());
-
-    if (!m_context.HelperCheckEdge(Keynodes::scp_process, process, ScType::EdgeAccessConstPosPerm))
-        return action.FinishUnsuccessfully();
+    ScAddr process = event.GetOtherElement();
 
     ScAddr decomp_node;
     ScIterator5Ptr it_temp =m_context.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, process, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_decomposition_of_action);
@@ -82,8 +77,7 @@ ScResult ASCPProcessDestroyer::DoProgram(ScEventAfterGenerateOutgoingArc<ScType:
 
 ScAddr ASCPProcessDestroyer::GetActionClass() const
 {
-//todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::scp_process;
 }
 
 ScAddr ASCPProcessDestroyer::GetEventSubscriptionElement() const

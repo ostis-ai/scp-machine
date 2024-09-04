@@ -4,14 +4,13 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "scpUtils.hpp"
 #include "scpProgramExecutionSyncronizer.hpp"
-#include "sc-memory/sc_memory.hpp"
+#include "scpKeynodes.hpp"
+#include "scpUtils.hpp"
+
 #include <iostream>
 
 namespace scp {
-ScAddr ASCPProgramExecutionSyncronizer::msAgentKeynode;
-
 ScResult ASCPProgramExecutionSyncronizer::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
@@ -51,7 +50,7 @@ ScAddr ASCPProgramExecutionSyncronizer::GetEventSubscriptionElement() const
   return Keynodes::action_finished;
 }
 
-void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr &scp_operator, ScAddr &relation)
+void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr &scp_operator, ScAddr const & relation)
 {
     ScIterator5Ptr iter_error =m_context.Iterator5(scp_operator, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
     while (iter_error->Next())

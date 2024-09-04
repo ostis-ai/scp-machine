@@ -4,25 +4,24 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
+#include "scpGenOperatorInterpreter.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpGenOperatorInterpreter.hpp"
+
 #include "gen_operators/SCPOperatorGenEl.hpp"
 #include "gen_operators/SCPOperatorGenElStr3.hpp"
 #include "gen_operators/SCPOperatorGenElStr5.hpp"
 #include "gen_operators/SCPOperatorSysGen.hpp"
-#include "sc-memory/sc_memory.hpp"
+
 #include <iostream>
 
 namespace scp {
-ScAddr ASCPGenOperatorInterpreter::msAgentKeynode;
-
 ScResult ASCPGenOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
         return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
+    ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
     if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
@@ -55,7 +54,7 @@ ScResult ASCPGenOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<S
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+        return action.FinishUnsuccessfully();
     }
     else
     {

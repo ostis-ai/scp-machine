@@ -6,10 +6,7 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
-#include "sc-memory/sc_object.hpp"
 #include <sc-memory/sc_agent.hpp>
-#include "scpKeynodes.hpp"
 
 namespace scp
 {
@@ -27,7 +24,7 @@ class ASCPProgramExecutionSyncronizer : public ScAgent<ScEventAfterGenerateOutgo
     static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_execution_syncronization"};
 
 private:
-    void InitOperatorsByRelation(ScAddr &scp_operator, ScAddr &relation);
+    void InitOperatorsByRelation(ScAddr & scp_operator, ScAddr const & relation);
 };
 
 }

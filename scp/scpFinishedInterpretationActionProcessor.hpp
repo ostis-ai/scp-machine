@@ -6,10 +6,7 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
-#include "sc-memory/sc_object.hpp"
 #include <sc-memory/sc_agent.hpp>
-#include "scpKeynodes.hpp"
 
 namespace scp
 {
@@ -29,4 +26,3 @@ class ASCPFinishedInterpretationActionProcessor : public ScAgent<ScEventAfterGen
 };
 
 }
-

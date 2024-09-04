@@ -20,18 +20,15 @@
 #include "math_operators/SCPOperatorContPow.hpp"
 #include "math_operators/SCPOperatorContDiv.hpp"
 
-#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 #include <string>
 
 namespace scp {
-ScAddr ASCPMathOperatorInterpreter::msAgentKeynode;
-
 ScResult ASCPMathOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action){
     if (!event.GetArc().IsValid())
         return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
+    ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
     if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
@@ -114,7 +111,7 @@ ScResult ASCPMathOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+        return action.FinishUnsuccessfully();
     }
     else
     {

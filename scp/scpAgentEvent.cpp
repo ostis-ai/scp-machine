@@ -118,8 +118,7 @@ void SCPAgentEvent::register_scp_agent(ScMemoryContext& ctx, ScAddr& agent_node)
     else
       SCP_LOG_WARNING("Not found action class for sc-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
 
-    auto * event = new SCPAgentEvent(ctx, event_node, resolve_event_type(event_type_node), action_addr, agent_proc);
-    scp_agent_events.push(event);
+    scp_agent_events.push(new SCPAgentEvent(ctx, event_node, resolve_event_type(event_type_node), action_addr, agent_proc));
 
     SCP_LOG_INFO("Register scp-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
 }

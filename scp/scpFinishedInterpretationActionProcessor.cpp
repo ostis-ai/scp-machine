@@ -4,23 +4,19 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
+#include "scpFinishedInterpretationActionProcessor.hpp"
+
 #include "scpKeynodes.hpp"
 #include "scpOperator.hpp"
-#include "scpFinishedInterpretationActionProcessor.hpp"
-#include "sc-memory/sc_memory.hpp"
 
 namespace scp {
-
-ScAddr ASCPFinishedInterpretationActionProcessor::msAgentKeynode;
 
 ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
         return action.FinishUnsuccessfully();
 
-    ScAddr scp_action =m_context.GetEdgeTarget(event.GetArc());
-    if (!m_context.HelperCheckEdge(Keynodes::action_scp_interpretation_request, scp_action, ScType::EdgeAccessConstPosPerm))
-        return action.FinishUnsuccessfully();
+    ScAddr scp_action = event.GetOtherElement();
 
     ScAddr wait_operator;
 
@@ -57,8 +53,7 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(ScEventAfterGenera
 
 ScAddr ASCPFinishedInterpretationActionProcessor::GetActionClass() const
 {
-//todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_scp_interpretation_request;
 }
 
 ScAddr ASCPFinishedInterpretationActionProcessor::GetEventSubscriptionElement() const

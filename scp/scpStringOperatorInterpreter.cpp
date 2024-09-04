@@ -21,19 +21,17 @@
 #include "string_operators/SCPOperatorStringSub.hpp"
 #include "string_operators/SCPOperatorStringIfEq.hpp"
 #include "string_operators/SCPOperatorStringIfGr.hpp"
-#include "sc-memory/sc_memory.hpp"
+
 #include <iostream>
 
 namespace scp
 {
-ScAddr ASCPStringOperatorInterpreter::msAgentKeynode;
-
 ScResult ASCPStringOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
             return action.FinishUnsuccessfully();
 
-        ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
+        ScAddr scp_operator = event.GetOtherElement();
 
         ScAddr type;
         if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
@@ -99,7 +97,7 @@ ScResult ASCPStringOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingAr
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+        return action.FinishUnsuccessfully();
     }
     else
     {

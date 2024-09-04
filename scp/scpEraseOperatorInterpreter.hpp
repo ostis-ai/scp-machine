@@ -6,27 +6,23 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
-#include "sc-memory/sc_object.hpp"
 #include <sc-memory/sc_agent.hpp>
-#include "scpKeynodes.hpp"
 
 namespace scp
 {
 
 class ASCPEraseOperatorInterpreter : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
 {
-    public:
-  ScAddr GetActionClass() const override;
+public:
 
-  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action) override;
+ScAddr GetActionClass() const override;
 
-  ScAddr GetEventSubscriptionElement() const override;
+ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action) override;
 
-    public:
-    static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_erase_interpreting"};
+ScAddr GetEventSubscriptionElement() const override;
+
+public:
+static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_erase_interpreting"};
 
 };
-
 }
-

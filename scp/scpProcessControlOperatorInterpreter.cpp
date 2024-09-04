@@ -4,25 +4,24 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
+#include "scpProcessControlOperatorInterpreter.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpProcessControlOperatorInterpreter.hpp"
+
 #include "process_control_operators/SCPOperatorReturn.hpp"
 #include "process_control_operators/SCPOperatorSysWait.hpp"
 #include "process_control_operators/SCPOperatorCall.hpp"
 #include "process_control_operators/SCPOperatorWaitReturn.hpp"
-#include "sc-memory/sc_memory.hpp"
+
 #include <iostream>
 
 namespace scp {
-ScAddr ASCPProcessControlOperatorInterpreter::msAgentKeynode;
-
 ScResult ASCPProcessControlOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
         return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator = m_context.GetEdgeTarget(event.GetArc());
+    ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
     if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
@@ -55,7 +54,7 @@ ScResult ASCPProcessControlOperatorInterpreter::DoProgram(ScEventAfterGenerateOu
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+        return action.FinishUnsuccessfully();
     }
     else
     {

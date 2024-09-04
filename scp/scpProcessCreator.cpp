@@ -4,23 +4,14 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
+#include "scpProcessCreator.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpProcessCreator.hpp"
-#include "sc-memory/sc_memory.hpp"
-#include <iostream>
 
 namespace scp {
-ScAddr ASCPProcessCreator::msAgentKeynode;
-
 ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
-        return action.FinishUnsuccessfully();
-
-    ScAddr action =m_context.GetEdgeTarget(event.GetArc());
-
-    if (!m_context.HelperCheckEdge(Keynodes::action_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm))
         return action.FinishUnsuccessfully();
 
     ScAddr program, params;
@@ -104,9 +95,6 @@ ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScA
 
 ScAddr ASCPProcessCreator::GetActionClass() const
 {
-//todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_scp_interpretation_request;
 }
-
-
 }

@@ -6,43 +6,37 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
-#include "sc-memory/sc_object.hpp"
 #include <sc-memory/sc_agent.hpp>
-#include "concurrent_queue.hpp"
-#include "scpAgentEvent.hpp"
-#include "scpKeynodes.hpp"
 
 namespace scp
 {
 
 class ASCPAgentActivator : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
 {
-    public:
+  public:
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action) override;
 
   ScAddr GetEventSubscriptionElement() const override;
 
-    public:
-    static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_agents_activation"};
+  public:
+  static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_agents_activation"};
 
 };
 
 class ASCPAgentDeactivator : public ScAgent<ScEventBeforeEraseOutgoingArc<ScType::EdgeAccessConstPosPerm>>
 {
-    public:
+  public:
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScEventBeforeEraseOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action) override;
 
   ScAddr GetEventSubscriptionElement() const override;
 
-    public:
-    static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_agents_deactivation"};
+  public:
+  static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_agents_deactivation"};
 
 };
 
 }
-
