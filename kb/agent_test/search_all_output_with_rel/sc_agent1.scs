@@ -48,6 +48,6 @@ sc_agent1
 	test_action1 _-> .._action;;
 	action_finished _-> .._action;;
 	action _-> .._action;;
-	.._action _=> nrel_answer:: .._answer;;
+	.._action _=> nrel_result: .._result;;
 	.._action _-> .._parameter;;
 *];;
