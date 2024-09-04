@@ -8,22 +8,21 @@
 
 #include "sc-memory/sc_addr.hpp"
 #include "sc-memory/sc_object.hpp"
-#include "sc-memory/kpm/sc_agent.hpp"
+#include <sc-memory/sc_agent.hpp>
 #include "scpKeynodes.hpp"
-
-#include "scpProcessCreator.generated.hpp"
 
 namespace scp
 {
 
-class ASCPProcessCreator : public ScAgent
+class ASCPProcessCreator : public ScActionInitiatedAgent
 {
-    SC_CLASS(Agent, Event(Keynodes::action_initiated, ScEvent::Type::AddOutputEdge))
-    SC_GENERATED_BODY()
+    public:
+  ScAddr GetActionClass() const override;
 
-public:
-    SC_PROPERTY(Keynode("sc_agent_of_scp_process_creation"), ForceCreate)
-    static ScAddr msAgentKeynode;
+  ScResult DoProgram(ScActionInitiatedEvent const & event, ScAction & action) override;
+
+    public:
+    static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_process_creation"};
 
 };
 

@@ -18,40 +18,40 @@
 namespace scp {
 ScAddr ASCPEraseOperatorInterpreter::msAgentKeynode;
 
-SC_AGENT_IMPLEMENTATION(ASCPEraseOperatorInterpreter)
+ScResult ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
+    if (!event.GetArc().IsValid())
+        return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-        return SC_RESULT_ERROR_INVALID_TYPE;
+    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+        return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_eraseEl)
     {
-        oper = new SCPOperatorEraseEl(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorEraseEl(m_context, scp_operator);
     }
     if (type == Keynodes::op_eraseElStr3)
     {
-        oper = new SCPOperatorEraseElStr3(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorEraseElStr3(m_context, scp_operator);
     }
     if (type == Keynodes::op_eraseElStr5)
     {
-        oper = new SCPOperatorEraseElStr5(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorEraseElStr5(m_context, scp_operator);
     }
     if (type == Keynodes::op_eraseSetStr3)
     {
-        oper = new SCPOperatorEraseSetStr3(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorEraseSetStr3(m_context, scp_operator);
     }
     if (type == Keynodes::op_eraseSetStr5)
     {
-        oper = new SCPOperatorEraseSetStr5(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorEraseSetStr5(m_context, scp_operator);
     }
     if (oper == nullptr)
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+        return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -60,15 +60,26 @@ SC_AGENT_IMPLEMENTATION(ASCPEraseOperatorInterpreter)
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return parse_result;
+        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
     else
     {
         sc_result execute_result;
         execute_result = oper->Execute();
         delete oper;
-        return execute_result;
+        return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
+}
+
+ScAddr ASCPEraseOperatorInterpreter::GetActionClass() const
+{
+//todo(codegen-removal): replace action with your action class
+  return ScKeynodes::action;
+}
+
+ScAddr ASCPEraseOperatorInterpreter::GetEventSubscriptionElement() const
+{
+  return Keynodes::active_action;
 }
 
 }

@@ -17,36 +17,36 @@
 namespace scp {
 ScAddr ASCPProcessControlOperatorInterpreter::msAgentKeynode;
 
-SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
+ScResult ASCPProcessControlOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
+    if (!event.GetArc().IsValid())
+        return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator = m_memoryCtx.GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator = m_context.GetEdgeTarget(event.GetArc());
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-        return SC_RESULT_ERROR_INVALID_TYPE;
+    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+        return action.FinishUnsuccessfully();
 
     SCPOperator* oper;
     if (type == Keynodes::op_return)
     {
-        oper = new SCPOperatorReturn(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorReturn(m_context, scp_operator);
     }
     else if (type == Keynodes::op_sys_wait)
     {
-        oper = new SCPOperatorSysWait(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorSysWait(m_context, scp_operator);
     }
     else if (type == Keynodes::op_call)
     {
-        oper = new SCPOperatorCall(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorCall(m_context, scp_operator);
     }
     else if (type == Keynodes::op_waitReturn)
     {
-        oper = new SCPOperatorWaitReturn(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorWaitReturn(m_context, scp_operator);
     }
     else
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+        return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -55,15 +55,26 @@ SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return parse_result;
+        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
     else
     {
         sc_result execute_result;
         execute_result = oper->Execute();
         delete oper;
-        return execute_result;
+        return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
+}
+
+ScAddr ASCPProcessControlOperatorInterpreter::GetActionClass() const
+{
+//todo(codegen-removal): replace action with your action class
+  return ScKeynodes::action;
+}
+
+ScAddr ASCPProcessControlOperatorInterpreter::GetEventSubscriptionElement() const
+{
+  return Keynodes::active_action;
 }
 
 }

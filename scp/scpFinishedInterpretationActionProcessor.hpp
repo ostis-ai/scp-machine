@@ -8,22 +8,23 @@
 
 #include "sc-memory/sc_addr.hpp"
 #include "sc-memory/sc_object.hpp"
-#include "sc-memory/kpm/sc_agent.hpp"
+#include <sc-memory/sc_agent.hpp>
 #include "scpKeynodes.hpp"
-
-#include "scpFinishedInterpretationActionProcessor.generated.hpp"
 
 namespace scp
 {
 
-class ASCPFinishedInterpretationActionProcessor : public ScAgent
+class ASCPFinishedInterpretationActionProcessor : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
 {
-    SC_CLASS(Agent, Event(Keynodes::action_finished, ScEvent::Type::AddOutputEdge))
-    SC_GENERATED_BODY()
+    public:
+  ScAddr GetActionClass() const override;
 
-public:
-    SC_PROPERTY(Keynode("sc_agent_of_finished_scp_interpretation_action_processing"), ForceCreate)
-    static ScAddr msAgentKeynode;
+  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action) override;
+
+  ScAddr GetEventSubscriptionElement() const override;
+
+    public:
+    static inline ScKeynode const msAgentKeynode{"sc_agent_of_finished_scp_interpretation_action_processing"};
 
 };
 

@@ -14,80 +14,91 @@ namespace scp
 {
 ScAddr ASCPProcessDestroyer::msAgentKeynode;
 
-SC_AGENT_IMPLEMENTATION(ASCPProcessDestroyer)
+ScResult ASCPProcessDestroyer::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
+    if (!event.GetArc().IsValid())
+        return action.FinishUnsuccessfully();
 
-    ScAddr process =m_memoryCtx.GetEdgeTarget(edgeAddr);
+    ScAddr process =m_context.GetEdgeTarget(event.GetArc());
 
-    if (!m_memoryCtx.HelperCheckEdge(Keynodes::scp_process, process, ScType::EdgeAccessConstPosPerm))
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+    if (!m_context.HelperCheckEdge(Keynodes::scp_process, process, ScType::EdgeAccessConstPosPerm))
+        return action.FinishUnsuccessfully();
 
     ScAddr decomp_node;
-    ScIterator5Ptr it_temp =m_memoryCtx.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, process, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_decomposition_of_action);
+    ScIterator5Ptr it_temp =m_context.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, process, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_decomposition_of_action);
     if (it_temp->Next())
         decomp_node = it_temp->Get(0);
-    else return SC_RESULT_ERROR_INVALID_STATE;
+    else return action.FinishUnsuccessfully();
 
-    ScIterator3Ptr it_oper =m_memoryCtx.Iterator3(decomp_node, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    ScIterator3Ptr it_oper =m_context.Iterator3(decomp_node, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (it_oper->Next())
     {
         ScAddr curr_operator = it_oper->Get(2);
 
-        if (m_memoryCtx.HelperCheckEdge(Keynodes::op_sys_search, curr_operator, ScType::EdgeAccessConstPosPerm)
-                ||m_memoryCtx.HelperCheckEdge(Keynodes::op_sys_gen, curr_operator, ScType::EdgeAccessConstPosPerm))
+        if (m_context.HelperCheckEdge(Keynodes::op_sys_search, curr_operator, ScType::EdgeAccessConstPosPerm)
+                ||m_context.HelperCheckEdge(Keynodes::op_sys_gen, curr_operator, ScType::EdgeAccessConstPosPerm))
         {
-            ScIterator5Ptr it_operand =m_memoryCtx.Iterator5(curr_operator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_const);
+            ScIterator5Ptr it_operand =m_context.Iterator5(curr_operator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_const);
             while (it_operand->Next())
             {
-                if (!(m_memoryCtx.HelperCheckEdge(Keynodes::rrel_2, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)
-                        ||m_memoryCtx.HelperCheckEdge(Keynodes::rrel_3, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)))
+                if (!(m_context.HelperCheckEdge(Keynodes::rrel_2, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)
+                        ||m_context.HelperCheckEdge(Keynodes::rrel_3, it_operand->Get(1), ScType::EdgeAccessConstPosPerm)))
                     continue;
 
                 ScAddr curr_operand = it_operand->Get(2);
-                ScIterator3Ptr it_pairs =m_memoryCtx.Iterator3(curr_operand, ScType::EdgeAccessConstPosPerm, ScType(0));
+                ScIterator3Ptr it_pairs =m_context.Iterator3(curr_operand, ScType::EdgeAccessConstPosPerm, ScType(0));
                 while (it_pairs->Next())
                 {
                     ScAddr curr_pair = it_pairs->Get(2);
                     deleteSCPVarsSet(curr_pair, process);
-                   m_memoryCtx.EraseElement(curr_pair);
+                   m_context.EraseElement(curr_pair);
                 }
-               m_memoryCtx.EraseElement(curr_operand);
+               m_context.EraseElement(curr_operand);
             }
         }
-        if (m_memoryCtx.HelperCheckEdge(Keynodes::op_call, curr_operator, ScType::EdgeAccessConstPosPerm))
+        if (m_context.HelperCheckEdge(Keynodes::op_call, curr_operator, ScType::EdgeAccessConstPosPerm))
         {
-            ScIterator5Ptr it_operand =m_memoryCtx.Iterator5(curr_operator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2);
+            ScIterator5Ptr it_operand =m_context.Iterator5(curr_operator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2);
             if (it_operand->Next())
             {
-                if (m_memoryCtx.HelperCheckEdge(Keynodes::rrel_scp_const, it_operand->Get(1), ScType::EdgeAccessConstPosPerm))
+                if (m_context.HelperCheckEdge(Keynodes::rrel_scp_const, it_operand->Get(1), ScType::EdgeAccessConstPosPerm))
                 {
                     ScAddr curr_operand = it_operand->Get(2);
                     deleteSCPVarsSet(curr_operand, process);
-                   m_memoryCtx.EraseElement(curr_operand);
+                   m_context.EraseElement(curr_operand);
                 }
             }
         }
 
         deleteSCPVarsSet(curr_operator, process);
-       m_memoryCtx.EraseElement(curr_operator);
+       m_context.EraseElement(curr_operator);
     }
 
-   m_memoryCtx.EraseElement(decomp_node);
-   m_memoryCtx.EraseElement(process);
+   m_context.EraseElement(decomp_node);
+   m_context.EraseElement(process);
 
-    return SC_RESULT_OK;
+    return action.FinishSuccessfully();
+}
+
+ScAddr ASCPProcessDestroyer::GetActionClass() const
+{
+//todo(codegen-removal): replace action with your action class
+  return ScKeynodes::action;
+}
+
+ScAddr ASCPProcessDestroyer::GetEventSubscriptionElement() const
+{
+  return Keynodes::action_finished;
 }
 
 void ASCPProcessDestroyer::deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAddr)
 {
     ScAddrVector elems;
-    ScIterator5Ptr it_operand =m_memoryCtx.Iterator5(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_var);
+    ScIterator5Ptr it_operand =m_context.Iterator5(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_var);
     while (it_operand->Next())
     {
         ScAddr elem = it_operand->Get(2);
-        ScIterator5Ptr it_params =m_memoryCtx.Iterator5(processAddr, ScType::EdgeAccessConstPosPerm, elem, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_out);
+        ScIterator5Ptr it_params =m_context.Iterator5(processAddr, ScType::EdgeAccessConstPosPerm, elem, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_out);
         if (!it_params->Next())
         {
             elems.push_back(elem);
@@ -96,7 +107,7 @@ void ASCPProcessDestroyer::deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAd
 
     for (auto const & elem : elems)
     {
-       m_memoryCtx.EraseElement(elem);
+       m_context.EraseElement(elem);
     }
 }
 

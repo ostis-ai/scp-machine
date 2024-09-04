@@ -28,68 +28,68 @@ namespace scp
 {
 ScAddr ASCPStringOperatorInterpreter::msAgentKeynode;
 
-SC_AGENT_IMPLEMENTATION(ASCPStringOperatorInterpreter)
+ScResult ASCPStringOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
-    if (!edgeAddr.IsValid())
-            return SC_RESULT_ERROR;
+    if (!event.GetArc().IsValid())
+            return action.FinishUnsuccessfully();
 
-        ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
+        ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
 
         ScAddr type;
-        if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-            return SC_RESULT_ERROR_INVALID_TYPE;
+        if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+            return action.FinishUnsuccessfully();
 
         SCPOperator* oper = nullptr;
         if (type == Keynodes::op_stringSplit)
         {
-            oper = new SCPOperatorStringSplit(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringSplit(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringSlice)
         {
-            oper = new SCPOperatorStringSlice(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringSlice(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringReplace)
         {
-            oper = new SCPOperatorStringReplace(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringReplace(m_context, scp_operator);
         }
         if (type == Keynodes::op_contStringConcat)
         {
-            oper = new SCPOperatorContStringConcat(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorContStringConcat(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringIfEq)
         {
-            oper = new SCPOperatorStringIfEq(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringIfEq(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringIfGr)
         {
-            oper = new SCPOperatorStringIfGr(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringIfGr(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringLen)
         {
-            oper = new SCPOperatorStringLen(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringLen(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringSub)
         {
-            oper = new SCPOperatorStringSub(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringSub(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringStartsWith)
         {
-            oper = new SCPOperatorStringStartsWith(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringStartsWith(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringEndsWith)
         {
-            oper = new SCPOperatorStringEndsWith(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringEndsWith(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringToUpperCase)
         {
-            oper = new SCPOperatorStringToUpperCase(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringToUpperCase(m_context, scp_operator);
         }
         if (type == Keynodes::op_stringToLowerCase)
         {
-            oper = new SCPOperatorStringToLowerCase(m_memoryCtx, scp_operator);
+            oper = new SCPOperatorStringToLowerCase(m_context, scp_operator);
         }
         if (oper == nullptr)
-            return SC_RESULT_ERROR_INVALID_PARAMS;
+            return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -99,15 +99,26 @@ SC_AGENT_IMPLEMENTATION(ASCPStringOperatorInterpreter)
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return parse_result;
+        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
     else
     {
         sc_result execute_result;
         execute_result = oper->Execute();
         delete oper;
-        return execute_result;
+        return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
+}
+
+ScAddr ASCPStringOperatorInterpreter::GetActionClass() const
+{
+//todo(codegen-removal): replace action with your action class
+  return ScKeynodes::action;
+}
+
+ScAddr ASCPStringOperatorInterpreter::GetEventSubscriptionElement() const
+{
+  return Keynodes::active_action;
 }
 
 }

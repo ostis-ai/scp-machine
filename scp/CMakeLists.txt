@@ -18,5 +18,3 @@ target_include_directories(scp
     PUBLIC ${SCP_SRC}
     PUBLIC ${SC_MEMORY_SRC}
 )
-
-sc_codegen_ex(scp ${SCP_SRC} "${SCP_SRC}/generated")

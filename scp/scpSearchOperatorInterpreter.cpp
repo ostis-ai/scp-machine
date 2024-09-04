@@ -18,40 +18,40 @@
 namespace scp {
 ScAddr ASCPSearchOperatorInterpreter::msAgentKeynode;
 
-SC_AGENT_IMPLEMENTATION(ASCPSearchOperatorInterpreter)
+ScResult ASCPSearchOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
+    if (!event.GetArc().IsValid())
+        return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-        return SC_RESULT_ERROR_INVALID_TYPE;
+    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+        return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_searchElStr3)
     {
-        oper = new SCPOperatorSearchElStr3(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorSearchElStr3(m_context, scp_operator);
     }
     if (type == Keynodes::op_searchElStr5)
     {
-        oper = new SCPOperatorSearchElStr5(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorSearchElStr5(m_context, scp_operator);
     }
     if (type == Keynodes::op_searchSetStr3)
     {
-        oper = new SCPOperatorSearchSetStr3(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorSearchSetStr3(m_context, scp_operator);
     }
     if (type == Keynodes::op_searchSetStr5)
     {
-        oper = new SCPOperatorSearchSetStr5(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorSearchSetStr5(m_context, scp_operator);
     }
     if (type == Keynodes::op_sys_search)
     {
-        oper = new SCPOperatorSysSearch(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorSysSearch(m_context, scp_operator);
     }
     if (oper == nullptr)
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+        return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -60,15 +60,26 @@ SC_AGENT_IMPLEMENTATION(ASCPSearchOperatorInterpreter)
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return parse_result;
+        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
     else
     {
         sc_result execute_result;
         execute_result = oper->Execute();
         delete oper;
-        return execute_result;
+        return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
+}
+
+ScAddr ASCPSearchOperatorInterpreter::GetActionClass() const
+{
+//todo(codegen-removal): replace action with your action class
+  return ScKeynodes::action;
+}
+
+ScAddr ASCPSearchOperatorInterpreter::GetEventSubscriptionElement() const
+{
+  return Keynodes::active_action;
 }
 
 }

@@ -17,33 +17,33 @@ namespace scp
 {
 ScAddr ASCPIfOperatorInterpreter::msAgentKeynode;
 
-SC_AGENT_IMPLEMENTATION(ASCPIfOperatorInterpreter)
+ScResult ASCPIfOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
+    if (!event.GetArc().IsValid())
+        return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-        return SC_RESULT_ERROR_INVALID_TYPE;
+    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+        return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
     if (type == Keynodes::op_ifCoin)
     {
-        oper = new SCPOperatorIfCoin(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorIfCoin(m_context, scp_operator);
     }
     if (type == Keynodes::op_ifType)
     {
-        oper = new SCPOperatorIfType(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorIfType(m_context, scp_operator);
     }
     if (type == Keynodes::op_ifVarAssign)
     {
-        oper = new SCPOperatorIfVarAssign(m_memoryCtx, scp_operator);
+        oper = new SCPOperatorIfVarAssign(m_context, scp_operator);
     }
 
     if (oper == nullptr)
-        return SC_RESULT_ERROR_INVALID_PARAMS;
+        return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -52,15 +52,26 @@ SC_AGENT_IMPLEMENTATION(ASCPIfOperatorInterpreter)
     if (parse_result != SC_RESULT_OK)
     {
         delete oper;
-        return parse_result;
+        return (parse_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
     else
     {
         sc_result execute_result;
         execute_result = oper->Execute();
         delete oper;
-        return execute_result;
+        return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
     }
+}
+
+ScAddr ASCPIfOperatorInterpreter::GetActionClass() const
+{
+//todo(codegen-removal): replace action with your action class
+  return ScKeynodes::action;
+}
+
+ScAddr ASCPIfOperatorInterpreter::GetEventSubscriptionElement() const
+{
+  return Keynodes::active_action;
 }
 
 }

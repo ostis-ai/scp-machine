@@ -12,41 +12,52 @@
 namespace scp {
 ScAddr ASCPProgramExecutionSyncronizer::msAgentKeynode;
 
-SC_AGENT_IMPLEMENTATION(ASCPProgramExecutionSyncronizer)
+ScResult ASCPProgramExecutionSyncronizer::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
+    if (!event.GetArc().IsValid())
+        return action.FinishUnsuccessfully();
 
-    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
+    ScAddr scp_operator =m_context.GetEdgeTarget(event.GetArc());
 
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::action_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_context.HelperCheckEdge(Keynodes::action_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_error);
-        return SC_RESULT_OK;
+        return action.FinishSuccessfully();
     }
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::action_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_context.HelperCheckEdge(Keynodes::action_finished_successfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_then);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);
-        return SC_RESULT_OK;
+        return action.FinishSuccessfully();
     }
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::action_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
+    if (m_context.HelperCheckEdge(Keynodes::action_finished_unsuccessfully, scp_operator, ScType::EdgeAccessConstPosPerm))
     {
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_else);
         InitOperatorsByRelation(scp_operator, Keynodes::nrel_goto);
-        return SC_RESULT_OK;
+        return action.FinishSuccessfully();
     }
 
-    return SC_RESULT_OK;
+    return action.FinishSuccessfully();
+}
+
+ScAddr ASCPProgramExecutionSyncronizer::GetActionClass() const
+{
+//todo(codegen-removal): replace action with your action class
+  return ScKeynodes::action;
+}
+
+ScAddr ASCPProgramExecutionSyncronizer::GetEventSubscriptionElement() const
+{
+  return Keynodes::action_finished;
 }
 
 void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr &scp_operator, ScAddr &relation)
 {
-    ScIterator5Ptr iter_error =m_memoryCtx.Iterator5(scp_operator, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
+    ScIterator5Ptr iter_error =m_context.Iterator5(scp_operator, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
     while (iter_error->Next())
     {
         ScAddr next_op = iter_error->Get(2);
-       m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
+       m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
     }
 }
 
