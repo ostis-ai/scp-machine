@@ -135,17 +135,17 @@ class Keynodes : public ScKeynodes
     static inline ScKeynode const rrel_class{"rrel_class"};
 
 // Events
-    static inline ScKeynode const sc_event_remove_element{"sc_event_remove_element"};
+    static inline ScKeynode const sc_event_remove_element{"sc_event_before_erase_element"};
 
-    static inline ScKeynode const sc_event_add_output_arc{"sc_event_add_output_arc"};
+    static inline ScKeynode const sc_event_add_output_arc{"sc_event_after_generate_incoming_arc"};
 
-    static inline ScKeynode const sc_event_add_input_arc{"sc_event_add_input_arc"};
+    static inline ScKeynode const sc_event_add_input_arc{"sc_event_after_generate_outgoing_arc"};
 
-    static inline ScKeynode const sc_event_remove_output_arc{"sc_event_remove_output_arc"};
+    static inline ScKeynode const sc_event_remove_output_arc{"sc_event_before_erase_outgoing_arc"};
 
-    static inline ScKeynode const sc_event_remove_input_arc{"sc_event_remove_input_arc"};
+    static inline ScKeynode const sc_event_remove_input_arc{"sc_event_before_erase_incoming_arc"};
 
-    static inline ScKeynode const sc_event_content_changed{"sc_event_content_changed"};
+    static inline ScKeynode const sc_event_content_changed{"sc_event_before_change_link_content"};
 
 // Order relations
     static inline ScKeynode const rrel_1{"rrel_1"};

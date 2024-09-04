@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorSysWait: public SCPOperatorElStr2
 {
 private:
-    ScEvent::Type resolve_event_type(ScAddr const & event_type_node);
+    ScAddr resolve_event_type(ScAddr const & event_type_node);
 
 public:
     SCPOperatorSysWait(ScMemoryContext &ctx, ScAddr addr);

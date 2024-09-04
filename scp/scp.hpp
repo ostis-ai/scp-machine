@@ -18,4 +18,8 @@ class scpModule : public ScModule
 {
     public:
     static ScMemoryContext s_default_ctx;
+
+  void Initialize(ScMemoryContext * context) override;
+
+  void Shutdown(ScMemoryContext * context) override;
 };

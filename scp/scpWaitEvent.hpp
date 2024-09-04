@@ -17,14 +17,13 @@ class SCPWaitEvent
 
 private:
     sc_addr static resolve_sc_addr_from_pointer(sc_pointer data);
-    static sc_result Run(sc_event const* evt, sc_addr edge, sc_addr other_el);
-    sc_event_type ConvertEventType(ScEvent::Type type);
-    sc_event* m_event;
+    static sc_result Run(sc_event_subscription const* evt, sc_addr edge);
+    sc_event_subscription * m_event;
 
 public:
     static concurrent_deque<SCPWaitEvent*> sys_wait_events;
     void static unregister_all_sys_wait();
-    SCPWaitEvent(ScMemoryContext& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& param_addr);
+    SCPWaitEvent(ScMemoryContext& ctx, const ScAddr& addr, ScAddr const & eventType, const ScAddr& param_addr);
     ScAddr GetParamAddr();
     ~SCPWaitEvent();
 };

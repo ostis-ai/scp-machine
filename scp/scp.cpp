@@ -1,5 +1,6 @@
 
 #include "scp.hpp"
+#include "scpAgentEvent.hpp"
 #include "scpAgentProcessor.hpp"
 #include "scpEraseOperatorInterpreter.hpp"
 #include "scpFinishedInterpretationActionProcessor.hpp"
@@ -15,6 +16,7 @@
 #include "scpSearchOperatorInterpreter.hpp"
 #include "scpStringOperatorInterpreter.hpp"
 #include "scpVarValueOperatorInterpreter.hpp"
+#include "scpWaitEvent.hpp"
 
 #include <sc-memory/sc_agent.hpp>
 
@@ -55,3 +57,19 @@ SC_MODULE_REGISTER(scpModule)
   ->Agent<ASCPFinishedInterpretationActionProcessor>();
 
 ScMemoryContext scpModule::s_default_ctx;
+
+void scpModule::Initialize(ScMemoryContext * context)
+{
+  ScModule::Initialize(context);
+  std::cout << "SCP START" << std::endl;
+  SCPAgentEvent::register_all_scp_agents(s_default_ctx);
+}
+
+void scpModule::Shutdown(ScMemoryContext * context)
+{
+  ScModule::Shutdown(context);
+  std::cout << "SCP END" << std::endl;
+
+  SCPAgentEvent::unregister_all_scp_agents(s_default_ctx);
+  SCPWaitEvent::unregister_all_sys_wait();
+}

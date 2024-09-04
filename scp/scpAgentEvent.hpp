@@ -24,11 +24,10 @@ public:
     ~SCPAgentEvent();
 
 private:
-    sc_event_type ConvertEventType(ScEvent::Type type);
-    ScEvent::Type static resolve_event_type(ScAddr const& event_type_node);
-    sc_result static runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr other_el);
-    SCPAgentEvent(ScMemoryContext& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& actionClass, const ScAddr& procAddr);
-    sc_event* m_event;
+
+  sc_result static runSCPAgent(sc_event_subscription const* evt, sc_addr edge);
+    SCPAgentEvent(ScMemoryContext& ctx, const ScAddr& addr, ScAddr const & eventType, const ScAddr& actionClass, const ScAddr& procAddr);
+    sc_event_subscription * m_event;
 };
 
 }

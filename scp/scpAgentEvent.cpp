@@ -11,7 +11,7 @@
 
 extern "C"
 {
-#include "sc-core/sc-store/sc_event.h"
+#include "sc-core/sc-store/sc_event_subscription.h"
 }
 
 #include <iostream>
@@ -118,7 +118,7 @@ void SCPAgentEvent::register_scp_agent(ScMemoryContext& ctx, ScAddr& agent_node)
     else
       SCP_LOG_WARNING("Not found action class for sc-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
 
-    scp_agent_events.push(new SCPAgentEvent(ctx, event_node, resolve_event_type(event_type_node), action_addr, agent_proc));
+    scp_agent_events.push(new SCPAgentEvent(ctx, event_node, event_type_node, action_addr, agent_proc));
 
     SCP_LOG_INFO("Register scp-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
 }
@@ -185,57 +185,9 @@ void SCPAgentEvent::unregister_scp_agent(ScMemoryContext& ctx, ScAddr& agent_nod
     }
 }
 
-sc_event_type SCPAgentEvent::ConvertEventType(ScEvent::Type type)
+sc_result SCPAgentEvent::runSCPAgent(sc_event_subscription const* evt, sc_addr edge)
 {
-    switch (type)
-    {
-        case ScEvent::Type::AddOutputEdge:
-            return SC_EVENT_ADD_OUTPUT_ARC;
-
-        case ScEvent::Type::AddInputEdge:
-            return SC_EVENT_ADD_INPUT_ARC;
-
-        case ScEvent::Type::RemoveOutputEdge:
-            return SC_EVENT_REMOVE_OUTPUT_ARC;
-
-        case ScEvent::Type::RemoveInputEdge:
-            return SC_EVENT_REMOVE_INPUT_ARC;
-
-        case ScEvent::Type::EraseElement:
-            return SC_EVENT_REMOVE_ELEMENT;
-
-        case ScEvent::Type::ContentChanged:
-            return SC_EVENT_CONTENT_CHANGED;
-    }
-
-    SC_THROW_EXCEPTION(utils::ExceptionNotImplemented,
-                       "Unsupported event type " + std::to_string(int(type)));
-}
-
-ScEvent::Type SCPAgentEvent::resolve_event_type(ScAddr const& event_type_node)
-{
-    if (event_type_node == Keynodes::sc_event_add_output_arc)
-        return ScEvent::Type::AddOutputEdge;
-    if (event_type_node == Keynodes::sc_event_add_input_arc)
-        return ScEvent::Type::AddInputEdge;
-
-    if (event_type_node == Keynodes::sc_event_remove_output_arc)
-        return ScEvent::Type::RemoveOutputEdge;
-    if (event_type_node == Keynodes::sc_event_remove_input_arc)
-        return ScEvent::Type::RemoveInputEdge;
-
-    if (event_type_node == Keynodes::sc_event_content_changed)
-        return ScEvent::Type::ContentChanged;
-
-    if (event_type_node == Keynodes::sc_event_remove_element)
-        return ScEvent::Type::EraseElement;
-
-    return ScEvent::Type::AddOutputEdge;
-}
-
-sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr other_el)
-{
-    ScAddr quest(other_el);
+    ScAddr quest(scpModule::s_default_ctx.GetEdgeTarget(edge));
 
     ScIterator5Ptr iter_quest = scpModule::s_default_ctx.Iterator5(quest, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors);
     if (iter_quest->Next())
@@ -244,10 +196,10 @@ sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr 
             return SC_RESULT_OK;
     }
 
-    auto * data = (ScAddr *)sc_event_get_data(evt);
+    auto * data = (ScAddr *)sc_event_subscription_get_data(evt);
     ScAddr action_addr = data[0];
 
-    if (action_addr.IsValid() && !scpModule::s_default_ctx.HelperCheckEdge(action_addr, other_el, ScType::EdgeAccessConstPosPerm))
+    if (action_addr.IsValid() && !scpModule::s_default_ctx.HelperCheckEdge(action_addr, quest, ScType::EdgeAccessConstPosPerm))
       return SC_RESULT_OK;
 
     ScAddr proc_addr = data[1];
@@ -276,23 +228,23 @@ sc_result SCPAgentEvent::runSCPAgent(sc_event const* evt, sc_addr edge, sc_addr 
     return SC_RESULT_OK;
 }
 
-SCPAgentEvent::SCPAgentEvent(ScMemoryContext& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& actionClass, const ScAddr& procAddr)
+SCPAgentEvent::SCPAgentEvent(ScMemoryContext& ctx, const ScAddr& addr, ScAddr const & eventType, const ScAddr& actionClass, const ScAddr& procAddr)
 {
     auto * data = new ScAddr[2];
     data[0] = actionClass;
     data[1] = procAddr;
-    m_event = sc_event_new_ex(
+    m_event = sc_event_subscription_new(
         ctx.GetRealContext(),
         *addr,
-        ConvertEventType(eventType),
+        *eventType,
         data,
-        runSCPAgent,
+        reinterpret_cast<sc_event_callback>(runSCPAgent),
         nullptr);
 }
 
 ScAddr SCPAgentEvent::GetProcAddr()
 {
-    auto * data = (ScAddr *)sc_event_get_data(m_event);
+    auto * data = (ScAddr *) sc_event_subscription_get_data(m_event);
     return data[1];
 }
 
@@ -300,8 +252,8 @@ SCPAgentEvent::~SCPAgentEvent()
 {
     if (m_event)
     {
-        delete[] (ScAddr *)sc_event_get_data(m_event);
-        sc_event_destroy(m_event);
+        delete[] (ScAddr *)sc_event_subscription_get_data(m_event);
+        sc_event_subscription_destroy(m_event);
     }
 }
 

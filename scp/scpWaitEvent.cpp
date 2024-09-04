@@ -12,7 +12,7 @@
 
 extern "C"
 {
-#include "sc-core/sc-store/sc_event.h"
+#include "sc-core/sc-store/sc_event_subscription.h"
 }
 
 #include <iostream>
@@ -31,33 +31,6 @@ void SCPWaitEvent::unregister_all_sys_wait()
     }
 }
 
-sc_event_type SCPWaitEvent::ConvertEventType(ScEvent::Type type)
-{
-    switch (type)
-    {
-        case ScEvent::Type::AddOutputEdge:
-            return SC_EVENT_ADD_OUTPUT_ARC;
-
-        case ScEvent::Type::AddInputEdge:
-            return SC_EVENT_ADD_INPUT_ARC;
-
-        case ScEvent::Type::RemoveOutputEdge:
-            return SC_EVENT_REMOVE_OUTPUT_ARC;
-
-        case ScEvent::Type::RemoveInputEdge:
-            return SC_EVENT_REMOVE_INPUT_ARC;
-
-        case ScEvent::Type::EraseElement:
-            return SC_EVENT_REMOVE_ELEMENT;
-
-        case ScEvent::Type::ContentChanged:
-            return SC_EVENT_CONTENT_CHANGED;
-    }
-
-    SC_THROW_EXCEPTION(utils::ExceptionNotImplemented,
-                       "Unsupported event type " + std::to_string(int(type)));
-}
-
 sc_addr SCPWaitEvent::resolve_sc_addr_from_pointer(sc_pointer data)
 {
     sc_addr elem;
@@ -66,10 +39,10 @@ sc_addr SCPWaitEvent::resolve_sc_addr_from_pointer(sc_pointer data)
     return elem;
 }
 
-sc_result SCPWaitEvent::Run(sc_event const* evt, sc_addr edge, sc_addr other_el)
+sc_result SCPWaitEvent::Run(sc_event_subscription const* evt, sc_addr edge)
 {
     auto & ctx = (ScMemoryContext&)scpModule::s_default_ctx;
-    ScAddr oper_node = ScAddr(resolve_sc_addr_from_pointer(sc_event_get_data(evt)));
+    ScAddr oper_node = ScAddr(resolve_sc_addr_from_pointer(sc_event_subscription_get_data(evt)));
 
     ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, oper_node);
     ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, oper_node);
@@ -88,21 +61,21 @@ sc_result SCPWaitEvent::Run(sc_event const* evt, sc_addr edge, sc_addr other_el)
     return SC_RESULT_OK;
 }
 
-SCPWaitEvent::SCPWaitEvent(ScMemoryContext& ctx, const ScAddr& addr, ScEvent::Type eventType, const ScAddr& param_addr)
+SCPWaitEvent::SCPWaitEvent(ScMemoryContext& ctx, const ScAddr& addr, ScAddr const & eventType, const ScAddr& param_addr)
 {
-    m_event = sc_event_new_ex(
-        ctx.GetRealContext(), *addr, ConvertEventType(eventType), (sc_pointer)(sc_uint64)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, nullptr);
+    m_event = sc_event_subscription_new(
+        ctx.GetRealContext(), *addr, *eventType, (sc_pointer)(sc_uint64)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, nullptr);
 }
 
 ScAddr SCPWaitEvent::GetParamAddr()
 {
-    return resolve_sc_addr_from_pointer(sc_event_get_data(m_event));
+    return resolve_sc_addr_from_pointer(sc_event_subscription_get_data(m_event));
 }
 
 SCPWaitEvent::~SCPWaitEvent()
 {
     if (m_event)
-        sc_event_destroy(m_event);
+        sc_event_subscription_destroy(m_event);
 }
 
 }

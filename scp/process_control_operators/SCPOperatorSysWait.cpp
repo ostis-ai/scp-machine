@@ -8,31 +8,31 @@
 #include "scpUtils.hpp"
 #include "SCPOperatorSysWait.hpp"
 #include "scpWaitEvent.hpp"
-#include "sc-memory/sc_memory.hpp"
+
 #include <iostream>
 
 namespace scp
 {
 
-ScEvent::Type SCPOperatorSysWait::resolve_event_type(ScAddr const & event_type_node)
+ScAddr SCPOperatorSysWait::resolve_event_type(ScAddr const & event_type_node)
 {
     if (event_type_node == Keynodes::sc_event_add_output_arc)
-        return ScEvent::Type::AddOutputEdge;
+        return event_type_node;
     if (event_type_node == Keynodes::sc_event_add_input_arc)
-        return ScEvent::Type::AddInputEdge;
+        return event_type_node;
 
     if (event_type_node == Keynodes::sc_event_remove_output_arc)
-        return ScEvent::Type::RemoveOutputEdge;
+        return event_type_node;
     if (event_type_node == Keynodes::sc_event_remove_input_arc)
-        return ScEvent::Type::RemoveInputEdge;
+        return event_type_node;
 
     if (event_type_node == Keynodes::sc_event_content_changed)
-        return ScEvent::Type::ContentChanged;
+        return event_type_node;
 
     if (event_type_node == Keynodes::sc_event_remove_element)
-        return ScEvent::Type::EraseElement;
+        return event_type_node;
 
-    return ScEvent::Type::AddOutputEdge;
+    return Keynodes::sc_event_add_output_arc;
 }
 
 SCPOperatorSysWait::SCPOperatorSysWait(ScMemoryContext &ctx, ScAddr addr): SCPOperatorElStr2(ctx, addr)
