@@ -18,3 +18,6 @@ target_include_directories(scp
     PUBLIC ${SCP_SRC}
     PUBLIC ${SC_MEMORY_SRC}
 )
+if (${SCP_CLANG_FORMAT_CODE})
+    target_clangformat_setup(scp)
+endif()

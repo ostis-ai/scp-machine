@@ -18,6 +18,12 @@ set(SC_MEMORY_SRC "${SC_MACHINE_PATH}/sc-memory/")
 set(SC_KPM_SRC "${SC_MACHINE_PATH}/sc-kpm/")
 set(SC_TOOLS_SRC "${SC_MACHINE_PATH}/sc-tools/")
 
+option(SCP_CLANG_FORMAT_CODE "Flag to add clangformat and clangformat_check targets" OFF)
+
+if(${SCP_CLANG_FORMAT_CODE})
+    include(${SC_MACHINE_PATH}/cmake/ClangFormat.cmake)
+endif()
+
 if(${WIN32})
     message(SEND_ERROR "scp-machine isn't supported on Windows OS.")
 endif(${WIN32})
