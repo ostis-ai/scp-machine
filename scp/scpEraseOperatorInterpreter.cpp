@@ -12,11 +12,18 @@
 #include "erase_operators/SCPOperatorEraseElStr5.hpp"
 #include "erase_operators/SCPOperatorEraseSetStr3.hpp"
 #include "erase_operators/SCPOperatorEraseSetStr5.hpp"
-#include "sc-memory/sc_memory.hpp"
+
 #include <iostream>
 
 namespace scp
 {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPEraseOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_eraseEl, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseEl(ctx, addr); }},
+    {Keynodes::op_eraseElStr3, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseElStr3(ctx, addr); }},
+    {Keynodes::op_eraseElStr5, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseElStr5(ctx, addr); }},
+    {Keynodes::op_eraseSetStr3, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseSetStr3(ctx, addr); }},
+    {Keynodes::op_eraseSetStr5, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseSetStr5(ctx, addr); }},
+};
 
 ScResult
 ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -28,30 +35,14 @@ ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::
   ScAddr scp_operator = event.GetOtherElement();
 
   ScAddr type;
-  if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return action.FinishUnsuccessfully();
 
   SCPOperator * oper = nullptr;
-  if (type == Keynodes::op_eraseEl)
-  {
-    oper = new SCPOperatorEraseEl(m_context, scp_operator);
-  }
-  if (type == Keynodes::op_eraseElStr3)
-  {
-    oper = new SCPOperatorEraseElStr3(m_context, scp_operator);
-  }
-  if (type == Keynodes::op_eraseElStr5)
-  {
-    oper = new SCPOperatorEraseElStr5(m_context, scp_operator);
-  }
-  if (type == Keynodes::op_eraseSetStr3)
-  {
-    oper = new SCPOperatorEraseSetStr3(m_context, scp_operator);
-  }
-  if (type == Keynodes::op_eraseSetStr5)
-  {
-    oper = new SCPOperatorEraseSetStr5(m_context, scp_operator);
-  }
+
+  if (supportedOperators.count(type))
+    oper = supportedOperators.at(type)(m_context, scp_operator);
+
   if (oper == nullptr)
     return action.FinishUnsuccessfully();
 
@@ -81,6 +72,17 @@ ScAddr ASCPEraseOperatorInterpreter::GetActionClass() const
 ScAddr ASCPEraseOperatorInterpreter::GetEventSubscriptionElement() const
 {
   return Keynodes::active_action;
+}
+
+bool ASCPEraseOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
 }
 
 }

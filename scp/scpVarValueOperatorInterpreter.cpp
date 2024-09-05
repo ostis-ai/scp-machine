@@ -15,6 +15,11 @@
 
 namespace scp
 {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPVarValueOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_varAssign, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorVarAssign(ctx, addr); }},
+    {Keynodes::op_varErase, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorVarErase(ctx, addr); }},
+};
+
 ScResult ASCPVarValueOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
@@ -23,18 +28,13 @@ ScResult ASCPVarValueOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoing
     ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+    if (!Utils::resolveOperatorType(m_context, scp_operator, type))
         return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_varAssign)
-    {
-        oper = new SCPOperatorVarAssign(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_varErase)
-    {
-        oper = new SCPOperatorVarErase(m_context, scp_operator);
-    }
+
+    if (supportedOperators.count(type))
+      oper = supportedOperators.at(type)(m_context, scp_operator);
 
     if (oper == nullptr)
         return action.FinishUnsuccessfully();
@@ -68,4 +68,14 @@ ScAddr ASCPVarValueOperatorInterpreter::GetEventSubscriptionElement() const
   return Keynodes::active_action;
 }
 
+bool ASCPVarValueOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
+}
 }

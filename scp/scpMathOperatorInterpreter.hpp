@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scpOperator.hpp"
+
 #include <sc-memory/sc_agent.hpp>
 
 namespace scp
@@ -14,9 +16,11 @@ class ASCPMathOperatorInterpreter : public ScAgent<ScEventAfterGenerateOutgoingA
 
   ScAddr GetEventSubscriptionElement() const override;
 
-    public:
-    static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_math_interpreting"};
+  bool CheckInitiationCondition(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event) override;
 
+    static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_math_interpreting"};
+private:
+  static ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> supportedOperators;
 };
 
 }

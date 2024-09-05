@@ -24,6 +24,25 @@
 #include <string>
 
 namespace scp {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPMathOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_contSin, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorSIn(ctx, addr); }},
+    {Keynodes::op_contCos, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorCos(ctx, addr); }},
+    {Keynodes::op_contTg, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorTg(ctx, addr); }},
+    {Keynodes::op_contASin, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorASin(ctx, addr); }},
+    {Keynodes::op_contACos, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorACos(ctx, addr); }},
+    {Keynodes::op_contATg, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorATg(ctx, addr); }},
+    {Keynodes::op_contDivInt, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorDivInt(ctx, addr); }},
+    {Keynodes::op_contDivRem, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorDivRem(ctx, addr); }},
+    {Keynodes::op_ifEq, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorIfEq(ctx, addr); }},
+    {Keynodes::op_contLn, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorContLn(ctx, addr); }},
+    {Keynodes::op_ifGr, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorIfGr(ctx, addr); }},
+    {Keynodes::op_contAdd, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorContAdd(ctx, addr); }},
+    {Keynodes::op_contSub, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorContSub(ctx, addr); }},
+    {Keynodes::op_contMult, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorContMult(ctx, addr); }},
+    {Keynodes::op_contDiv, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorContDiv(ctx, addr); }},
+    {Keynodes::op_contPow, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorContPow(ctx, addr); }},
+};
+
 ScResult ASCPMathOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action){
     if (!event.GetArc().IsValid())
         return action.FinishUnsuccessfully();
@@ -31,74 +50,13 @@ ScResult ASCPMathOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<
     ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+    if (!Utils::resolveOperatorType(m_context, scp_operator, type))
         return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_contSin)
-    {
-        oper = new SCPOperatorSIn(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contCos)
-    {
-        oper = new SCPOperatorCos(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contTg)
-    {
-        oper = new SCPOperatorTg(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contASin)
-    {
-        oper = new SCPOperatorASin(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contACos)
-    {
-        oper = new SCPOperatorACos(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contATg)
-    {
-        oper = new SCPOperatorATg(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contDivInt)
-    {
-        oper = new SCPOperatorDivInt(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contDivRem)
-    {
-        oper = new SCPOperatorDivRem(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_ifEq)
-    {
-        oper = new SCPOperatorIfEq(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contLn)
-    {
-        oper = new SCPOperatorContLn(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_ifGr)
-    {
-        oper = new SCPOperatorIfGr(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contAdd)
-    {
-        oper = new SCPOperatorContAdd(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contSub)
-    {
-        oper = new SCPOperatorContSub(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contMult)
-    {
-        oper = new SCPOperatorContMult(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contDiv)
-    {
-        oper = new SCPOperatorContDiv(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_contPow)
-    {
-        oper = new SCPOperatorContPow(m_context, scp_operator);
-    }
+
+    if (supportedOperators.count(type))
+      oper = supportedOperators.at(type)(m_context, scp_operator);
 
     if (oper == nullptr){
         return action.FinishUnsuccessfully();
@@ -131,6 +89,16 @@ ScAddr ASCPMathOperatorInterpreter::GetActionClass() const
 ScAddr ASCPMathOperatorInterpreter::GetEventSubscriptionElement() const
 {
   return Keynodes::active_action;
+}
+
+bool ASCPMathOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
 }
 
 }

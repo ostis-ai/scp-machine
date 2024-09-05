@@ -16,6 +16,13 @@
 #include <iostream>
 
 namespace scp {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPGenOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_genEl, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorGenEl(ctx, addr); }},
+    {Keynodes::op_genElStr3, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorGenElStr3(ctx, addr); }},
+    {Keynodes::op_genElStr5, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorGenElStr5(ctx, addr); }},
+    {Keynodes::op_sys_gen, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorSysGen(ctx, addr); }},
+};
+
 ScResult ASCPGenOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
@@ -24,28 +31,16 @@ ScResult ASCPGenOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<S
     ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+    if (!Utils::resolveOperatorType(m_context, scp_operator, type))
         return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_genEl)
-    {
-        oper = new SCPOperatorGenEl(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_genElStr3)
-    {
-        oper = new SCPOperatorGenElStr3(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_genElStr5)
-    {
-        oper = new SCPOperatorGenElStr5(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_sys_gen)
-    {
-        oper = new SCPOperatorSysGen(m_context, scp_operator);
-    }
+
+    if (supportedOperators.count(type))
+      oper = supportedOperators.at(type)(m_context, scp_operator);
+
     if (oper == nullptr)
-        return action.FinishUnsuccessfully();
+      return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -74,6 +69,16 @@ ScAddr ASCPGenOperatorInterpreter::GetActionClass() const
 ScAddr ASCPGenOperatorInterpreter::GetEventSubscriptionElement() const
 {
   return Keynodes::active_action;
+}
+
+bool ASCPGenOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
 }
 
 }

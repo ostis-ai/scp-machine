@@ -17,6 +17,14 @@
 #include <iostream>
 
 namespace scp {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPSearchOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_searchElStr3, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorSearchElStr3(ctx, addr); }},
+    {Keynodes::op_searchElStr5, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorSearchElStr5(ctx, addr); }},
+    {Keynodes::op_searchSetStr3, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorSearchSetStr3(ctx, addr); }},
+    {Keynodes::op_searchSetStr5, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorSearchSetStr5(ctx, addr); }},
+    {Keynodes::op_sys_search, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorSysSearch(ctx, addr); }},
+};
+
 ScResult ASCPSearchOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
@@ -25,30 +33,14 @@ ScResult ASCPSearchOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingAr
     ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+    if (!Utils::resolveOperatorType(m_context, scp_operator, type))
         return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_searchElStr3)
-    {
-        oper = new SCPOperatorSearchElStr3(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_searchElStr5)
-    {
-        oper = new SCPOperatorSearchElStr5(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_searchSetStr3)
-    {
-        oper = new SCPOperatorSearchSetStr3(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_searchSetStr5)
-    {
-        oper = new SCPOperatorSearchSetStr5(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_sys_search)
-    {
-        oper = new SCPOperatorSysSearch(m_context, scp_operator);
-    }
+
+    if (supportedOperators.count(type))
+      oper = supportedOperators.at(type)(m_context, scp_operator);
+
     if (oper == nullptr)
         return action.FinishUnsuccessfully();
 
@@ -79,6 +71,17 @@ ScAddr ASCPSearchOperatorInterpreter::GetActionClass() const
 ScAddr ASCPSearchOperatorInterpreter::GetEventSubscriptionElement() const
 {
   return Keynodes::active_action;
+}
+
+bool ASCPSearchOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
 }
 
 }

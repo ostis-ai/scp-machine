@@ -4,257 +4,72 @@
 * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
 */
 
-#include "sc-memory/sc_addr.hpp"
-#include "scp.hpp"
-#include "scpKeynodes.hpp"
 #include "scpAgentEvent.hpp"
 
-extern "C"
-{
-#include "sc-core/sc-store/sc_event_subscription.h"
-}
-
-#include <iostream>
+#include "scp.hpp"
+#include "scpInterpretationRequestInitiationAgent.hpp"
+#include "scpKeynodes.hpp"
 
 namespace scp {
-
-concurrent_deque<SCPAgentEvent*> SCPAgentEvent::scp_agent_events;
-
-void SCPAgentEvent::register_all_scp_agents(ScMemoryContext& ctx)
+void SCPAgentEvent::register_all_scp_agents(ScAgentContext & ctx)
 {
-    ScIterator3Ptr iter_agent = ctx.Iterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-    while (iter_agent->Next())
+  auto const & activeAgentsIterator = ctx.Iterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  while (activeAgentsIterator->Next())
+  {
+    ScAddr const & agent = activeAgentsIterator->Get(2);
+    auto const & agentImplementationsIterator = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
+    while (agentImplementationsIterator->Next())
     {
-        ScAddr agent = iter_agent->Get(2);
-        register_scp_agent(ctx, agent);
+      ScAddr const & agentImplementation = agentImplementationsIterator->Get(0);
+      if (agentImplementation == Keynodes::active_sc_agent)
+        continue;
+      if (ctx.HelperCheckEdge(Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
+      {
+        SCP_LOG_DEBUG("found independent abstract sc agent for agent " << ctx.HelperGetSystemIdtf(agent));
+        register_scp_agent(ctx, agentImplementation);
+      }
     }
+  }
 }
 
-void SCPAgentEvent::unregister_all_scp_agents(ScMemoryContext& ctx)
+void SCPAgentEvent::unregister_all_scp_agents(ScAgentContext & ctx)
 {
-    while (!scp_agent_events.empty())
+  auto const & activeAgentsIterator = ctx.Iterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  while (activeAgentsIterator->Next())
+  {
+    ScAddr const & agent = activeAgentsIterator->Get(2);
+    auto const & agentImplementationsIterator = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
+    while (agentImplementationsIterator->Next())
     {
-        SCPAgentEvent* event = scp_agent_events.front();
-        scp_agent_events.pop();
-        delete event;
+      ScAddr const & agentImplementation = agentImplementationsIterator->Get(0);
+      if (ctx.HelperCheckEdge(Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
+        unregister_scp_agent(ctx, agentImplementation);
     }
+  }
 }
 
-void SCPAgentEvent::register_scp_agent(ScMemoryContext& ctx, ScAddr& agent_node)
+void SCPAgentEvent::register_scp_agent(ScAgentContext & ctx, ScAddr const & agentNode)
 {
-    ScAddr abstract_agent, scp_agent;
-    ScIterator3Ptr iter_impl = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent_node);
-    while (iter_impl->Next())
-    {
-        ScIterator5Ptr iter_agent = ctx.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, iter_impl->Get(0), ScType::EdgeAccessConstPosPerm, Keynodes::nrel_inclusion);
-        while (iter_agent->Next())
-        {
-            if (ctx.HelperCheckEdge(Keynodes::abstract_sc_agent, iter_agent->Get(0), ScType::EdgeAccessConstPosPerm))
-            {
-                abstract_agent = iter_agent->Get(0);
-                scp_agent = iter_impl->Get(0);
-                break;
-            }
-        }
-    }
-    if (!scp_agent.IsValid())
-    {
-      SCP_LOG_ERROR("Not found sc-agent for scp-agent \"" << ctx.HelperGetSystemIdtf(agent_node) << "\"");
-      return;
-    }
-    if (!abstract_agent.IsValid())
-    {
-      SCP_LOG_ERROR("Not found abstract agent for scp-agent \"" << ctx.HelperGetSystemIdtf(agent_node) << "\"");
-      return;
-    }
-
-    // Find program
-    ScAddr agent_proc;
-    ScIterator5Ptr iter_proc = ctx.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, scp_agent, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_sc_agent_program);
-    while (iter_proc->Next())
-    {
-        ScIterator3Ptr iter_proc2 = ctx.Iterator3(iter_proc->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-        while (iter_proc2->Next())
-        {
-            if (ctx.HelperCheckEdge(Keynodes::agent_scp_program, iter_proc2->Get(2), ScType::EdgeAccessConstPosPerm))
-            {
-                agent_proc = iter_proc2->Get(2);
-                break;
-            }
-        }
-    }
-    if (!agent_proc.IsValid())
-    {
-      SCP_LOG_ERROR("Not found program for sc-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
-      return;
-    }
-
-    // Old SCP program check
-    iter_proc = ctx.Iterator5(agent_proc, ScType::EdgeAccessConstPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_key_sc_element);
-    if (!iter_proc->Next())
-    {
-      SCP_LOG_ERROR("Not found process variable in program for sc-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
-      return;
-    }
-
-    // Find event
-    ScAddr event_type_node, event_node;
-    ScIterator5Ptr iter_event = ctx.Iterator5(abstract_agent, ScType::EdgeDCommonConst, ScType::Const, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_primary_initiation_condition);
-    if (iter_event->Next())
-    {
-        event_type_node = ctx.GetEdgeSource(iter_event->Get(2));
-        event_node = ctx.GetEdgeTarget(iter_event->Get(2));
-    }
-    else
-    {
-      SCP_LOG_ERROR("Not found primary initiation condition for sc-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
-      return;
-    }
-
-    ScAddr action_addr;
-    ScIterator5Ptr iter_action = ctx.Iterator5(abstract_agent, ScType::EdgeDCommonConst, ScType::Const, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_sc_agent_action_class);
-    if (iter_action->Next())
-      action_addr = iter_action->Get(2);
-    else
-      SCP_LOG_WARNING("Not found action class for sc-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
-
-    scp_agent_events.push(new SCPAgentEvent(ctx, event_node, event_type_node, action_addr, agent_proc));
-
-    SCP_LOG_INFO("Register scp-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
+  try
+  {
+    ctx.SubscribeSpecifiedAgent<SCPInterpretationRequestInitiationAgent>(agentNode);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SCP_LOG_ERROR("Cannot register agent " << agentNode.Hash() << "\n" << exception.Description());
+  }
 }
 
-void SCPAgentEvent::unregister_scp_agent(ScMemoryContext& ctx, ScAddr& agent_node)
+void SCPAgentEvent::unregister_scp_agent(ScAgentContext & ctx, ScAddr const & agentNode)
 {
-    ScAddr abstract_agent, scp_agent;
-    ScIterator3Ptr iter_impl = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent_node);
-    while (iter_impl->Next())
-    {
-        ScIterator5Ptr iter_agent = ctx.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, iter_impl->Get(0), ScType::EdgeAccessConstPosPerm, Keynodes::nrel_inclusion);
-        while (iter_agent->Next())
-        {
-            if (ctx.HelperCheckEdge(Keynodes::abstract_sc_agent, iter_agent->Get(0), ScType::EdgeAccessConstPosPerm))
-            {
-                abstract_agent = iter_agent->Get(0);
-                scp_agent = iter_impl->Get(0);
-                break;
-            }
-        }
-    }
-    if (!scp_agent.IsValid())
-    {
-        SCP_LOG_ERROR("Not found sc-agent for scp-agent \"" << ctx.HelperGetSystemIdtf(agent_node) << "\"");
-        return;
-    }
-    if (!abstract_agent.IsValid())
-    {
-        SCP_LOG_ERROR("Not found abstract agent for scp-agent \"" << ctx.HelperGetSystemIdtf(agent_node) << "\"");
-        return;
-    }
-
-    // Find program
-    ScAddr agent_proc;
-    ScIterator5Ptr iter_proc = ctx.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, scp_agent, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_sc_agent_program);
-    while (iter_proc->Next())
-    {
-        ScIterator3Ptr iter_proc2 = ctx.Iterator3(iter_proc->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-        while (iter_proc2->Next())
-        {
-            if (ctx.HelperCheckEdge(Keynodes::agent_scp_program, iter_proc2->Get(2), ScType::EdgeAccessConstPosPerm))
-            {
-                agent_proc = iter_proc2->Get(2);
-                break;
-            }
-        }
-    }
-    if (!agent_proc.IsValid())
-    {
-        SCP_LOG_ERROR("Not found program for sc-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
-        return;
-    }
-
-    auto checker = [&agent_proc](SCPAgentEvent * event)
-    {
-        return event->GetProcAddr() == agent_proc;
-    };
-
-    SCPAgentEvent * event;
-    if (scp_agent_events.extract(checker, event))
-    {
-        delete event;
-        SCP_LOG_INFO("Unregister scp-agent \"" << ctx.HelperGetSystemIdtf(abstract_agent) << "\"");
-    }
-}
-
-sc_result SCPAgentEvent::runSCPAgent(sc_event_subscription const* evt, sc_addr edge)
-{
-    ScAddr quest(scpModule::s_default_ctx.GetEdgeTarget(edge));
-
-    ScIterator5Ptr iter_quest = scpModule::s_default_ctx.Iterator5(quest, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors);
-    if (iter_quest->Next())
-    {
-        if (iter_quest->Get(2) == Keynodes::abstract_scp_machine)
-            return SC_RESULT_OK;
-    }
-
-    auto * data = (ScAddr *)sc_event_subscription_get_data(evt);
-    ScAddr action_addr = data[0];
-
-    if (action_addr.IsValid() && !scpModule::s_default_ctx.HelperCheckEdge(action_addr, quest, ScType::EdgeAccessConstPosPerm))
-      return SC_RESULT_OK;
-
-    ScAddr proc_addr = data[1];
-    ScAddr inp_arc(edge);
-
-    ScAddr scp_quest = scpModule::s_default_ctx.CreateNode(ScType::NodeConst);
-    ScAddr arc1 = scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, proc_addr);
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
-
-    ScAddr scp_params = scpModule::s_default_ctx.CreateNode(ScType::NodeConst);
-    arc1 = scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, scp_params, proc_addr);
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
-
-    arc1 = scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, scp_params, inp_arc);
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
-
-    arc1 = scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, scp_params);
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
-
-    arc1 = scpModule::s_default_ctx.CreateEdge(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
-
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_scp_interpretation_request, scp_quest);
-    scpModule::s_default_ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_initiated, scp_quest);
-
-    return SC_RESULT_OK;
-}
-
-SCPAgentEvent::SCPAgentEvent(ScMemoryContext& ctx, const ScAddr& addr, ScAddr const & eventType, const ScAddr& actionClass, const ScAddr& procAddr)
-{
-    auto * data = new ScAddr[2];
-    data[0] = actionClass;
-    data[1] = procAddr;
-    m_event = sc_event_subscription_new(
-        ctx.GetRealContext(),
-        *addr,
-        *eventType,
-        data,
-        reinterpret_cast<sc_event_callback>(runSCPAgent),
-        nullptr);
-}
-
-ScAddr SCPAgentEvent::GetProcAddr()
-{
-    auto * data = (ScAddr *) sc_event_subscription_get_data(m_event);
-    return data[1];
-}
-
-SCPAgentEvent::~SCPAgentEvent()
-{
-    if (m_event)
-    {
-        delete[] (ScAddr *)sc_event_subscription_get_data(m_event);
-        sc_event_subscription_destroy(m_event);
-    }
+  try
+  {
+    ctx.UnsubscribeSpecifiedAgent<SCPInterpretationRequestInitiationAgent>(agentNode);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SCP_LOG_ERROR("Cannot unregister agent " << agentNode.Hash() << "\n" << exception.Description());
+  }
 }
 
 }

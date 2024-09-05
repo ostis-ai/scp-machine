@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "scpKeynodes.hpp"
+
 #include "sc-memory/sc_module.hpp"
 
 #define SCP_PREFIX "[scp-machine] "

@@ -15,6 +15,12 @@
 
 namespace scp
 {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPPrintOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_printEl, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorPrintEl(ctx, addr); }},
+    {Keynodes::op_print, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorPrint(ctx, addr, false); }},
+    {Keynodes::op_printNl, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorPrint(ctx, addr, true); }},
+};
+
 ScResult ASCPPrintOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
@@ -23,19 +29,14 @@ ScResult ASCPPrintOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc
     ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+    if (!Utils::resolveOperatorType(m_context, scp_operator, type))
         return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_printEl)
-    {
-        oper = new SCPOperatorPrintEl(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_print || type == Keynodes::op_printNl)
-    {
-        sc_bool newline = (type == Keynodes::op_printNl);
-        oper = new SCPOperatorPrint(m_context, scp_operator, newline);
-    }
+
+
+    if (supportedOperators.count(type))
+      oper = supportedOperators.at(type)(m_context, scp_operator);
 
     if (oper == nullptr)
         return action.FinishUnsuccessfully();
@@ -69,4 +70,14 @@ ScAddr ASCPPrintOperatorInterpreter::GetEventSubscriptionElement() const
   return Keynodes::active_action;
 }
 
+bool ASCPPrintOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
+}
 }

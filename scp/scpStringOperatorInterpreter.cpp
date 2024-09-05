@@ -26,68 +26,39 @@
 
 namespace scp
 {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPStringOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_stringSplit, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringSplit(ctx, addr); }},
+    {Keynodes::op_stringSlice, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringSlice(ctx, addr); }},
+    {Keynodes::op_stringReplace, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringReplace(ctx, addr); }},
+    {Keynodes::op_contStringConcat, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorContStringConcat(ctx, addr); }},
+    {Keynodes::op_stringIfEq, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringIfEq(ctx, addr); }},
+    {Keynodes::op_stringIfGr, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringIfGr(ctx, addr); }},
+    {Keynodes::op_stringLen, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringLen(ctx, addr); }},
+    {Keynodes::op_stringSub, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringSub(ctx, addr); }},
+    {Keynodes::op_stringStartsWith, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringStartsWith(ctx, addr); }},
+    {Keynodes::op_stringEndsWith, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringEndsWith(ctx, addr); }},
+    {Keynodes::op_stringToUpperCase, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringToUpperCase(ctx, addr); }},
+    {Keynodes::op_stringToLowerCase, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorStringToLowerCase(ctx, addr); }},
+};
+
 ScResult ASCPStringOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
             return action.FinishUnsuccessfully();
 
-        ScAddr scp_operator = event.GetOtherElement();
+    ScAddr scp_operator = event.GetOtherElement();
 
-        ScAddr type;
-        if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
-            return action.FinishUnsuccessfully();
+    ScAddr type;
+    if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+        return action.FinishUnsuccessfully();
 
-        SCPOperator* oper = nullptr;
-        if (type == Keynodes::op_stringSplit)
-        {
-            oper = new SCPOperatorStringSplit(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringSlice)
-        {
-            oper = new SCPOperatorStringSlice(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringReplace)
-        {
-            oper = new SCPOperatorStringReplace(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_contStringConcat)
-        {
-            oper = new SCPOperatorContStringConcat(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringIfEq)
-        {
-            oper = new SCPOperatorStringIfEq(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringIfGr)
-        {
-            oper = new SCPOperatorStringIfGr(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringLen)
-        {
-            oper = new SCPOperatorStringLen(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringSub)
-        {
-            oper = new SCPOperatorStringSub(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringStartsWith)
-        {
-            oper = new SCPOperatorStringStartsWith(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringEndsWith)
-        {
-            oper = new SCPOperatorStringEndsWith(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringToUpperCase)
-        {
-            oper = new SCPOperatorStringToUpperCase(m_context, scp_operator);
-        }
-        if (type == Keynodes::op_stringToLowerCase)
-        {
-            oper = new SCPOperatorStringToLowerCase(m_context, scp_operator);
-        }
-        if (oper == nullptr)
-            return action.FinishUnsuccessfully();
+    SCPOperator* oper = nullptr;
+
+    if (supportedOperators.count(type))
+      oper = supportedOperators.at(type)(m_context, scp_operator);
+
+    if (oper == nullptr)
+        return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -117,6 +88,17 @@ ScAddr ASCPStringOperatorInterpreter::GetActionClass() const
 ScAddr ASCPStringOperatorInterpreter::GetEventSubscriptionElement() const
 {
   return Keynodes::active_action;
+}
+
+bool ASCPStringOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
 }
 
 }

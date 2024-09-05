@@ -16,6 +16,12 @@
 
 namespace scp
 {
+ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPIfOperatorInterpreter::supportedOperators = {
+    {Keynodes::op_ifCoin, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorIfCoin(ctx, addr); }},
+    {Keynodes::op_ifType, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorIfType(ctx, addr); }},
+    {Keynodes::op_ifVarAssign, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorIfVarAssign(ctx, addr); }},
+};
+
 ScResult ASCPIfOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
 {
     if (!event.GetArc().IsValid())
@@ -24,25 +30,16 @@ ScResult ASCPIfOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<Sc
     ScAddr scp_operator = event.GetOtherElement();
 
     ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_context, scp_operator, type))
+    if (!Utils::resolveOperatorType(m_context, scp_operator, type))
         return action.FinishUnsuccessfully();
 
     SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_ifCoin)
-    {
-        oper = new SCPOperatorIfCoin(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_ifType)
-    {
-        oper = new SCPOperatorIfType(m_context, scp_operator);
-    }
-    if (type == Keynodes::op_ifVarAssign)
-    {
-        oper = new SCPOperatorIfVarAssign(m_context, scp_operator);
-    }
+
+    if (supportedOperators.count(type))
+      oper = supportedOperators.at(type)(m_context, scp_operator);
 
     if (oper == nullptr)
-        return action.FinishUnsuccessfully();
+      return action.FinishUnsuccessfully();
 
 #ifdef SCP_DEBUG
     std::cout << oper->GetTypeName() << std::endl;
@@ -73,4 +70,14 @@ ScAddr ASCPIfOperatorInterpreter::GetEventSubscriptionElement() const
   return Keynodes::active_action;
 }
 
+bool ASCPIfOperatorInterpreter::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+    return false;
+  return supportedOperators.count(type);
+}
 }

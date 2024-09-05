@@ -56,7 +56,7 @@ class Keynodes : public ScKeynodes
 
     static inline ScKeynode const active_action{"active_action"};
 
-    static inline ScKeynode const active_sc_agent{"active_sc_agent"};
+    static inline ScKeynode const active_sc_agent{"active_sc_agent", ScType::NodeConstClass};
 
     static inline ScKeynode const nrel_scp_var_value{"nrel_scp_var_value"};
 
