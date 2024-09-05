@@ -6,13 +6,17 @@ sc_agent1
 <- abstract_sc_agent;
 
 => nrel_primary_initiation_condition: 
-	(sc_event_add_output_arc => action_initiated);
+	(sc_event_after_generate_outgoing_arc => action_initiated);
 
 => nrel_initiation_condition_and_result: 
 	(..sc_agent1_condition => ..sc_agent1_result);
 
 => nrel_sc_agent_action_class:
-	test_action1;
+	test_action1
+	(*
+	    <- sc_node_class;;
+	    <= nrel_inclusion: information_action;;
+	*);
 
 <= nrel_sc_agent_key_sc_elements: 
 	{
