@@ -1,8 +1,8 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #include "scpUtils.hpp"
 #include "SCPOperatorSysSearch.hpp"
@@ -10,10 +10,11 @@
 namespace scp
 {
 using namespace utils;
-SCPOperatorSysSearch::SCPOperatorSysSearch(ScMemoryContext &ctx, ScAddr addr)
+
+SCPOperatorSysSearch::SCPOperatorSysSearch(ScMemoryContext & ctx, ScAddr addr)
   : SCPOperator(ctx, addr)
 {
-  operands = std::vector<SCPOperand*>(4);
+  operands = std::vector<SCPOperand *>(4);
 }
 
 std::string SCPOperatorSysSearch::GetTypeName()
@@ -108,15 +109,19 @@ sc_result SCPOperatorSysSearch::Execute()
 
   ScTemplateParams searchParams;
   ScAddr const & searchParamsAddr = operands[2]->GetValue();
-  ScIterator3Ptr const paramsMapIt3 = m_memoryCtx.Iterator3(
-      searchParamsAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  ScIterator3Ptr const paramsMapIt3 =
+      m_memoryCtx.Iterator3(searchParamsAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
   while (paramsMapIt3->Next())
   {
     ScAddr const & parameterPairAddr = paramsMapIt3->Get(2);
 
     ScIterator5Ptr const varIt5 = m_memoryCtx.Iterator5(
-        parameterPairAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
+        parameterPairAddr,
+        ScType::EdgeAccessConstPosPerm,
+        ScType::Unknown,
+        ScType::EdgeAccessConstPosPerm,
+        Keynodes::rrel_1);
 
     ScAddr varAddr;
     if (varIt5->Next())
@@ -131,7 +136,11 @@ sc_result SCPOperatorSysSearch::Execute()
     }
 
     ScIterator5Ptr const replacementIt5 = m_memoryCtx.Iterator5(
-        parameterPairAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2);
+        parameterPairAddr,
+        ScType::EdgeAccessConstPosPerm,
+        ScType::Unknown,
+        ScType::EdgeAccessConstPosPerm,
+        Keynodes::rrel_2);
 
     ScAddr replacementAddr;
     if (replacementIt5->Next())
@@ -152,7 +161,8 @@ sc_result SCPOperatorSysSearch::Execute()
     catch (utils::ScException const & e)
     {
 #ifdef SCP_DEBUG
-      Utils::logSCPError(m_memoryCtx, "Search parameters pair must has one replacement, but has two or more replacements", addr);
+      Utils::logSCPError(
+          m_memoryCtx, "Search parameters pair must has one replacement, but has two or more replacements", addr);
 #endif
       FinishExecutionWithError();
       return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -190,8 +200,8 @@ sc_result SCPOperatorSysSearch::Execute()
   }
 
   std::set<ScAddr, ScAddrLessFunc> templateVarsSet;
-  ScIterator3Ptr const templateIt3 = m_memoryCtx.Iterator3(
-      searchTemplateAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
+  ScIterator3Ptr const templateIt3 =
+      m_memoryCtx.Iterator3(searchTemplateAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
   while (templateIt3->Next())
   {
     ScAddr const & templateElementAddr = templateIt3->Get(2);
@@ -217,37 +227,36 @@ sc_result SCPOperatorSysSearch::Execute()
   }
 
   std::unordered_map<ScAddr, ScAddr, ScAddrHashFunc> templateVarAddrsToSearchResultAddrs;
-  searchResult.ForEach([
-      this,
-      &templateVarsSet,
-      &templateVarAddrsToSearchResultAddrs,
-      &foundElementsSetAddr](ScTemplateResultItem const & item) {
-    for (ScAddr const & templateVarAddr : templateVarsSet)
-    {
-      ScAddr foundAddr;
-      item.Get(templateVarAddr, foundAddr);
-      if (!foundAddr.IsValid())
-        continue;
-
-      ScAddr replacementsSetAddr;
-      if (templateVarAddrsToSearchResultAddrs.find(templateVarAddr) == templateVarAddrsToSearchResultAddrs.cend())
+  searchResult.ForEach(
+      [this, &templateVarsSet, &templateVarAddrsToSearchResultAddrs, &foundElementsSetAddr](
+          ScTemplateResultItem const & item)
       {
-        replacementsSetAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
-        templateVarAddrsToSearchResultAddrs.insert({templateVarAddr, replacementsSetAddr});
-      }
-      else
-      {
-        replacementsSetAddr = templateVarAddrsToSearchResultAddrs.at(templateVarAddr);
-      }
+        for (ScAddr const & templateVarAddr : templateVarsSet)
+        {
+          ScAddr foundAddr;
+          item.Get(templateVarAddr, foundAddr);
+          if (!foundAddr.IsValid())
+            continue;
 
-      if (!m_memoryCtx.HelperCheckEdge(replacementsSetAddr, foundAddr, ScType::EdgeAccessConstPosPerm))
-        m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, replacementsSetAddr, foundAddr);
+          ScAddr replacementsSetAddr;
+          if (templateVarAddrsToSearchResultAddrs.find(templateVarAddr) == templateVarAddrsToSearchResultAddrs.cend())
+          {
+            replacementsSetAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
+            templateVarAddrsToSearchResultAddrs.insert({templateVarAddr, replacementsSetAddr});
+          }
+          else
+          {
+            replacementsSetAddr = templateVarAddrsToSearchResultAddrs.at(templateVarAddr);
+          }
 
-      if (foundElementsSetAddr.IsValid()
-        && !m_memoryCtx.HelperCheckEdge(foundElementsSetAddr, foundAddr, ScType::EdgeAccessConstPosPerm))
-        m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, foundElementsSetAddr, foundAddr);
-    }
-  });
+          if (!m_memoryCtx.HelperCheckEdge(replacementsSetAddr, foundAddr, ScType::EdgeAccessConstPosPerm))
+            m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, replacementsSetAddr, foundAddr);
+
+          if (foundElementsSetAddr.IsValid()
+              && !m_memoryCtx.HelperCheckEdge(foundElementsSetAddr, foundAddr, ScType::EdgeAccessConstPosPerm))
+            m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, foundElementsSetAddr, foundAddr);
+        }
+      });
 
   ScAddr templateVarsToSearchResultsSetAddr;
   if (operands[1]->IsFixed())
@@ -256,7 +265,8 @@ sc_result SCPOperatorSysSearch::Execute()
   }
   else
   {
-    templateVarsToSearchResultsSetAddr = m_memoryCtx.CreateNode(ScType::NodeConst);;
+    templateVarsToSearchResultsSetAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
+    ;
     operands[1]->ResetValue();
     operands[1]->SetValue(templateVarsToSearchResultsSetAddr);
   }
@@ -271,13 +281,13 @@ sc_result SCPOperatorSysSearch::Execute()
 
     ScAddr const & replacementPairAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
 
-    ScAddr const & edgeToTemplateVarAddr = m_memoryCtx.CreateEdge(
-        ScType::EdgeAccessConstPosPerm, replacementPairAddr, templateVarAddr);
+    ScAddr const & edgeToTemplateVarAddr =
+        m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, replacementPairAddr, templateVarAddr);
     m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, edgeToTemplateVarAddr);
     m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_const, edgeToTemplateVarAddr);
 
-    ScAddr const & edgeToSearchResultSetVariableAddr = m_memoryCtx.CreateEdge(
-        ScType::EdgeAccessConstPosPerm, replacementPairAddr, searchResultSetVariableAddr);
+    ScAddr const & edgeToSearchResultSetVariableAddr =
+        m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, replacementPairAddr, searchResultSetVariableAddr);
     m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, edgeToSearchResultSetVariableAddr);
     m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_var, edgeToSearchResultSetVariableAddr);
     m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_assign, edgeToSearchResultSetVariableAddr);

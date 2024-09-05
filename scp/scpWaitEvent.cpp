@@ -1,8 +1,8 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #include "sc-memory/sc_addr.hpp"
 #include "scp.hpp"
@@ -17,66 +17,70 @@ extern "C"
 
 #include <iostream>
 
-namespace scp {
+namespace scp
+{
 
-concurrent_deque<SCPWaitEvent*> SCPWaitEvent::sys_wait_events;
+concurrent_deque<SCPWaitEvent *> SCPWaitEvent::sys_wait_events;
 
 void SCPWaitEvent::unregister_all_sys_wait()
 {
-    while (!sys_wait_events.empty())
-    {
-        SCPWaitEvent* event = sys_wait_events.front();
-        sys_wait_events.pop();
-        delete event;
-    }
+  while (!sys_wait_events.empty())
+  {
+    SCPWaitEvent * event = sys_wait_events.front();
+    sys_wait_events.pop();
+    delete event;
+  }
 }
 
 sc_addr SCPWaitEvent::resolve_sc_addr_from_pointer(sc_pointer data)
 {
-    sc_addr elem;
-    elem.offset = SC_ADDR_LOCAL_OFFSET_FROM_INT((int)(long)(data));
-    elem.seg = SC_ADDR_LOCAL_SEG_FROM_INT((int)(long)(data));
-    return elem;
+  sc_addr elem;
+  elem.offset = SC_ADDR_LOCAL_OFFSET_FROM_INT((int)(long)(data));
+  elem.seg = SC_ADDR_LOCAL_SEG_FROM_INT((int)(long)(data));
+  return elem;
 }
 
-sc_result SCPWaitEvent::Run(sc_event_subscription const* evt, sc_addr edge)
+sc_result SCPWaitEvent::Run(sc_event_subscription const * evt, sc_addr edge)
 {
-    auto & ctx = (ScMemoryContext&)scpModule::s_default_ctx;
-    ScAddr oper_node = ScAddr(resolve_sc_addr_from_pointer(sc_event_subscription_get_data(evt)));
+  auto & ctx = (ScMemoryContext &)scpModule::s_default_ctx;
+  ScAddr oper_node = ScAddr(resolve_sc_addr_from_pointer(sc_event_subscription_get_data(evt)));
 
-    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, oper_node);
-    ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, oper_node);
+  ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, oper_node);
+  ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, oper_node);
 
-    auto checker = [&oper_node](SCPWaitEvent * event)
-    {
-        return event->GetParamAddr() == oper_node;
-    };
+  auto checker = [&oper_node](SCPWaitEvent * event)
+  {
+    return event->GetParamAddr() == oper_node;
+  };
 
-    SCPWaitEvent* event;
-    if (sys_wait_events.extract(checker, event))
-    {
-        delete event;
-    }
+  SCPWaitEvent * event;
+  if (sys_wait_events.extract(checker, event))
+  {
+    delete event;
+  }
 
-    return SC_RESULT_OK;
+  return SC_RESULT_OK;
 }
 
-SCPWaitEvent::SCPWaitEvent(ScMemoryContext& ctx, const ScAddr& addr, ScAddr const & eventType, const ScAddr& param_addr)
+SCPWaitEvent::SCPWaitEvent(
+    ScMemoryContext & ctx,
+    ScAddr const & addr,
+    ScAddr const & eventType,
+    ScAddr const & param_addr)
 {
-    m_event = sc_event_subscription_new(
-        ctx.GetRealContext(), *addr, *eventType, (sc_pointer)(sc_uint64)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, nullptr);
+  m_event = sc_event_subscription_new(
+      ctx.GetRealContext(), *addr, *eventType, (sc_pointer)(sc_uint64)SC_ADDR_LOCAL_TO_INT(*param_addr), Run, nullptr);
 }
 
 ScAddr SCPWaitEvent::GetParamAddr()
 {
-    return resolve_sc_addr_from_pointer(sc_event_subscription_get_data(m_event));
+  return resolve_sc_addr_from_pointer(sc_event_subscription_get_data(m_event));
 }
 
 SCPWaitEvent::~SCPWaitEvent()
 {
-    if (m_event)
-        sc_event_subscription_destroy(m_event);
+  if (m_event)
+    sc_event_subscription_destroy(m_event);
 }
 
-}
-
+}  // namespace scp

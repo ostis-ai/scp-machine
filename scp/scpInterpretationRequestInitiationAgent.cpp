@@ -14,7 +14,8 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
   ScAddr const & firstArgumentArc = m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, scpParams, agentProgram);
   m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, firstArgumentArc);
 
-  ScAddr const & secondArgumentArc = m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, scpParams, event.GetConnector());
+  ScAddr const & secondArgumentArc =
+      m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, scpParams, event.GetConnector());
   m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, secondArgumentArc);
 
   ScAction scpAction = m_context.GenerateAction(Keynodes::action_scp_interpretation_request);
@@ -37,13 +38,20 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetScAgentProgram() const
   }
 
   ScAddr agentProgram;
-  auto const & programsTupleIterator = m_context.Iterator5(ScType::NodeConst, ScType::EdgeDCommonConst, m_agentImplementationAddr, ScType::EdgeAccessConstPosPerm, Keynodes::nrel_sc_agent_program);
+  auto const & programsTupleIterator = m_context.Iterator5(
+      ScType::NodeConst,
+      ScType::EdgeDCommonConst,
+      m_agentImplementationAddr,
+      ScType::EdgeAccessConstPosPerm,
+      Keynodes::nrel_sc_agent_program);
   while (programsTupleIterator->Next())
   {
-    ScIterator3Ptr programsIterator = m_context.Iterator3(programsTupleIterator->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    ScIterator3Ptr programsIterator =
+        m_context.Iterator3(programsTupleIterator->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (programsIterator->Next())
     {
-      if (m_context.HelperCheckEdge(Keynodes::agent_scp_program, programsIterator->Get(2), ScType::EdgeAccessConstPosPerm))
+      if (m_context.HelperCheckEdge(
+              Keynodes::agent_scp_program, programsIterator->Get(2), ScType::EdgeAccessConstPosPerm))
       {
         agentProgram = programsIterator->Get(2);
         break;
@@ -52,15 +60,23 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetScAgentProgram() const
   }
   if (!agentProgram.IsValid())
   {
-    SC_AGENT_LOG_ERROR("Not found program for sc-agent \"" << m_context.HelperGetSystemIdtf(GetAbstractAgent()) << "\"");
+    SC_AGENT_LOG_ERROR(
+        "Not found program for sc-agent \"" << m_context.HelperGetSystemIdtf(GetAbstractAgent()) << "\"");
     return ScAddr::Empty;
   }
 
   // Old SCP program check
-  auto const & programKeyElementIterator = m_context.Iterator5(agentProgram, ScType::EdgeAccessConstPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_key_sc_element);
+  auto const & programKeyElementIterator = m_context.Iterator5(
+      agentProgram,
+      ScType::EdgeAccessConstPosPerm,
+      ScType::NodeVar,
+      ScType::EdgeAccessConstPosPerm,
+      Keynodes::rrel_key_sc_element);
   if (!programKeyElementIterator->Next())
   {
-    SC_AGENT_LOG_ERROR("Not found process variable in program for sc-agent \"" << m_context.HelperGetSystemIdtf(GetAbstractAgent()) << "\"");
+    SC_AGENT_LOG_ERROR(
+        "Not found process variable in program for sc-agent \"" << m_context.HelperGetSystemIdtf(GetAbstractAgent())
+                                                                << "\"");
     return ScAddr::Empty;
   }
   return agentProgram;
@@ -76,7 +92,7 @@ bool SCPInterpretationRequestInitiationAgent::CheckInitiationCondition(ScElement
       ScType::EdgeAccessConstPosPerm,
       Keynodes::nrel_authors);
   if (actionAuthorIterator->Next())
-      return false;
+    return false;
   if (!m_context.HelperCheckEdge(GetActionClass(), action, ScType::EdgeAccessConstPosPerm))
     return false;
   return true;

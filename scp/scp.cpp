@@ -27,21 +27,21 @@
 using namespace scp;
 
 SC_MODULE_REGISTER(scpModule)
-  ->Agent<ASCPProcessCreator>()
-  ->Agent<ASCPProcessDestroyer>()
-  ->Agent<ASCPGenOperatorInterpreter>()
-  ->Agent<ASCPEraseOperatorInterpreter>()
-  ->Agent<ASCPSearchOperatorInterpreter>()
-  ->Agent<ASCPIfOperatorInterpreter>()
-  ->Agent<ASCPVarValueOperatorInterpreter>()
-  ->Agent<ASCPPrintOperatorInterpreter>()
-  ->Agent<ASCPProgramExecutionSyncronizer>()
-  ->Agent<ASCPProcessControlOperatorInterpreter>()
-  ->Agent<ASCPAgentActivator>()
-  ->Agent<ASCPAgentDeactivator>()
-  ->Agent<ASCPMathOperatorInterpreter>()
-  ->Agent<ASCPStringOperatorInterpreter>()
-  ->Agent<ASCPFinishedInterpretationActionProcessor>();
+    ->Agent<ASCPProcessCreator>()
+    ->Agent<ASCPProcessDestroyer>()
+    ->Agent<ASCPGenOperatorInterpreter>()
+    ->Agent<ASCPEraseOperatorInterpreter>()
+    ->Agent<ASCPSearchOperatorInterpreter>()
+    ->Agent<ASCPIfOperatorInterpreter>()
+    ->Agent<ASCPVarValueOperatorInterpreter>()
+    ->Agent<ASCPPrintOperatorInterpreter>()
+    ->Agent<ASCPProgramExecutionSyncronizer>()
+    ->Agent<ASCPProcessControlOperatorInterpreter>()
+    ->Agent<ASCPAgentActivator>()
+    ->Agent<ASCPAgentDeactivator>()
+    ->Agent<ASCPMathOperatorInterpreter>()
+    ->Agent<ASCPStringOperatorInterpreter>()
+    ->Agent<ASCPFinishedInterpretationActionProcessor>();
 
 ScMemoryContext scpModule::s_default_ctx;
 

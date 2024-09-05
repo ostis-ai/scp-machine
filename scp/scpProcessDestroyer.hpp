@@ -1,8 +1,8 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #pragma once
 
@@ -13,20 +13,19 @@ namespace scp
 
 class ASCPProcessDestroyer : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
 {
-    public:
+public:
   ScAddr GetActionClass() const override;
 
-  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action) override;
+  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
+      override;
 
   ScAddr GetEventSubscriptionElement() const override;
 
-    public:
-    static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_process_destruction"};
+public:
+  static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_process_destruction"};
 
 private:
-    void deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAddr);
-
+  void deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAddr);
 };
 
-}
-
+}  // namespace scp

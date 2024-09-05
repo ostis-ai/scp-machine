@@ -1,8 +1,8 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #pragma once
 
@@ -15,14 +15,13 @@
 namespace scp
 {
 
-class SCPOperatorEraseSetStr5: public SCPOperatorElStr5
+class SCPOperatorEraseSetStr5 : public SCPOperatorElStr5
 {
 public:
-    SCPOperatorEraseSetStr5(ScMemoryContext &ctx, ScAddr addr);
-    std::string GetTypeName();
-    sc_result Parse();
-    sc_result Execute();
+  SCPOperatorEraseSetStr5(ScMemoryContext & ctx, ScAddr addr);
+  std::string GetTypeName();
+  sc_result Parse();
+  sc_result Execute();
 };
 
-}
-
+}  // namespace scp

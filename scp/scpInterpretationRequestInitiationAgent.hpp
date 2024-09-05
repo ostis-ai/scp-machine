@@ -12,7 +12,6 @@ public:
   ScAddr GetScAgentProgram() const;
 
   bool CheckInitiationCondition(ScElementaryEvent const & event) override;
-
 };
 
 }  // namespace scp

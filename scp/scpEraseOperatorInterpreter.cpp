@@ -1,8 +1,8 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
@@ -17,17 +17,38 @@
 
 namespace scp
 {
-ScAddrToValueUnorderedMap<std::function<SCPOperator*(ScMemoryContext &, ScAddr)>> ASCPEraseOperatorInterpreter::supportedOperators = {
-    {Keynodes::op_eraseEl, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseEl(ctx, addr); }},
-    {Keynodes::op_eraseElStr3, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseElStr3(ctx, addr); }},
-    {Keynodes::op_eraseElStr5, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseElStr5(ctx, addr); }},
-    {Keynodes::op_eraseSetStr3, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseSetStr3(ctx, addr); }},
-    {Keynodes::op_eraseSetStr5, [](ScMemoryContext& ctx, ScAddr addr) { return new SCPOperatorEraseSetStr5(ctx, addr); }},
+ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
+    ASCPEraseOperatorInterpreter::supportedOperators = {
+        {Keynodes::op_eraseEl,
+         [](ScMemoryContext & ctx, ScAddr addr)
+         {
+           return new SCPOperatorEraseEl(ctx, addr);
+         }},
+        {Keynodes::op_eraseElStr3,
+         [](ScMemoryContext & ctx, ScAddr addr)
+         {
+           return new SCPOperatorEraseElStr3(ctx, addr);
+         }},
+        {Keynodes::op_eraseElStr5,
+         [](ScMemoryContext & ctx, ScAddr addr)
+         {
+           return new SCPOperatorEraseElStr5(ctx, addr);
+         }},
+        {Keynodes::op_eraseSetStr3,
+         [](ScMemoryContext & ctx, ScAddr addr)
+         {
+           return new SCPOperatorEraseSetStr3(ctx, addr);
+         }},
+        {Keynodes::op_eraseSetStr5,
+         [](ScMemoryContext & ctx, ScAddr addr)
+         {
+           return new SCPOperatorEraseSetStr5(ctx, addr);
+         }},
 };
 
-ScResult
-ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
-                                        ScAction & action)
+ScResult ASCPEraseOperatorInterpreter::DoProgram(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+    ScAction & action)
 {
   if (!event.GetArc().IsValid())
     return action.FinishUnsuccessfully();
@@ -54,7 +75,8 @@ ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::
   {
     delete oper;
     return action.FinishUnsuccessfully();
-  } else
+  }
+  else
   {
     sc_result execute_result;
     execute_result = oper->Execute();
@@ -65,7 +87,7 @@ ASCPEraseOperatorInterpreter::DoProgram(ScEventAfterGenerateOutgoingArc<ScType::
 
 ScAddr ASCPEraseOperatorInterpreter::GetActionClass() const
 {
-//todo(codegen-removal): replace action with your action class
+  // todo(codegen-removal): replace action with your action class
   return ScKeynodes::action;
 }
 
@@ -85,4 +107,4 @@ bool ASCPEraseOperatorInterpreter::CheckInitiationCondition(
   return supportedOperators.count(type);
 }
 
-}
+}  // namespace scp

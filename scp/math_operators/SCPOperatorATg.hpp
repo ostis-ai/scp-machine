@@ -5,15 +5,16 @@
 #include <sc-memory/sc_agent.hpp>
 #include "scpKeynodes.hpp"
 #include "scpOperatorStr.hpp"
+
 namespace scp
 {
 
-class SCPOperatorATg: public SCPOperatorElStr2
+class SCPOperatorATg : public SCPOperatorElStr2
 {
 public:
-    SCPOperatorATg(ScMemoryContext &ctx, ScAddr addr);
-    std::string GetTypeName();
-    sc_result Parse();
-    sc_result Execute();
+  SCPOperatorATg(ScMemoryContext & ctx, ScAddr addr);
+  std::string GetTypeName();
+  sc_result Parse();
+  sc_result Execute();
 };
-}
+}  // namespace scp
