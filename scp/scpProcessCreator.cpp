@@ -12,22 +12,8 @@ namespace scp
 {
 ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScAction & action)
 {
-  if (!event.GetArc().IsValid())
-    return action.FinishUnsuccessfully();
-
-  ScAddr program, params;
-  ScIterator5Ptr iter_param = m_context.Iterator5(
-      action, ScType::EdgeAccessConstPosPerm, ScType::Node, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
-  if (iter_param->Next())
-    program = iter_param->Get(2);
-  else
-    return action.FinishUnsuccessfully();
-
-  iter_param = m_context.Iterator5(
-      action, ScType::EdgeAccessConstPosPerm, ScType::Node, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2);
-  if (iter_param->Next())
-    params = iter_param->Get(2);
-  else
+  auto const & [program, params] = action.GetArguments<2>();
+  if (!program.IsValid() || !params.IsValid())
     return action.FinishUnsuccessfully();
 
   ScTemplate program_templ;
@@ -57,8 +43,8 @@ ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScA
     ScAddr order;
     if (Utils::resolveOrderRoleRelation(m_context, iter_temp->Get(1), order))
     {
-      iter_param =
-          m_context.Iterator5(params, ScType::EdgeAccessConstPosPerm, ScType(0), ScType::EdgeAccessConstPosPerm, order);
+      auto const & iter_param = m_context.Iterator5(
+          params, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, order);
       if (!iter_param->Next())
       {
 #ifdef SCP_DEBUG

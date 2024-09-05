@@ -443,7 +443,7 @@ void logUnknownOperatorTypeError(ScMemoryContext & ctx, ScAddr & addr)
   cout << endl;
 }
 
-void logSCPError(ScMemoryContext & ctx, string text, ScAddr & addr)
+void logSCPError(ScMemoryContext & ctx, string text, ScAddr const & addr)
 {
   cout << "SCP Error: " << text << ": ";
   printSystemIdentifier(ctx, addr);

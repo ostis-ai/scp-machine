@@ -95,7 +95,7 @@ void logUnknownOperatorTypeError(ScMemoryContext & ctx, ScAddr & addr);
 
 /*! Logs error with text (text) and element addr (addr)
  */
-void logSCPError(ScMemoryContext & ctx, std::string text, ScAddr & addr);
+void logSCPError(ScMemoryContext & ctx, std::string text, ScAddr const & addr);
 #endif
 
 }  // namespace Utils
