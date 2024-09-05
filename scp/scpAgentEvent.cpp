@@ -14,6 +14,18 @@ namespace scp
 {
 void SCPAgentEvent::register_all_scp_agents(ScAgentContext & ctx)
 {
+  handle_all_scp_agents(ctx, register_scp_agent);
+}
+
+void SCPAgentEvent::unregister_all_scp_agents(ScAgentContext & ctx)
+{
+  handle_all_scp_agents(ctx, unregister_scp_agent);
+}
+
+void SCPAgentEvent::handle_all_scp_agents(
+    ScAgentContext & ctx,
+    std::function<void(ScAgentContext &, ScAddr const &)> const & handler)
+{
   auto const & activeAgentsIterator =
       ctx.Iterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   while (activeAgentsIterator->Next())
@@ -26,29 +38,8 @@ void SCPAgentEvent::register_all_scp_agents(ScAgentContext & ctx)
       if (agentImplementation == Keynodes::active_sc_agent)
         continue;
       if (ctx.HelperCheckEdge(
-              Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
-      {
-        SCP_LOG_DEBUG("found independent abstract sc agent for agent " << ctx.HelperGetSystemIdtf(agent));
-        register_scp_agent(ctx, agentImplementation);
-      }
-    }
-  }
-}
-
-void SCPAgentEvent::unregister_all_scp_agents(ScAgentContext & ctx)
-{
-  auto const & activeAgentsIterator =
-      ctx.Iterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-  while (activeAgentsIterator->Next())
-  {
-    ScAddr const & agent = activeAgentsIterator->Get(2);
-    auto const & agentImplementationsIterator = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
-    while (agentImplementationsIterator->Next())
-    {
-      ScAddr const & agentImplementation = agentImplementationsIterator->Get(0);
-      if (ctx.HelperCheckEdge(
-              Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
-        unregister_scp_agent(ctx, agentImplementation);
+          Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
+        handler(ctx, agentImplementation);
     }
   }
 }

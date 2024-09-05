@@ -16,6 +16,9 @@ class SCPAgentEvent
 public:
   void static register_all_scp_agents(ScAgentContext & ctx);
   void static unregister_all_scp_agents(ScAgentContext & ctx);
+  void static handle_all_scp_agents(
+      ScAgentContext & ctx,
+      std::function<void(ScAgentContext &, ScAddr const &)> const & handler);
   void static register_scp_agent(ScAgentContext & ctx, ScAddr const & agentNode);
   void static unregister_scp_agent(ScAgentContext & ctx, ScAddr const & agentNode);
 };

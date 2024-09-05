@@ -20,8 +20,6 @@
 #include "scpVarValueOperatorInterpreter.hpp"
 #include "scpWaitEvent.hpp"
 
-#include <sc-memory/sc_agent.hpp>
-
 #include <iostream>
 
 using namespace scp;
