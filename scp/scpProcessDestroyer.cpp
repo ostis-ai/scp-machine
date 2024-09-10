@@ -16,9 +16,6 @@ ScResult ASCPProcessDestroyer::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  if (!event.GetArc().IsValid())
-    return action.FinishUnsuccessfully();
-
   ScAddr process = event.GetOtherElement();
 
   ScAddr decomp_node;
@@ -95,7 +92,7 @@ ScResult ASCPProcessDestroyer::DoProgram(
 
 ScAddr ASCPProcessDestroyer::GetActionClass() const
 {
-  return Keynodes::scp_process;
+  return Keynodes::action_destroy_process;
 }
 
 ScAddr ASCPProcessDestroyer::GetEventSubscriptionElement() const
@@ -127,6 +124,19 @@ void ASCPProcessDestroyer::deleteSCPVarsSet(ScAddr & setAddr, ScAddr & processAd
   {
     m_context.EraseElement(elem);
   }
+}
+
+bool ASCPProcessDestroyer::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  return m_context
+      .Iterator5(
+          ScType::NodeConst,
+          ScType::EdgeDCommonConst,
+          event.GetOtherElement(),
+          ScType::EdgeAccessConstPosPerm,
+          Keynodes::nrel_decomposition_of_action)
+      ->Next();
 }
 
 }  // namespace scp

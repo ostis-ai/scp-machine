@@ -24,7 +24,23 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
   ScAddr const & authorArc = m_context.CreateEdge(ScType::EdgeDCommonConst, scpAction, Keynodes::abstract_scp_machine);
   m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, authorArc);
 
-  scpAction.Initiate();
+  scpAction.InitiateAndWait();
+  if (scpAction.IsFinishedSuccessfully())
+  {
+    ScAddr const & result = scpAction.GetResult();
+    if (!m_context.IsElement(result))
+    {
+      return action.FinishUnsuccessfully();
+    }
+    auto const & waiter =
+        m_context.GenerateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
+            result,
+            [](ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm> const & subscribedEvent)
+            {
+              return subscribedEvent.GetArcSourceElement() == Keynodes::action_finished;
+            });
+    waiter->Wait();
+  }
 
   return action.FinishSuccessfully();
 }

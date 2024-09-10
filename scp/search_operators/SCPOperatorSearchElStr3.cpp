@@ -9,6 +9,7 @@
 #include "SCPOperatorSearchElStr3.hpp"
 #include "sc-memory/sc_memory.hpp"
 #include <iostream>
+#include <bitset>
 
 namespace scp
 {
@@ -128,6 +129,7 @@ sc_result SCPOperatorSearchElStr3::Execute()
   {
     ScIterator3Ptr iter =
         m_memoryCtx.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
+
     if (iter->Next())
     {
       operands[1]->SetValue(iter->Get(1));

@@ -21,6 +21,8 @@ public:
 
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_string_interpreting"};
 
+  static void InitializeSupportedOperators();
+
 private:
   static ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>> supportedOperators;
 };

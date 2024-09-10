@@ -21,7 +21,6 @@ public:
 
   ScAddr GetEventSubscriptionElement() const override;
 
-public:
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_agents_activation"};
 };
 
@@ -35,7 +34,6 @@ public:
 
   ScAddr GetEventSubscriptionElement() const override;
 
-public:
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_agents_deactivation"};
 };
 

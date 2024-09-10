@@ -16,10 +16,26 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  if (!event.GetArc().IsValid())
-    return action.FinishUnsuccessfully();
-
-  ScAddr scp_action = event.GetOtherElement();
+  ScAction scp_action = m_context.ConvertToAction(event.GetOtherElement());
+  ScAddr const & scpActionParams = scp_action.GetArgument(2);
+  if (m_context.IsElement(scpActionParams))
+  {
+    auto const & scpParamConnectorIterator = m_context.Iterator5(
+        scpActionParams,
+        ScType::EdgeAccessConstPosPerm,
+        ScType::EdgeAccessConstPosPerm,
+        ScType::EdgeAccessConstPosPerm,
+        Keynodes::rrel_2);
+    if (scpParamConnectorIterator->Next())
+    {
+      ScAddr const & scpParamConnector = scpParamConnectorIterator->Get(2);
+      ScAddr connectorSource, connectorTarget;
+      m_context.GetEdgeInfo(scpParamConnector, connectorSource, connectorTarget);
+      if (connectorSource == Keynodes::action_initiated
+          && !m_context.HelperCheckEdge(Keynodes::action_finished, connectorTarget, ScType::EdgeAccessConstPosPerm))
+        m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, connectorTarget);
+    }
+  }
 
   ScAddr wait_operator;
 
@@ -68,12 +84,19 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
 
 ScAddr ASCPFinishedInterpretationActionProcessor::GetActionClass() const
 {
-  return Keynodes::action_scp_interpretation_request;
+  return Keynodes::action_interpret_finished_action;
 }
 
 ScAddr ASCPFinishedInterpretationActionProcessor::GetEventSubscriptionElement() const
 {
   return Keynodes::action_finished;
+}
+
+bool ASCPFinishedInterpretationActionProcessor::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  return m_context.HelperCheckEdge(
+      Keynodes::action_scp_interpretation_request, event.GetOtherElement(), ScType::EdgeAccessConstPosPerm);
 }
 
 }  // namespace scp

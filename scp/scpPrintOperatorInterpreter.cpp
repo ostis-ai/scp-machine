@@ -16,23 +16,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPPrintOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_printEl,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorPrintEl(ctx, addr);
-         }},
-        {Keynodes::op_print,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorPrint(ctx, addr, false);
-         }},
-        {Keynodes::op_printNl,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorPrint(ctx, addr, true);
-         }},
-};
+    ASCPPrintOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPPrintOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -75,8 +59,7 @@ ScResult ASCPPrintOperatorInterpreter::DoProgram(
 
 ScAddr ASCPPrintOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_print_operator;
 }
 
 ScAddr ASCPPrintOperatorInterpreter::GetEventSubscriptionElement() const
@@ -93,5 +76,26 @@ bool ASCPPrintOperatorInterpreter::CheckInitiationCondition(
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
   return supportedOperators.count(type);
+}
+
+void ASCPPrintOperatorInterpreter::InitializeSupportedOperators()
+{
+  supportedOperators = {
+      {Keynodes::op_printEl,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorPrintEl(ctx, addr);
+       }},
+      {Keynodes::op_print,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorPrint(ctx, addr, false);
+       }},
+      {Keynodes::op_printNl,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorPrint(ctx, addr, true);
+       }},
+  };
 }
 }  // namespace scp

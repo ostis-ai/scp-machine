@@ -14,15 +14,15 @@ namespace scp
 {
 void SCPAgentEvent::register_all_scp_agents(ScAgentContext & ctx)
 {
-  handle_all_scp_agents(ctx, register_scp_agent);
+  handle_all_active_agents(ctx, register_scp_agent);
 }
 
 void SCPAgentEvent::unregister_all_scp_agents(ScAgentContext & ctx)
 {
-  handle_all_scp_agents(ctx, unregister_scp_agent);
+  handle_all_active_agents(ctx, unregister_scp_agent);
 }
 
-void SCPAgentEvent::handle_all_scp_agents(
+void SCPAgentEvent::handle_all_active_agents(
     ScAgentContext & ctx,
     std::function<void(ScAgentContext &, ScAddr const &)> const & handler)
 {
@@ -31,16 +31,24 @@ void SCPAgentEvent::handle_all_scp_agents(
   while (activeAgentsIterator->Next())
   {
     ScAddr const & agent = activeAgentsIterator->Get(2);
-    auto const & agentImplementationsIterator = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
-    while (agentImplementationsIterator->Next())
-    {
-      ScAddr const & agentImplementation = agentImplementationsIterator->Get(0);
-      if (agentImplementation == Keynodes::active_sc_agent)
-        continue;
-      if (ctx.HelperCheckEdge(
-          Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
-        handler(ctx, agentImplementation);
-    }
+    handle_active_agent(ctx, handler, agent);
+  }
+}
+
+void SCPAgentEvent::handle_active_agent(
+    ScAgentContext & ctx,
+    std::function<void(ScAgentContext &, ScAddr const &)> const & handler,
+    ScAddr const & agent)
+{
+  auto const & agentImplementationsIterator = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
+  while (agentImplementationsIterator->Next())
+  {
+    ScAddr const & agentImplementation = agentImplementationsIterator->Get(0);
+    if (agentImplementation == Keynodes::active_sc_agent)
+      continue;
+    if (ctx.HelperCheckEdge(
+            Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
+      handler(ctx, agentImplementation);
   }
 }
 

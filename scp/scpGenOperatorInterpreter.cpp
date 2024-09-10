@@ -18,28 +18,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPGenOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_genEl,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorGenEl(ctx, addr);
-         }},
-        {Keynodes::op_genElStr3,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorGenElStr3(ctx, addr);
-         }},
-        {Keynodes::op_genElStr5,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorGenElStr5(ctx, addr);
-         }},
-        {Keynodes::op_sys_gen,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSysGen(ctx, addr);
-         }},
-};
+    ASCPGenOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPGenOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -55,9 +34,9 @@ ScResult ASCPGenOperatorInterpreter::DoProgram(
     return action.FinishUnsuccessfully();
 
   SCPOperator * oper = nullptr;
-
-  if (supportedOperators.count(type))
-    oper = supportedOperators.at(type)(m_context, scp_operator);
+  auto const & pair = supportedOperators.find(type);
+  if (pair != supportedOperators.cend())
+    oper = pair->second(m_context, scp_operator);
 
   if (oper == nullptr)
     return action.FinishUnsuccessfully();
@@ -82,8 +61,7 @@ ScResult ASCPGenOperatorInterpreter::DoProgram(
 
 ScAddr ASCPGenOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_gen_operator;
 }
 
 ScAddr ASCPGenOperatorInterpreter::GetEventSubscriptionElement() const
@@ -99,7 +77,34 @@ bool ASCPGenOperatorInterpreter::CheckInitiationCondition(
   ScAddr type;
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
-  return supportedOperators.count(type);
+  auto const & pair = supportedOperators.find(type);
+  return pair != supportedOperators.cend();
+}
+
+void ASCPGenOperatorInterpreter::InitializeSupportedOperators()
+{
+  supportedOperators = {
+      {Keynodes::op_genEl,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorGenEl(ctx, addr);
+       }},
+      {Keynodes::op_genElStr3,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorGenElStr3(ctx, addr);
+       }},
+      {Keynodes::op_genElStr5,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorGenElStr5(ctx, addr);
+       }},
+      {Keynodes::op_sys_gen,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSysGen(ctx, addr);
+       }},
+  };
 }
 
 }  // namespace scp

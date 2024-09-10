@@ -249,6 +249,40 @@ public:
   static inline ScKeynode const op_sys_wait{"sys_wait"};
 
   static inline ScKeynode const op_syncronize{"syncronize"};
+
+  static inline ScKeynode const action_activate_agent{"action_activate_agent", ScType::NodeConstClass};
+  static inline ScKeynode const action_deactivate_agent{"action_deactivate_agent", ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_erase_operator{
+      "action_interpret_erase_operator",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_finished_action{
+      "action_interpret_finished_action",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_gen_operator{"action_interpret_gen_operator", ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_if_operator{"action_interpret_if_operator", ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_math_operator{
+      "action_interpret_math_operator",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_print_operator{
+      "action_interpret_print_operator",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_process_control_operator{
+      "action_interpret_process_control_operator",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_create_process{"action_create_process", ScType::NodeConstClass};
+  static inline ScKeynode const action_destroy_process{"action_destroy_process", ScType::NodeConstClass};
+  static inline ScKeynode const action_synchronize_program_execution{
+      "action_synchronize_program_execution",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_search_operator{
+      "action_interpret_search_operator",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_string_operator{
+      "action_interpret_string_operator",
+      ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_var_value_operator{
+      "action_interpret_var_value_operator",
+      ScType::NodeConstClass};
 };
 
 }  // namespace scp

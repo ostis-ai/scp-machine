@@ -18,15 +18,14 @@ ScResult ASCPAgentActivator::DoProgram(
 {
   ScAddr agent = event.GetOtherElement();
 
-  SCPAgentEvent::register_scp_agent(m_context, agent);
+  SCPAgentEvent::handle_active_agent(m_context, SCPAgentEvent::register_scp_agent, agent);
 
   return action.FinishSuccessfully();
 }
 
 ScAddr ASCPAgentActivator::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_activate_agent;
 }
 
 ScAddr ASCPAgentActivator::GetEventSubscriptionElement() const
@@ -39,15 +38,15 @@ ScResult ASCPAgentDeactivator::DoProgram(
     ScAction & action)
 {
   ScAddr agent = event.GetOtherElement();
-  SCPAgentEvent::unregister_scp_agent(m_context, agent);
+
+  SCPAgentEvent::handle_active_agent(m_context, SCPAgentEvent::unregister_scp_agent, agent);
 
   return action.FinishSuccessfully();
 }
 
 ScAddr ASCPAgentDeactivator::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_deactivate_agent;
 }
 
 ScAddr ASCPAgentDeactivator::GetEventSubscriptionElement() const

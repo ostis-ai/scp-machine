@@ -26,88 +26,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPMathOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_contSin,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSIn(ctx, addr);
-         }},
-        {Keynodes::op_contCos,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorCos(ctx, addr);
-         }},
-        {Keynodes::op_contTg,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorTg(ctx, addr);
-         }},
-        {Keynodes::op_contASin,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorASin(ctx, addr);
-         }},
-        {Keynodes::op_contACos,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorACos(ctx, addr);
-         }},
-        {Keynodes::op_contATg,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorATg(ctx, addr);
-         }},
-        {Keynodes::op_contDivInt,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorDivInt(ctx, addr);
-         }},
-        {Keynodes::op_contDivRem,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorDivRem(ctx, addr);
-         }},
-        {Keynodes::op_ifEq,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorIfEq(ctx, addr);
-         }},
-        {Keynodes::op_contLn,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorContLn(ctx, addr);
-         }},
-        {Keynodes::op_ifGr,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorIfGr(ctx, addr);
-         }},
-        {Keynodes::op_contAdd,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorContAdd(ctx, addr);
-         }},
-        {Keynodes::op_contSub,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorContSub(ctx, addr);
-         }},
-        {Keynodes::op_contMult,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorContMult(ctx, addr);
-         }},
-        {Keynodes::op_contDiv,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorContDiv(ctx, addr);
-         }},
-        {Keynodes::op_contPow,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorContPow(ctx, addr);
-         }},
-};
+    ASCPMathOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPMathOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -151,8 +70,7 @@ ScResult ASCPMathOperatorInterpreter::DoProgram(
 
 ScAddr ASCPMathOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_math_operator;
 }
 
 ScAddr ASCPMathOperatorInterpreter::GetEventSubscriptionElement() const
@@ -169,6 +87,92 @@ bool ASCPMathOperatorInterpreter::CheckInitiationCondition(
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
   return supportedOperators.count(type);
+}
+
+void ASCPMathOperatorInterpreter::InitializeSupportedOperators()
+{
+  supportedOperators = {
+      {Keynodes::op_contSin,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSIn(ctx, addr);
+       }},
+      {Keynodes::op_contCos,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorCos(ctx, addr);
+       }},
+      {Keynodes::op_contTg,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorTg(ctx, addr);
+       }},
+      {Keynodes::op_contASin,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorASin(ctx, addr);
+       }},
+      {Keynodes::op_contACos,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorACos(ctx, addr);
+       }},
+      {Keynodes::op_contATg,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorATg(ctx, addr);
+       }},
+      {Keynodes::op_contDivInt,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorDivInt(ctx, addr);
+       }},
+      {Keynodes::op_contDivRem,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorDivRem(ctx, addr);
+       }},
+      {Keynodes::op_ifEq,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorIfEq(ctx, addr);
+       }},
+      {Keynodes::op_contLn,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorContLn(ctx, addr);
+       }},
+      {Keynodes::op_ifGr,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorIfGr(ctx, addr);
+       }},
+      {Keynodes::op_contAdd,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorContAdd(ctx, addr);
+       }},
+      {Keynodes::op_contSub,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorContSub(ctx, addr);
+       }},
+      {Keynodes::op_contMult,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorContMult(ctx, addr);
+       }},
+      {Keynodes::op_contDiv,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorContDiv(ctx, addr);
+       }},
+      {Keynodes::op_contPow,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorContPow(ctx, addr);
+       }},
+  };
 }
 
 }  // namespace scp

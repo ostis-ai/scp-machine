@@ -16,18 +16,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPVarValueOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_varAssign,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorVarAssign(ctx, addr);
-         }},
-        {Keynodes::op_varErase,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorVarErase(ctx, addr);
-         }},
-};
+    ASCPVarValueOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPVarValueOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -70,8 +59,7 @@ ScResult ASCPVarValueOperatorInterpreter::DoProgram(
 
 ScAddr ASCPVarValueOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_var_value_operator;
 }
 
 ScAddr ASCPVarValueOperatorInterpreter::GetEventSubscriptionElement() const
@@ -88,5 +76,21 @@ bool ASCPVarValueOperatorInterpreter::CheckInitiationCondition(
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
   return supportedOperators.count(type);
+}
+
+void ASCPVarValueOperatorInterpreter::InitializeSupportedOperators()
+{
+  supportedOperators = {
+      {Keynodes::op_varAssign,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorVarAssign(ctx, addr);
+       }},
+      {Keynodes::op_varErase,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorVarErase(ctx, addr);
+       }},
+  };
 }
 }  // namespace scp

@@ -10,7 +10,9 @@
 
 namespace scp
 {
-ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScAction & action)
+ScResult ASCPProcessCreator::DoProgram(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+    ScAction & action)
 {
   auto const & [program, params] = action.GetArguments<2>();
   if (!program.IsValid() || !params.IsValid())
@@ -21,27 +23,29 @@ ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScA
   ScTemplateParams gen_params;
 
   ScAddr process_node;
-  ScIterator5Ptr iter_temp = m_context.Iterator5(
+  auto const & programKeyElementIterator = m_context.Iterator5(
       program,
       ScType::EdgeAccessConstPosPerm,
       ScType::NodeVar,
       ScType::EdgeAccessConstPosPerm,
       Keynodes::rrel_key_sc_element);
-  if (iter_temp->IsValid() && iter_temp->Next())
-    process_node = iter_temp->Get(2);
+  if (programKeyElementIterator->IsValid() && programKeyElementIterator->Next())
+    process_node = programKeyElementIterator->Get(2);
   else
     return action.FinishUnsuccessfully();
 
-  iter_temp = m_context.Iterator5(
-      process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program);
-  if (!iter_temp->IsValid())
+  auto const & processParametersIterator = m_context.Iterator5(
+      process_node, ScType::EdgeAccessVarPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, program);
+  if (!processParametersIterator->IsValid())
+  {
     return action.FinishUnsuccessfully();
+  }
 
   //! TODO Make all sc-links constant to allow using constant sc-links within scp-program code
-  while (iter_temp->Next())
+  while (processParametersIterator->Next())
   {
     ScAddr order;
-    if (Utils::resolveOrderRoleRelation(m_context, iter_temp->Get(1), order))
+    if (Utils::resolveOrderRoleRelation(m_context, processParametersIterator->Get(1), order))
     {
       auto const & iter_param = m_context.Iterator5(
           params, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, order);
@@ -52,7 +56,7 @@ ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScA
 #endif
         continue;
       }
-      gen_params.Add(iter_temp->Get(2), iter_param->Get(2));
+      gen_params.Add(processParametersIterator->Get(2), iter_param->Get(2));
     }
   }
 
@@ -60,24 +64,23 @@ ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScA
   m_context.HelperGenTemplate(program_templ, result, gen_params);
 
   ScAddr const_process_node = result[process_node];
-  iter_temp = m_context.Iterator5(
+  auto const & generatedProcessDecompositionIterator = m_context.Iterator5(
       ScType::NodeConst,
       ScType::EdgeDCommonConst,
       const_process_node,
       ScType::EdgeAccessConstPosPerm,
       Keynodes::nrel_decomposition_of_action);
-  if (iter_temp->Next())
+  if (generatedProcessDecompositionIterator->Next())
   {
     ScIterator5Ptr oper_iter = m_context.Iterator5(
-        iter_temp->Get(0),
+        generatedProcessDecompositionIterator->Get(0),
         ScType::EdgeAccessConstPosPerm,
         ScType::NodeConst,
         ScType::EdgeAccessConstPosPerm,
         Keynodes::rrel_1);
     if (oper_iter->Next())
     {
-      ScAddr arc = m_context.CreateEdge(ScType::EdgeDCommonConst, action, const_process_node);
-      m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_result, arc);
+      action.SetResult(const_process_node);
       m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, oper_iter->Get(2));
     }
     else
@@ -99,8 +102,19 @@ ScResult ASCPProcessCreator::DoProgram(ScActionInitiatedEvent const & event, ScA
   return action.FinishSuccessfully();
 }
 
+ScAddr ASCPProcessCreator::GetEventSubscriptionElement() const noexcept(false)
+{
+  return Keynodes::action_initiated;
+}
+
 ScAddr ASCPProcessCreator::GetActionClass() const
 {
-  return Keynodes::action_scp_interpretation_request;
+  return Keynodes::action_create_process;
+}
+
+bool ASCPProcessCreator::CheckInitiationCondition(ScActionInitiatedEvent const & event)
+{
+  return m_context.HelperCheckEdge(
+      Keynodes::action_scp_interpretation_request, event.GetOtherElement(), ScType::EdgeAccessConstPosPerm);
 }
 }  // namespace scp

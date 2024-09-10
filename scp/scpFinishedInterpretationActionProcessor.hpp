@@ -22,7 +22,8 @@ public:
 
   ScAddr GetEventSubscriptionElement() const override;
 
-public:
+  bool CheckInitiationCondition(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event) override;
+
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_finished_scp_interpretation_action_processing"};
 };
 

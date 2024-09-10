@@ -45,5 +45,4 @@ public:
   static void FinishExecutionUnsuccessfully(ScMemoryContext & ctx, ScAddr oper_addr);
   static void FinishExecutionWithError(ScMemoryContext & ctx, ScAddr oper_addr);
 };
-
 }  // namespace scp

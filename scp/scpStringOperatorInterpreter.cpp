@@ -27,68 +27,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPStringOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_stringSplit,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringSplit(ctx, addr);
-         }},
-        {Keynodes::op_stringSlice,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringSlice(ctx, addr);
-         }},
-        {Keynodes::op_stringReplace,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringReplace(ctx, addr);
-         }},
-        {Keynodes::op_contStringConcat,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorContStringConcat(ctx, addr);
-         }},
-        {Keynodes::op_stringIfEq,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringIfEq(ctx, addr);
-         }},
-        {Keynodes::op_stringIfGr,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringIfGr(ctx, addr);
-         }},
-        {Keynodes::op_stringLen,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringLen(ctx, addr);
-         }},
-        {Keynodes::op_stringSub,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringSub(ctx, addr);
-         }},
-        {Keynodes::op_stringStartsWith,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringStartsWith(ctx, addr);
-         }},
-        {Keynodes::op_stringEndsWith,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringEndsWith(ctx, addr);
-         }},
-        {Keynodes::op_stringToUpperCase,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringToUpperCase(ctx, addr);
-         }},
-        {Keynodes::op_stringToLowerCase,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorStringToLowerCase(ctx, addr);
-         }},
-};
+    ASCPStringOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPStringOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -132,8 +71,7 @@ ScResult ASCPStringOperatorInterpreter::DoProgram(
 
 ScAddr ASCPStringOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_string_operator;
 }
 
 ScAddr ASCPStringOperatorInterpreter::GetEventSubscriptionElement() const
@@ -150,6 +88,72 @@ bool ASCPStringOperatorInterpreter::CheckInitiationCondition(
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
   return supportedOperators.count(type);
+}
+
+void ASCPStringOperatorInterpreter::InitializeSupportedOperators()
+{
+  supportedOperators = {
+      {Keynodes::op_stringSplit,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringSplit(ctx, addr);
+       }},
+      {Keynodes::op_stringSlice,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringSlice(ctx, addr);
+       }},
+      {Keynodes::op_stringReplace,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringReplace(ctx, addr);
+       }},
+      {Keynodes::op_contStringConcat,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorContStringConcat(ctx, addr);
+       }},
+      {Keynodes::op_stringIfEq,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringIfEq(ctx, addr);
+       }},
+      {Keynodes::op_stringIfGr,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringIfGr(ctx, addr);
+       }},
+      {Keynodes::op_stringLen,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringLen(ctx, addr);
+       }},
+      {Keynodes::op_stringSub,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringSub(ctx, addr);
+       }},
+      {Keynodes::op_stringStartsWith,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringStartsWith(ctx, addr);
+       }},
+      {Keynodes::op_stringEndsWith,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringEndsWith(ctx, addr);
+       }},
+      {Keynodes::op_stringToUpperCase,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringToUpperCase(ctx, addr);
+       }},
+      {Keynodes::op_stringToLowerCase,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorStringToLowerCase(ctx, addr);
+       }},
+  };
 }
 
 }  // namespace scp

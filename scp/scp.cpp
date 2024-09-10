@@ -9,6 +9,7 @@
 #include "scpFinishedInterpretationActionProcessor.hpp"
 #include "scpGenOperatorInterpreter.hpp"
 #include "scpIfOperatorInterpreter.hpp"
+#include "scpInterpretationRequestInitiationAgent.hpp"
 #include "scpMathOperatorInterpreter.hpp"
 #include "scpPrintOperatorInterpreter.hpp"
 #include "scpProcessControlOperatorInterpreter.hpp"
@@ -25,6 +26,7 @@
 using namespace scp;
 
 SC_MODULE_REGISTER(scpModule)
+    ->Agent<SCPInterpretationRequestInitiationAgent>()
     ->Agent<ASCPProcessCreator>()
     ->Agent<ASCPProcessDestroyer>()
     ->Agent<ASCPGenOperatorInterpreter>()
@@ -46,6 +48,15 @@ ScMemoryContext scpModule::s_default_ctx;
 void scpModule::Initialize(ScMemoryContext * context)
 {
   ScModule::Initialize(context);
+  ASCPGenOperatorInterpreter::InitializeSupportedOperators();
+  ASCPEraseOperatorInterpreter::InitializeSupportedOperators();
+  ASCPSearchOperatorInterpreter::InitializeSupportedOperators();
+  ASCPIfOperatorInterpreter::InitializeSupportedOperators();
+  ASCPVarValueOperatorInterpreter::InitializeSupportedOperators();
+  ASCPPrintOperatorInterpreter::InitializeSupportedOperators();
+  ASCPProcessControlOperatorInterpreter::InitializeSupportedOperators();
+  ASCPMathOperatorInterpreter::InitializeSupportedOperators();
+  ASCPStringOperatorInterpreter::InitializeSupportedOperators();
   std::cout << "SCP START" << std::endl;
   ScAgentContext agentContext;
   SCPAgentEvent::register_all_scp_agents(agentContext);

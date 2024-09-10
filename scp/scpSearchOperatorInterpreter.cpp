@@ -19,33 +19,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPSearchOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_searchElStr3,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSearchElStr3(ctx, addr);
-         }},
-        {Keynodes::op_searchElStr5,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSearchElStr5(ctx, addr);
-         }},
-        {Keynodes::op_searchSetStr3,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSearchSetStr3(ctx, addr);
-         }},
-        {Keynodes::op_searchSetStr5,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSearchSetStr5(ctx, addr);
-         }},
-        {Keynodes::op_sys_search,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSysSearch(ctx, addr);
-         }},
-};
+    ASCPSearchOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPSearchOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -62,8 +36,9 @@ ScResult ASCPSearchOperatorInterpreter::DoProgram(
 
   SCPOperator * oper = nullptr;
 
-  if (supportedOperators.count(type))
-    oper = supportedOperators.at(type)(m_context, scp_operator);
+  auto const & pair = supportedOperators.find(type);
+  if (pair != supportedOperators.cend())
+    oper = pair->second(m_context, scp_operator);
 
   if (oper == nullptr)
     return action.FinishUnsuccessfully();
@@ -88,8 +63,7 @@ ScResult ASCPSearchOperatorInterpreter::DoProgram(
 
 ScAddr ASCPSearchOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_search_operator;
 }
 
 ScAddr ASCPSearchOperatorInterpreter::GetEventSubscriptionElement() const
@@ -105,7 +79,39 @@ bool ASCPSearchOperatorInterpreter::CheckInitiationCondition(
   ScAddr type;
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
-  return supportedOperators.count(type);
+  auto const & pair = supportedOperators.find(type);
+  return pair != supportedOperators.cend();
+}
+
+void ASCPSearchOperatorInterpreter::InitializeSupportedOperators()
+{
+  supportedOperators = {
+      {Keynodes::op_searchElStr3,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSearchElStr3(ctx, addr);
+       }},
+      {Keynodes::op_searchElStr5,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSearchElStr5(ctx, addr);
+       }},
+      {Keynodes::op_searchSetStr3,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSearchSetStr3(ctx, addr);
+       }},
+      {Keynodes::op_searchSetStr5,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSearchSetStr5(ctx, addr);
+       }},
+      {Keynodes::op_sys_search,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSysSearch(ctx, addr);
+       }},
+  };
 }
 
 }  // namespace scp

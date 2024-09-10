@@ -18,28 +18,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPProcessControlOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_return,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorReturn(ctx, addr);
-         }},
-        {Keynodes::op_sys_wait,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorSysWait(ctx, addr);
-         }},
-        {Keynodes::op_call,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorCall(ctx, addr);
-         }},
-        {Keynodes::op_waitReturn,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorWaitReturn(ctx, addr);
-         }},
-};
+    ASCPProcessControlOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPProcessControlOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -54,7 +33,7 @@ ScResult ASCPProcessControlOperatorInterpreter::DoProgram(
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return action.FinishUnsuccessfully();
 
-  SCPOperator * oper;
+  SCPOperator * oper = nullptr;
 
   if (supportedOperators.count(type))
     oper = supportedOperators.at(type)(m_context, scp_operator);
@@ -82,8 +61,7 @@ ScResult ASCPProcessControlOperatorInterpreter::DoProgram(
 
 ScAddr ASCPProcessControlOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_process_control_operator;
 }
 
 ScAddr ASCPProcessControlOperatorInterpreter::GetEventSubscriptionElement() const
@@ -100,6 +78,32 @@ bool ASCPProcessControlOperatorInterpreter::CheckInitiationCondition(
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
   return supportedOperators.count(type);
+}
+
+void ASCPProcessControlOperatorInterpreter::InitializeSupportedOperators()
+{
+  supportedOperators = {
+      {Keynodes::op_return,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorReturn(ctx, addr);
+       }},
+      {Keynodes::op_sys_wait,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorSysWait(ctx, addr);
+       }},
+      {Keynodes::op_call,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorCall(ctx, addr);
+       }},
+      {Keynodes::op_waitReturn,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorWaitReturn(ctx, addr);
+       }},
+  };
 }
 
 }  // namespace scp

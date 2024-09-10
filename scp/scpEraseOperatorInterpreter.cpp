@@ -18,33 +18,7 @@
 namespace scp
 {
 ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
-    ASCPEraseOperatorInterpreter::supportedOperators = {
-        {Keynodes::op_eraseEl,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorEraseEl(ctx, addr);
-         }},
-        {Keynodes::op_eraseElStr3,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorEraseElStr3(ctx, addr);
-         }},
-        {Keynodes::op_eraseElStr5,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorEraseElStr5(ctx, addr);
-         }},
-        {Keynodes::op_eraseSetStr3,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorEraseSetStr3(ctx, addr);
-         }},
-        {Keynodes::op_eraseSetStr5,
-         [](ScMemoryContext & ctx, ScAddr addr)
-         {
-           return new SCPOperatorEraseSetStr5(ctx, addr);
-         }},
-};
+    ASCPEraseOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPEraseOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
@@ -87,8 +61,7 @@ ScResult ASCPEraseOperatorInterpreter::DoProgram(
 
 ScAddr ASCPEraseOperatorInterpreter::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_interpret_erase_operator;
 }
 
 ScAddr ASCPEraseOperatorInterpreter::GetEventSubscriptionElement() const
@@ -105,6 +78,37 @@ bool ASCPEraseOperatorInterpreter::CheckInitiationCondition(
   if (!Utils::resolveOperatorType(m_context, scp_operator, type))
     return false;
   return supportedOperators.count(type);
+}
+
+void ASCPEraseOperatorInterpreter::InitializeSupportedOperators()
+{
+  ASCPEraseOperatorInterpreter::supportedOperators = {
+      {Keynodes::op_eraseEl,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorEraseEl(ctx, addr);
+       }},
+      {Keynodes::op_eraseElStr3,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorEraseElStr3(ctx, addr);
+       }},
+      {Keynodes::op_eraseElStr5,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorEraseElStr5(ctx, addr);
+       }},
+      {Keynodes::op_eraseSetStr3,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorEraseSetStr3(ctx, addr);
+       }},
+      {Keynodes::op_eraseSetStr5,
+       [](ScMemoryContext & ctx, ScAddr addr)
+       {
+         return new SCPOperatorEraseSetStr5(ctx, addr);
+       }},
+  };
 }
 
 }  // namespace scp

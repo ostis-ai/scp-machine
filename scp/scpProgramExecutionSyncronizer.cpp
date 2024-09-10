@@ -16,10 +16,7 @@ ScResult ASCPProgramExecutionSyncronizer::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  if (!event.GetArc().IsValid())
-    return action.FinishUnsuccessfully();
-
-  ScAddr scp_operator = m_context.GetEdgeTarget(event.GetArc());
+  ScAddr scp_operator = event.GetOtherElement();
 
   if (m_context.HelperCheckEdge(Keynodes::action_finished_with_error, scp_operator, ScType::EdgeAccessConstPosPerm))
   {
@@ -44,8 +41,7 @@ ScResult ASCPProgramExecutionSyncronizer::DoProgram(
 
 ScAddr ASCPProgramExecutionSyncronizer::GetActionClass() const
 {
-  // todo(codegen-removal): replace action with your action class
-  return ScKeynodes::action;
+  return Keynodes::action_synchronize_program_execution;
 }
 
 ScAddr ASCPProgramExecutionSyncronizer::GetEventSubscriptionElement() const
@@ -62,6 +58,15 @@ void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr & scp_opera
     ScAddr next_op = iter_error->Get(2);
     m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
   }
+}
+
+bool ASCPProgramExecutionSyncronizer::CheckInitiationCondition(
+    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+{
+  ScAddr scp_operator = event.GetOtherElement();
+
+  ScAddr type;
+  return Utils::resolveOperatorType(m_context, scp_operator, type);
 }
 
 }  // namespace scp
