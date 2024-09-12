@@ -35,7 +35,10 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
   if (actionExpectedExecutionTime == 0)
     scpAction.InitiateAndWait();
   else
-    scpAction.InitiateAndWait(actionExpectedExecutionTime - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count());
+    scpAction.InitiateAndWait(
+        actionExpectedExecutionTime
+        - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime)
+              .count());
   if (scpAction.IsFinishedSuccessfully())
   {
     ScAddr const & result = scpAction.GetResult();
@@ -53,7 +56,10 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
     if (actionExpectedExecutionTime == 0)
       waiter->Wait();
     else
-      waiter->Wait(actionExpectedExecutionTime - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count());
+      waiter->Wait(
+          actionExpectedExecutionTime
+          - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime)
+                .count());
   }
 
   return action.FinishSuccessfully();
