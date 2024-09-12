@@ -1,6 +1,7 @@
 #include <tests/sc-memory/_test/sc_test.hpp>
 #include <scs_loader.hpp>
 
+#include "scpAgentEvent.hpp"
 #include "scpAgentProcessor.hpp"
 #include "scpGenOperatorInterpreter.hpp"
 #include "scpProcessCreator.hpp"
@@ -87,12 +88,14 @@ TEST_F(scpGenOperatorsTest, testGenEl)
   shutdown(context);
 }
 
-TEST_F(scpGenOperatorsTest, RuleIsImplication)
+TEST_F(scpGenOperatorsTest, ComplexAgentsChain)
 {
   ScAgentContext & context = * m_ctx;
   initialize(context);
+  context.BeingEventsBlocking();
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "agent_gen_el.scs");
-  Wait(context, WAIT_TIME);
+  context.EndEventsBlocking();
+  SCPAgentEvent::handle_active_agent(context, SCPAgentEvent::register_scp_agent, context.HelperFindBySystemIdtf("agent_gen_el_active"));
   ScAction action = context.GenerateAction(action_gen_el);
   ScAddr const & setAddr = context.CreateNode(ScType::NodeConst);
   action.SetArguments(setAddr);

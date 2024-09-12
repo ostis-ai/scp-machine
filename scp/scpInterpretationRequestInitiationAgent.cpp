@@ -2,10 +2,18 @@
 
 #include "scpKeynodes.hpp"
 
+#include <chrono>
+
 namespace scp
 {
 ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
+  auto const & startTime = std::chrono::high_resolution_clock::now();
+  ScAddr const & actionExpectedExecutionTimeLink = action.GetExpectedExecutionTimeInMilliseconds();
+  sc_uint32 actionExpectedExecutionTime = 0;
+  if (m_context.IsElement(actionExpectedExecutionTimeLink))
+    m_context.GetLinkContent(actionExpectedExecutionTimeLink, actionExpectedExecutionTime);
+
   ScAddr const & agentProgram = GetScAgentProgram();
   if (!m_context.IsElement(agentProgram))
     action.FinishUnsuccessfully();
@@ -24,7 +32,10 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
   ScAddr const & authorArc = m_context.CreateEdge(ScType::EdgeDCommonConst, scpAction, Keynodes::abstract_scp_machine);
   m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, authorArc);
 
-  scpAction.InitiateAndWait();
+  if (actionExpectedExecutionTime == 0)
+    scpAction.InitiateAndWait();
+  else
+    scpAction.InitiateAndWait(actionExpectedExecutionTime - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count());
   if (scpAction.IsFinishedSuccessfully())
   {
     ScAddr const & result = scpAction.GetResult();
@@ -39,7 +50,10 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
             {
               return subscribedEvent.GetArcSourceElement() == Keynodes::action_finished;
             });
-    waiter->Wait();
+    if (actionExpectedExecutionTime == 0)
+      waiter->Wait();
+    else
+      waiter->Wait(actionExpectedExecutionTime - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count());
   }
 
   return action.FinishSuccessfully();
