@@ -5,7 +5,6 @@ agent1_proc
 <- agent_scp_program;
 <- scp_program;
 -> rrel_key_sc_element: _process1;;
-
 agent1_proc = [*
 _process1 
 _<- scp_process;
@@ -55,7 +54,7 @@ _<= nrel_decomposition_of_action:: _... (*
 			(*
 			_<- genElStr3;;
 
-			_-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_node:: rrel_const:: _result;;
+			_-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_node:: rrel_const:: rrel_struct:: _result;;
 			_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_pos_const_perm:: _arc1;;
 			_-> rrel_3:: rrel_fixed:: rrel_scp_var:: _param;;
 

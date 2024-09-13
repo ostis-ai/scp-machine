@@ -47,11 +47,10 @@ sc_agent1
 	.._action _-> .._parameter;;
 *];;
 
+.._variable_role_relation
+    <- sc_node_role_relation;;
+
 ..sc_agent1_result
 = [*
-	test_action1 _-> .._action;;
-	action_finished _-> .._action;;
-	action _-> .._action;;
-	.._action _=> nrel_result: .._result;;
-	.._action _-> .._parameter;;
+    .._var1 _-> .._variable_role_relation:: .._var2;;
 *];;
