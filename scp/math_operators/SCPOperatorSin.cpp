@@ -19,7 +19,7 @@
 namespace scp
 {
 
-SCPOperatorSIn::SCPOperatorSIn(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorSIn::SCPOperatorSIn(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr2(ctx, addr)
 {
 }

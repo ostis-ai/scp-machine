@@ -26,7 +26,7 @@ public:
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_execution_syncronization"};
 
 private:
-  void InitOperatorsByRelation(ScAddr & scp_operator, ScAddr const & relation);
+  void InitOperatorsByRelation(ScAddr const & scpOperatorAddr, ScAddr const & relation);
 };
 
 }  // namespace scp

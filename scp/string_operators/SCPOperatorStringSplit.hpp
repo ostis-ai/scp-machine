@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringSplit : public SCPOperatorElStr3
 {
 public:
-  SCPOperatorStringSplit(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringSplit(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

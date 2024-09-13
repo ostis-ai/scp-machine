@@ -11,7 +11,7 @@ namespace scp
 {
 using namespace utils;
 
-SCPOperatorSysGen::SCPOperatorSysGen(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorSysGen::SCPOperatorSysGen(ScAgentContext & ctx, ScAddr addr)
   : SCPOperator(ctx, addr)
 {
   operands = std::vector<SCPOperand *>(4);

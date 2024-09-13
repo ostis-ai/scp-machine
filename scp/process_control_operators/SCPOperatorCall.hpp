@@ -31,7 +31,7 @@ private:
   std::vector<SCPParameter *> expected_params;
 
 public:
-  SCPOperatorCall(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorCall(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

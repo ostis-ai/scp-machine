@@ -12,7 +12,7 @@ namespace scp
 class SCPOperatorCos : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorCos(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorCos(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

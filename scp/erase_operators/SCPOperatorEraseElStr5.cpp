@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorEraseElStr5::SCPOperatorEraseElStr5(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorEraseElStr5::SCPOperatorEraseElStr5(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr5(ctx, addr)
 {
 }

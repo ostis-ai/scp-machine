@@ -35,7 +35,7 @@ ScAddr SCPOperatorSysWait::resolve_event_type(ScAddr const & event_type_node)
   return Keynodes::sc_event_add_output_arc;
 }
 
-SCPOperatorSysWait::SCPOperatorSysWait(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorSysWait::SCPOperatorSysWait(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr2(ctx, addr)
 {
 }

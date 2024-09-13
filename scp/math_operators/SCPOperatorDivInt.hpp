@@ -12,7 +12,7 @@ namespace scp
 class SCPOperatorDivInt : public SCPOperatorElStr3
 {
 public:
-  SCPOperatorDivInt(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorDivInt(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

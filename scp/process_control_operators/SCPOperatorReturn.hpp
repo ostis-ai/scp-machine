@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorReturn : public SCPOperator
 {
 public:
-  SCPOperatorReturn(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorReturn(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

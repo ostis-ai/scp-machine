@@ -13,7 +13,7 @@ namespace scp
 {
 
 // return
-SCPOperatorReturn::SCPOperatorReturn(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorReturn::SCPOperatorReturn(ScAgentContext & ctx, ScAddr addr)
   : SCPOperator(ctx, addr)
 {
 }

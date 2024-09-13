@@ -12,17 +12,17 @@
 
 namespace scp
 {
-void SCPAgentEvent::register_all_scp_agents(ScAgentContext & ctx)
+void SCPAgentEvent::SubscribeAllScpAgents(ScAgentContext & ctx)
 {
-  handle_all_active_agents(ctx, register_scp_agent);
+  HandleAllActiveAgents(ctx, RegisterScpAgent);
 }
 
-void SCPAgentEvent::unregister_all_scp_agents(ScAgentContext & ctx)
+void SCPAgentEvent::UnsubscribeAllScpAgents(ScAgentContext & ctx)
 {
-  handle_all_active_agents(ctx, unregister_scp_agent);
+  HandleAllActiveAgents(ctx, UnregisterScpAgent);
 }
 
-void SCPAgentEvent::handle_all_active_agents(
+void SCPAgentEvent::HandleAllActiveAgents(
     ScAgentContext & ctx,
     std::function<void(ScAgentContext &, ScAddr const &)> const & handler)
 {
@@ -31,11 +31,11 @@ void SCPAgentEvent::handle_all_active_agents(
   while (activeAgentsIterator->Next())
   {
     ScAddr const & agent = activeAgentsIterator->Get(2);
-    handle_active_agent(ctx, handler, agent);
+    HandleActiveAgent(ctx, handler, agent);
   }
 }
 
-void SCPAgentEvent::handle_active_agent(
+void SCPAgentEvent::HandleActiveAgent(
     ScAgentContext & ctx,
     std::function<void(ScAgentContext &, ScAddr const &)> const & handler,
     ScAddr const & agent)
@@ -52,11 +52,12 @@ void SCPAgentEvent::handle_active_agent(
   }
 }
 
-void SCPAgentEvent::register_scp_agent(ScAgentContext & ctx, ScAddr const & agentNode)
+void SCPAgentEvent::RegisterScpAgent(ScAgentContext & ctx, ScAddr const & agentNode)
 {
   try
   {
     ctx.SubscribeSpecifiedAgent<SCPInterpretationRequestInitiationAgent>(agentNode);
+    SC_LOG_INFO("Registered " << agentNode.Hash() << ", " << ctx.HelperGetSystemIdtf(agentNode));
   }
   catch (utils::ScException const & exception)
   {
@@ -64,7 +65,7 @@ void SCPAgentEvent::register_scp_agent(ScAgentContext & ctx, ScAddr const & agen
   }
 }
 
-void SCPAgentEvent::unregister_scp_agent(ScAgentContext & ctx, ScAddr const & agentNode)
+void SCPAgentEvent::UnregisterScpAgent(ScAgentContext & ctx, ScAddr const & agentNode)
 {
   try
   {

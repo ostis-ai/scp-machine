@@ -14,7 +14,7 @@
 namespace scp
 {
 
-SCPOperatorPrint::SCPOperatorPrint(ScMemoryContext & ctx, ScAddr addr, sc_bool newline_)
+SCPOperatorPrint::SCPOperatorPrint(ScAgentContext & ctx, ScAddr addr, sc_bool newline_)
   : SCPOperatorElStr1(ctx, addr)
 {
   newline = newline_;

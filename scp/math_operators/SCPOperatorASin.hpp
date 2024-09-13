@@ -12,7 +12,7 @@ namespace scp
 class SCPOperatorASin : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorASin(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorASin(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

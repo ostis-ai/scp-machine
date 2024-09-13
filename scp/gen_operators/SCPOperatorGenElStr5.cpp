@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorGenElStr5::SCPOperatorGenElStr5(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorGenElStr5::SCPOperatorGenElStr5(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr5(ctx, addr)
 {
 }

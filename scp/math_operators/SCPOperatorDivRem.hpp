@@ -12,7 +12,7 @@ namespace scp
 class SCPOperatorDivRem : public SCPOperatorElStr3
 {
 public:
-  SCPOperatorDivRem(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorDivRem(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

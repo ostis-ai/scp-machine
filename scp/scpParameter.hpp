@@ -20,13 +20,13 @@ private:
   bool isIn = false;
   bool isOut = false;
   uint8_t order = 0;
-  ScMemoryContext & m_memoryCtx;
+  ScAgentContext & m_memoryCtx;
 
   void resolveModifiers();
   void resolveOrder(ScAddr modifier);
 
 public:
-  SCPParameter(ScMemoryContext & ctx_, ScAddr addr_);
+  SCPParameter(ScAgentContext & ctx_, ScAddr addr_);
   ScAddr GetAddr();
   uint8_t GetOrder();
   bool IsIn();

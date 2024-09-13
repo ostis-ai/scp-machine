@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringLen : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorStringLen(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringLen(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

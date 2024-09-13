@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorIfCoin : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorIfCoin(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorIfCoin(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

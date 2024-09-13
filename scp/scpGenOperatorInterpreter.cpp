@@ -17,45 +17,49 @@
 
 namespace scp
 {
-ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
+ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScAgentContext &, ScAddr)>>
     ASCPGenOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPGenOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  if (!event.GetArc().IsValid())
-    return action.FinishUnsuccessfully();
-
-  ScAddr scp_operator = event.GetOtherElement();
+  ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
   ScAddr type;
-  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+  if (!Utils::resolveOperatorType(m_context, scpOperatorAddr, type))
+  {
+    SC_AGENT_LOG_ERROR("Cannot resolve operator type for " << scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
+  }
 
-  SCPOperator * oper = nullptr;
+  SCPOperator * scpOperator = nullptr;
   auto const & pair = supportedOperators.find(type);
   if (pair != supportedOperators.cend())
-    oper = pair->second(m_context, scp_operator);
+    scpOperator = pair->second(m_context, scpOperatorAddr);
 
-  if (oper == nullptr)
+  if (scpOperator == nullptr)
+  {
+    SC_AGENT_LOG_ERROR("Cannot create operator from " << scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
+  }
 
 #ifdef SCP_DEBUG
-  std::cout << oper->GetTypeName() << std::endl;
+  std::cout << scpOperator->GetTypeName() << std::endl;
 #endif
-  sc_result parse_result = oper->Parse();
-  if (parse_result != SC_RESULT_OK)
+  sc_result parseResult = scpOperator->Parse();
+  if (parseResult != SC_RESULT_OK)
   {
-    delete oper;
+    SC_AGENT_LOG_ERROR("Cannot parse operator " << scpOperatorAddr.Hash());
+    delete scpOperator;
     return action.FinishUnsuccessfully();
   }
   else
   {
-    sc_result execute_result;
-    execute_result = oper->Execute();
-    delete oper;
-    return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+    sc_result executeResult;
+    executeResult = scpOperator->Execute();
+    delete scpOperator;
+    return (executeResult == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
   }
 }
 
@@ -72,10 +76,10 @@ ScAddr ASCPGenOperatorInterpreter::GetEventSubscriptionElement() const
 bool ASCPGenOperatorInterpreter::CheckInitiationCondition(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
 {
-  ScAddr scp_operator = event.GetOtherElement();
+  ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
   ScAddr type;
-  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+  if (!Utils::resolveOperatorType(m_context, scpOperatorAddr, type))
     return false;
   auto const & pair = supportedOperators.find(type);
   return pair != supportedOperators.cend();
@@ -85,22 +89,22 @@ void ASCPGenOperatorInterpreter::InitializeSupportedOperators()
 {
   supportedOperators = {
       {Keynodes::op_genEl,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorGenEl(ctx, addr);
        }},
       {Keynodes::op_genElStr3,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorGenElStr3(ctx, addr);
        }},
       {Keynodes::op_genElStr5,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorGenElStr5(ctx, addr);
        }},
       {Keynodes::op_sys_gen,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorSysGen(ctx, addr);
        }},

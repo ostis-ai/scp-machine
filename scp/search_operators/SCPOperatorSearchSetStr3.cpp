@@ -13,7 +13,7 @@
 namespace scp
 {
 
-SCPOperatorSearchSetStr3::SCPOperatorSearchSetStr3(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorSearchSetStr3::SCPOperatorSearchSetStr3(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorSetStr3(ctx, addr)
 {
 }

@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringSlice : public SCPOperatorElStr5
 {
 public:
-  SCPOperatorStringSlice(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringSlice(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

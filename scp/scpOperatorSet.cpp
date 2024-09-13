@@ -15,7 +15,7 @@
 namespace scp
 {
 
-SCPOperatorSetStr3::SCPOperatorSetStr3(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperatorSetStr3::SCPOperatorSetStr3(ScAgentContext & ctx_, ScAddr addr_)
   : SCPOperator(ctx_, addr_)
 {
   operands = std::vector<SCPOperand *>(3);
@@ -110,7 +110,7 @@ SCPOperatorSetStr3::~SCPOperatorSetStr3()
   }
 }
 
-SCPOperatorSetStr5::SCPOperatorSetStr5(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperatorSetStr5::SCPOperatorSetStr5(ScAgentContext & ctx_, ScAddr addr_)
   : SCPOperator(ctx_, addr_)
 {
   operands = std::vector<SCPOperand *>(5);

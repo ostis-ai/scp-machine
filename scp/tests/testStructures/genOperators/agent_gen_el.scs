@@ -46,7 +46,7 @@ agent_gen_el_program
 -> rrel_key_sc_element: _process1;;
 
 agent_gen_el_program = [*
-@input_arc = (..._ _-> ..._);;
+@input_arc = (_temp _-> _quest);;
 _process1 
 _<- scp_process;
 //params

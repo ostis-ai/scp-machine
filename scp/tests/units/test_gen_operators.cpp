@@ -23,7 +23,7 @@ static ScKeynode action_gen_el("action_gen_el");
 
 using scpGenOperatorsTest = ScMemoryTest;
 
-void initialize(ScAgentContext & context)
+void SubscribeAgents(ScAgentContext & context)
 {
   ASCPGenOperatorInterpreter::InitializeSupportedOperators();
   ASCPProcessControlOperatorInterpreter::InitializeSupportedOperators();
@@ -38,7 +38,7 @@ void initialize(ScAgentContext & context)
   context.SubscribeAgent<ASCPSearchOperatorInterpreter>();
 }
 
-void shutdown(ScAgentContext & context)
+void UnsubscribeAgents(ScAgentContext & context)
 {
   context.UnsubscribeAgent<ASCPAgentActivator>();
   context.UnsubscribeAgent<ASCPGenOperatorInterpreter>();
@@ -47,16 +47,6 @@ void shutdown(ScAgentContext & context)
   context.UnsubscribeAgent<ASCPProcessDestroyer>();
   context.UnsubscribeAgent<ASCPProgramExecutionSyncronizer>();
   context.UnsubscribeAgent<ASCPSearchOperatorInterpreter>();
-
-}
-
-void Wait(ScAgentContext & context, size_t time)
-{
-  context.GenerateConditionWaiter<ScEventAfterGenerateConnector<ScType::EdgeAccessConstPosPerm>>(
-      action_gen_el,
-      [](){},
-      [](ScEventAfterGenerateConnector<ScType::EdgeAccessConstPosPerm> const & event){return false;}
-  )->Wait(time);
 }
 
 bool ApplyOperator(ScAgentContext & context, ScAddr const & operatorAddr, size_t waitTime)
@@ -72,11 +62,11 @@ bool ApplyOperator(ScAgentContext & context, ScAddr const & operatorAddr, size_t
   )->Wait(waitTime);
 }
 
-TEST_F(scpGenOperatorsTest, testGenEl)
+TEST_F(scpGenOperatorsTest, TestGenEl)
 {
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "gen_el_test.scs");
-  initialize(context);
+  SubscribeAgents(context);
   ScAddr const & testOperator = context.HelperFindBySystemIdtf(TEST_OPERATOR);
   EXPECT_TRUE(testOperator.IsValid());
   EXPECT_TRUE(ApplyOperator(context, testOperator, WAIT_TIME));
@@ -85,17 +75,18 @@ TEST_F(scpGenOperatorsTest, testGenEl)
   ScAddr const & operand = operandIterator->Get(2);
   auto const & operandValueIterator = context.Iterator3(operand, ScType::EdgeAccessConstPosTemp, ScType::NodeConst);
   EXPECT_TRUE(operandValueIterator->Next());
-  shutdown(context);
+  UnsubscribeAgents(context);
 }
 
 TEST_F(scpGenOperatorsTest, ComplexAgentsChain)
 {
   ScAgentContext & context = * m_ctx;
-  initialize(context);
+  SubscribeAgents(context);
   context.BeingEventsBlocking();
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "agent_gen_el.scs");
   context.EndEventsBlocking();
-  SCPAgentEvent::handle_active_agent(context, SCPAgentEvent::register_scp_agent, context.HelperFindBySystemIdtf("agent_gen_el_active"));
+  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterScpAgent,
+                                   context.HelperFindBySystemIdtf("agent_gen_el_active"));
   ScAction action = context.GenerateAction(action_gen_el);
   ScAddr const & setAddr = context.CreateNode(ScType::NodeConst);
   action.SetArguments(setAddr);
@@ -107,7 +98,7 @@ TEST_F(scpGenOperatorsTest, ComplexAgentsChain)
   EXPECT_TRUE(iteratorAfter->Next());
   EXPECT_FALSE(iteratorAfter->Next());
 
-  shutdown(context);
+  UnsubscribeAgents(context);
 }
 
 }  // namespace scpGenOperatorsTest

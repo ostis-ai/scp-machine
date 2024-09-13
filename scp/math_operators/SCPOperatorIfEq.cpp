@@ -14,7 +14,7 @@
 namespace scp
 {
 
-SCPOperatorIfEq::SCPOperatorIfEq(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorIfEq::SCPOperatorIfEq(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr2(ctx, addr)
 {
 }

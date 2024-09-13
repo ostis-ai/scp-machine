@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringIfGr : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorStringIfGr(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringIfGr(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

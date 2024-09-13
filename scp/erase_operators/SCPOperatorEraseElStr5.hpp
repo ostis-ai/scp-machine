@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorEraseElStr5 : public SCPOperatorElStr5
 {
 public:
-  SCPOperatorEraseElStr5(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorEraseElStr5(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

@@ -26,46 +26,51 @@
 
 namespace scp
 {
-ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
+ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScAgentContext &, ScAddr)>>
     ASCPStringOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPStringOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  if (!event.GetArc().IsValid())
-    return action.FinishUnsuccessfully();
-
-  ScAddr scp_operator = event.GetOtherElement();
+  ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
   ScAddr type;
-  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+  if (!Utils::resolveOperatorType(m_context, scpOperatorAddr, type))
+  {
+    SC_AGENT_LOG_ERROR("Cannot resolve operator type for " << scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
+  }
 
-  SCPOperator * oper = nullptr;
+  SCPOperator * scpOperator = nullptr;
 
-  if (supportedOperators.count(type))
-    oper = supportedOperators.at(type)(m_context, scp_operator);
+  auto const & pair = supportedOperators.find(type);
+  if (pair != supportedOperators.cend())
+    scpOperator = pair->second(m_context, scpOperatorAddr);
 
-  if (oper == nullptr)
+  if (scpOperator == nullptr)
+  {
+    SC_AGENT_LOG_ERROR("Cannot create operator from " << scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
+  }
 
 #ifdef SCP_DEBUG
-  std::cout << oper->GetTypeName() << std::endl;
+  std::cout << scpOperator->GetTypeName() << std::endl;
 #endif
 
-  sc_result parse_result = oper->Parse();
-  if (parse_result != SC_RESULT_OK)
+  sc_result parseResult = scpOperator->Parse();
+  if (parseResult != SC_RESULT_OK)
   {
-    delete oper;
+    SC_AGENT_LOG_ERROR("Cannot parse operator " << scpOperatorAddr.Hash());
+    delete scpOperator;
     return action.FinishUnsuccessfully();
   }
   else
   {
-    sc_result execute_result;
-    execute_result = oper->Execute();
-    delete oper;
-    return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+    sc_result executeResult;
+    executeResult = scpOperator->Execute();
+    delete scpOperator;
+    return (executeResult == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
   }
 }
 
@@ -82,10 +87,10 @@ ScAddr ASCPStringOperatorInterpreter::GetEventSubscriptionElement() const
 bool ASCPStringOperatorInterpreter::CheckInitiationCondition(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
 {
-  ScAddr scp_operator = event.GetOtherElement();
+  ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
   ScAddr type;
-  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+  if (!Utils::resolveOperatorType(m_context, scpOperatorAddr, type))
     return false;
   return supportedOperators.count(type);
 }
@@ -94,62 +99,62 @@ void ASCPStringOperatorInterpreter::InitializeSupportedOperators()
 {
   supportedOperators = {
       {Keynodes::op_stringSplit,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringSplit(ctx, addr);
        }},
       {Keynodes::op_stringSlice,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringSlice(ctx, addr);
        }},
       {Keynodes::op_stringReplace,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringReplace(ctx, addr);
        }},
       {Keynodes::op_contStringConcat,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorContStringConcat(ctx, addr);
        }},
       {Keynodes::op_stringIfEq,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringIfEq(ctx, addr);
        }},
       {Keynodes::op_stringIfGr,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringIfGr(ctx, addr);
        }},
       {Keynodes::op_stringLen,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringLen(ctx, addr);
        }},
       {Keynodes::op_stringSub,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringSub(ctx, addr);
        }},
       {Keynodes::op_stringStartsWith,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringStartsWith(ctx, addr);
        }},
       {Keynodes::op_stringEndsWith,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringEndsWith(ctx, addr);
        }},
       {Keynodes::op_stringToUpperCase,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringToUpperCase(ctx, addr);
        }},
       {Keynodes::op_stringToLowerCase,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorStringToLowerCase(ctx, addr);
        }},

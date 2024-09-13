@@ -40,10 +40,10 @@ private:
   void resolveSetOrder(ScAddr modifier);
   uint8_t order = 0;
   uint8_t set_order = 0;
-  ScMemoryContext & m_memoryCtx;
+  ScAgentContext & m_memoryCtx;
 
 public:
-  SCPOperand(ScMemoryContext & ctx_, ScAddr addr_);
+  SCPOperand(ScAgentContext & ctx_, ScAddr addr_);
   ScAddr GetAddr();
   ScAddr GetValue();
   ScType GetType();

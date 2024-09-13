@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorSIn : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorSIn(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorSIn(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

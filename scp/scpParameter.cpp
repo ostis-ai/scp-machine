@@ -15,7 +15,7 @@
 namespace scp
 {
 
-SCPParameter::SCPParameter(ScMemoryContext & ctx_, ScAddr addr_)
+SCPParameter::SCPParameter(ScAgentContext & ctx_, ScAddr addr_)
   : arc_addr(addr_)
   , m_memoryCtx(ctx_)
 {

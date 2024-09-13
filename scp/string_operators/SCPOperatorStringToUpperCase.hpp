@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringToUpperCase : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorStringToUpperCase(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringToUpperCase(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

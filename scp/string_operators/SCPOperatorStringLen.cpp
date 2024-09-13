@@ -18,7 +18,7 @@ using namespace std;
 namespace scp
 {
 
-SCPOperatorStringLen::SCPOperatorStringLen(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorStringLen::SCPOperatorStringLen(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr2(ctx, addr)
 {
 }

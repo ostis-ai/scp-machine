@@ -16,8 +16,8 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  ScAction scp_action = m_context.ConvertToAction(event.GetOtherElement());
-  ScAddr const & scpActionParams = scp_action.GetArgument(2);
+  ScAction const & scpAction = m_context.ConvertToAction(event.GetOtherElement());
+  ScAddr const & scpActionParams = scpAction.GetArgument(2);
   if (m_context.IsElement(scpActionParams))
   {
     auto const & scpParamConnectorIterator = m_context.Iterator5(
@@ -37,28 +37,28 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     }
   }
 
-  ScAddr wait_operator;
+  ScAddr waitOperatorAddr;
 
   // SCP_CONST case
   ScIterator5Ptr iter = m_context.Iterator5(
       ScType::NodeConst,
       ScType::EdgeAccessConstPosPerm,
-      scp_action,
+      scpAction,
       ScType::EdgeAccessConstPosPerm,
       Keynodes::rrel_scp_const);
   while (iter->Next())
   {
-    wait_operator = iter->Get(0);
-    if (!m_context.HelperCheckEdge(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm)
-        || !m_context.HelperCheckEdge(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
+    waitOperatorAddr = iter->Get(0);
+    if (!m_context.HelperCheckEdge(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
+        || !m_context.HelperCheckEdge(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
       continue;
 
-    SCPOperator::FinishExecutionSuccessfully(m_context, wait_operator);
+    SCPOperator::FinishExecutionSuccessfully(m_context, waitOperatorAddr);
     break;
   }
 
   // SCP_VAR case
-  ScIterator3Ptr iter3 = m_context.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosTemp, scp_action);
+  ScIterator3Ptr iter3 = m_context.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosTemp, scpAction);
   while (iter3->Next())
   {
     ScIterator5Ptr iter5 = m_context.Iterator5(
@@ -69,12 +69,12 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
         Keynodes::rrel_scp_var);
     while (iter5->Next())
     {
-      wait_operator = iter5->Get(0);
-      if (!m_context.HelperCheckEdge(Keynodes::op_waitReturn, wait_operator, ScType::EdgeAccessConstPosPerm)
-          || !m_context.HelperCheckEdge(Keynodes::active_action, wait_operator, ScType::EdgeAccessConstPosPerm))
+      waitOperatorAddr = iter5->Get(0);
+      if (!m_context.HelperCheckEdge(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
+          || !m_context.HelperCheckEdge(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
         continue;
 
-      SCPOperator::FinishExecutionSuccessfully(m_context, wait_operator);
+      SCPOperator::FinishExecutionSuccessfully(m_context, waitOperatorAddr);
       break;
     }
   }

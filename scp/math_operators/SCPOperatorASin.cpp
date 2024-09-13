@@ -16,7 +16,7 @@
 namespace scp
 {
 
-SCPOperatorASin::SCPOperatorASin(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorASin::SCPOperatorASin(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr2(ctx, addr)
 {
 }

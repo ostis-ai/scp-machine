@@ -14,7 +14,7 @@ namespace scp
 {
 
 // genEl
-SCPOperatorGenEl::SCPOperatorGenEl(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorGenEl::SCPOperatorGenEl(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr1(ctx, addr)
 {
 }

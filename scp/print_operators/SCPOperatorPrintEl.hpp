@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorPrintEl : public SCPOperatorElStr1
 {
 public:
-  SCPOperatorPrintEl(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorPrintEl(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

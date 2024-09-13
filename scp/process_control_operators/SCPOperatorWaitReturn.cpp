@@ -14,7 +14,7 @@ namespace scp
 {
 
 // waitReturn
-SCPOperatorWaitReturn::SCPOperatorWaitReturn(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorWaitReturn::SCPOperatorWaitReturn(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr1(ctx, addr)
 {
 }

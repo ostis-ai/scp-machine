@@ -24,7 +24,7 @@ public:
   static void InitializeSupportedOperators();
 
 private:
-  static ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>> supportedOperators;
+  static ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScAgentContext &, ScAddr)>> supportedOperators;
 };
 
 }  // namespace scp

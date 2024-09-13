@@ -19,7 +19,7 @@ using namespace std;
 namespace scp
 {
 
-SCPOperatorStringReplace::SCPOperatorStringReplace(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorStringReplace::SCPOperatorStringReplace(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr5(ctx, addr)
 {
 }

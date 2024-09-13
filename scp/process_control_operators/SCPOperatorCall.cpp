@@ -15,7 +15,7 @@
 namespace scp
 {
 
-SCPOperatorCall::SCPOperatorCall(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperatorCall::SCPOperatorCall(ScAgentContext & ctx_, ScAddr addr_)
   : SCPOperatorElStr3(ctx_, addr_)
 {
   //! TODO Change 10 to some correct value

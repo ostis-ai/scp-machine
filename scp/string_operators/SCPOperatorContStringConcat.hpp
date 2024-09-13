@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorContStringConcat : public SCPOperatorElStr3
 {
 public:
-  SCPOperatorContStringConcat(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorContStringConcat(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

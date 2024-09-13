@@ -25,46 +25,49 @@
 
 namespace scp
 {
-ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScMemoryContext &, ScAddr)>>
+ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScAgentContext &, ScAddr)>>
     ASCPMathOperatorInterpreter::supportedOperators = {};
 
 ScResult ASCPMathOperatorInterpreter::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  if (!event.GetArc().IsValid())
-    return action.FinishUnsuccessfully();
-
-  ScAddr scp_operator = event.GetOtherElement();
+  ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
   ScAddr type;
-  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
-    return action.FinishUnsuccessfully();
-
-  SCPOperator * oper = nullptr;
-
-  if (supportedOperators.count(type))
-    oper = supportedOperators.at(type)(m_context, scp_operator);
-
-  if (oper == nullptr)
+  if (!Utils::resolveOperatorType(m_context, scpOperatorAddr, type))
   {
+    SC_AGENT_LOG_ERROR("Cannot resolve operator type for " << scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
   }
 
-  std::cout << oper->GetTypeName() << std::endl;
+  SCPOperator * scpOperator = nullptr;
 
-  sc_result parse_result = oper->Parse();
-  if (parse_result != SC_RESULT_OK)
+  auto const & pair = supportedOperators.find(type);
+  if (pair != supportedOperators.cend())
+    scpOperator = pair->second(m_context, scpOperatorAddr);
+
+  if (scpOperator == nullptr)
   {
-    delete oper;
+    SC_AGENT_LOG_ERROR("Cannot create operator from " << scpOperatorAddr.Hash());
+    return action.FinishUnsuccessfully();
+  }
+
+  std::cout << scpOperator->GetTypeName() << std::endl;
+
+  sc_result parseResult = scpOperator->Parse();
+  if (parseResult != SC_RESULT_OK)
+  {
+    SC_AGENT_LOG_ERROR("Cannot parse operator " << scpOperatorAddr.Hash());
+    delete scpOperator;
     return action.FinishUnsuccessfully();
   }
   else
   {
-    sc_result execute_result;
-    execute_result = oper->Execute();
-    delete oper;
-    return (execute_result == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+    sc_result executeResult;
+    executeResult = scpOperator->Execute();
+    delete scpOperator;
+    return (executeResult == SC_RESULT_OK) ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
   }
 }
 
@@ -81,10 +84,10 @@ ScAddr ASCPMathOperatorInterpreter::GetEventSubscriptionElement() const
 bool ASCPMathOperatorInterpreter::CheckInitiationCondition(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
 {
-  ScAddr scp_operator = event.GetOtherElement();
+  ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
   ScAddr type;
-  if (!Utils::resolveOperatorType(m_context, scp_operator, type))
+  if (!Utils::resolveOperatorType(m_context, scpOperatorAddr, type))
     return false;
   return supportedOperators.count(type);
 }
@@ -93,82 +96,82 @@ void ASCPMathOperatorInterpreter::InitializeSupportedOperators()
 {
   supportedOperators = {
       {Keynodes::op_contSin,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorSIn(ctx, addr);
        }},
       {Keynodes::op_contCos,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorCos(ctx, addr);
        }},
       {Keynodes::op_contTg,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorTg(ctx, addr);
        }},
       {Keynodes::op_contASin,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorASin(ctx, addr);
        }},
       {Keynodes::op_contACos,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorACos(ctx, addr);
        }},
       {Keynodes::op_contATg,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorATg(ctx, addr);
        }},
       {Keynodes::op_contDivInt,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorDivInt(ctx, addr);
        }},
       {Keynodes::op_contDivRem,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorDivRem(ctx, addr);
        }},
       {Keynodes::op_ifEq,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorIfEq(ctx, addr);
        }},
       {Keynodes::op_contLn,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorContLn(ctx, addr);
        }},
       {Keynodes::op_ifGr,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorIfGr(ctx, addr);
        }},
       {Keynodes::op_contAdd,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorContAdd(ctx, addr);
        }},
       {Keynodes::op_contSub,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorContSub(ctx, addr);
        }},
       {Keynodes::op_contMult,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorContMult(ctx, addr);
        }},
       {Keynodes::op_contDiv,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorContDiv(ctx, addr);
        }},
       {Keynodes::op_contPow,
-       [](ScMemoryContext & ctx, ScAddr addr)
+       [](ScAgentContext & ctx, ScAddr addr)
        {
          return new SCPOperatorContPow(ctx, addr);
        }},

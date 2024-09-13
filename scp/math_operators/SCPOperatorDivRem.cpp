@@ -16,7 +16,7 @@
 namespace scp
 {
 
-SCPOperatorDivRem::SCPOperatorDivRem(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorDivRem::SCPOperatorDivRem(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr3(ctx, addr)
 {
 }

@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorContPow : public SCPOperatorElStr3
 {
 public:
-  SCPOperatorContPow(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorContPow(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

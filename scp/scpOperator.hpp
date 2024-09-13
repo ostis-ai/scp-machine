@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
+#include <sc-memory/sc_agent_context.hpp>
 #include "scpKeynodes.hpp"
 #include "scpOperand.hpp"
 
@@ -22,13 +22,13 @@ protected:
   ScAddr type;
   std::vector<SCPOperand *> operands;
 
-  ScMemoryContext & m_memoryCtx;
+  ScAgentContext & m_memoryCtx;
 
   sc_result ResetValues();
   sc_result CheckNullValues();
 
 public:
-  SCPOperator(ScMemoryContext & ctx_, ScAddr addr_);
+  SCPOperator(ScAgentContext & ctx_, ScAddr addr_);
   virtual ~SCPOperator();
   ScAddr GetAddr();
   virtual std::string GetTypeName();
@@ -39,10 +39,10 @@ public:
   void FinishExecutionSuccessfully();
   void FinishExecutionUnsuccessfully();
   void FinishExecutionWithError();
-  static void ClearExecutionState(ScMemoryContext & ctx, ScAddr oper_addr);
-  static void FinishExecution(ScMemoryContext & ctx, ScAddr oper_addr);
-  static void FinishExecutionSuccessfully(ScMemoryContext & ctx, ScAddr oper_addr);
-  static void FinishExecutionUnsuccessfully(ScMemoryContext & ctx, ScAddr oper_addr);
-  static void FinishExecutionWithError(ScMemoryContext & ctx, ScAddr oper_addr);
+  static void ClearExecutionState(ScAgentContext & ctx, ScAddr oper_addr);
+  static void FinishExecution(ScAgentContext & ctx, ScAddr oper_addr);
+  static void FinishExecutionSuccessfully(ScAgentContext & ctx, ScAddr oper_addr);
+  static void FinishExecutionUnsuccessfully(ScAgentContext & ctx, ScAddr oper_addr);
+  static void FinishExecutionWithError(ScAgentContext & ctx, ScAddr oper_addr);
 };
 }  // namespace scp

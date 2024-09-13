@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringStartsWith : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorStringStartsWith(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringStartsWith(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

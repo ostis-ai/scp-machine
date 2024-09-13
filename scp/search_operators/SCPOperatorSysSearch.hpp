@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorSysSearch : public SCPOperator
 {
 public:
-  SCPOperatorSysSearch(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorSysSearch(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

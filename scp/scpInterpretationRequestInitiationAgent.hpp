@@ -9,9 +9,11 @@ class SCPInterpretationRequestInitiationAgent : public ScElementaryEventAgent
 public:
   ScResult DoProgram(ScElementaryEvent const & event, ScAction & action) override;
 
-  ScAddr GetScAgentProgram() const;
+  ScAddr GetAgentProgram() const;
 
   bool CheckInitiationCondition(ScElementaryEvent const & event) override;
+
+  static int64_t GetTimeFromStart(std::chrono::time_point<std::chrono::high_resolution_clock> const & startTime);
 };
 
 }  // namespace scp

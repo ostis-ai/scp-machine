@@ -8,7 +8,7 @@
 
 #include "scpKeynodes.hpp"
 
-#include "sc-memory/sc_module.hpp"
+#include <sc-memory/sc_module.hpp>
 
 #define SCP_PREFIX "[scp-machine] "
 #define SCP_LOG_INFO(...) SC_LOG_INFO(SCP_PREFIX << __VA_ARGS__)
@@ -19,8 +19,6 @@
 class scpModule : public ScModule
 {
 public:
-  static ScMemoryContext s_default_ctx;
-
   void Initialize(ScMemoryContext * context) override;
 
   void Shutdown(ScMemoryContext * context) override;

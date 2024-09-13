@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringEndsWith : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorStringEndsWith(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringEndsWith(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

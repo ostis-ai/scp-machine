@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorIfVarAssign : public SCPOperatorElStr1
 {
 public:
-  SCPOperatorIfVarAssign(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorIfVarAssign(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

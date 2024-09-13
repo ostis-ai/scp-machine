@@ -16,7 +16,7 @@
 namespace scp
 {
 
-SCPOperator::SCPOperator(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperator::SCPOperator(ScAgentContext & ctx_, ScAddr addr_)
   : addr(addr_)
   , m_memoryCtx(ctx_)
 {
@@ -105,7 +105,7 @@ void SCPOperator::FinishExecutionWithError()
   SCPOperator::FinishExecutionWithError(m_memoryCtx, addr);
 }
 
-void SCPOperator::ClearExecutionState(ScMemoryContext & ctx, ScAddr oper_addr)
+void SCPOperator::ClearExecutionState(ScAgentContext & ctx, ScAddr oper_addr)
 {
   std::vector<ScAddr> arcs;
   ScIterator3Ptr iter = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, oper_addr);
@@ -126,26 +126,26 @@ void SCPOperator::ClearExecutionState(ScMemoryContext & ctx, ScAddr oper_addr)
     ctx.EraseElement(arc);
 }
 
-void SCPOperator::FinishExecution(ScMemoryContext & ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecution(ScAgentContext & ctx, ScAddr oper_addr)
 {
   ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, oper_addr);
 }
 
-void SCPOperator::FinishExecutionSuccessfully(ScMemoryContext & ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecutionSuccessfully(ScAgentContext & ctx, ScAddr oper_addr)
 {
   ClearExecutionState(ctx, oper_addr);
   ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, oper_addr);
   FinishExecution(ctx, oper_addr);
 }
 
-void SCPOperator::FinishExecutionUnsuccessfully(ScMemoryContext & ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecutionUnsuccessfully(ScAgentContext & ctx, ScAddr oper_addr)
 {
   ClearExecutionState(ctx, oper_addr);
   ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_unsuccessfully, oper_addr);
   FinishExecution(ctx, oper_addr);
 }
 
-void SCPOperator::FinishExecutionWithError(ScMemoryContext & ctx, ScAddr oper_addr)
+void SCPOperator::FinishExecutionWithError(ScAgentContext & ctx, ScAddr oper_addr)
 {
   ClearExecutionState(ctx, oper_addr);
   ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_with_error, oper_addr);

@@ -18,7 +18,7 @@ ScResult ASCPAgentActivator::DoProgram(
 {
   ScAddr agent = event.GetOtherElement();
 
-  SCPAgentEvent::handle_active_agent(m_context, SCPAgentEvent::register_scp_agent, agent);
+  SCPAgentEvent::HandleActiveAgent(m_context, SCPAgentEvent::RegisterScpAgent, agent);
 
   return action.FinishSuccessfully();
 }
@@ -39,7 +39,7 @@ ScResult ASCPAgentDeactivator::DoProgram(
 {
   ScAddr agent = event.GetOtherElement();
 
-  SCPAgentEvent::handle_active_agent(m_context, SCPAgentEvent::unregister_scp_agent, agent);
+  SCPAgentEvent::HandleActiveAgent(m_context, SCPAgentEvent::UnregisterScpAgent, agent);
 
   return action.FinishSuccessfully();
 }

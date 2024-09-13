@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringToLowerCase : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorStringToLowerCase(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringToLowerCase(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

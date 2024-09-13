@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorStringReplace : public SCPOperatorElStr5
 {
 public:
-  SCPOperatorStringReplace(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorStringReplace(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

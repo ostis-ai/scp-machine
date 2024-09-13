@@ -18,7 +18,7 @@ namespace scp
 class SCPOperatorIfEq : public SCPOperatorElStr2
 {
 public:
-  SCPOperatorIfEq(ScMemoryContext & ctx, ScAddr addr);
+  SCPOperatorIfEq(ScAgentContext & ctx, ScAddr addr);
   std::string GetTypeName();
   sc_result Parse();
   sc_result Execute();

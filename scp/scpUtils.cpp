@@ -21,7 +21,7 @@ namespace scp
 namespace Utils
 {
 
-bool addToSet(ScMemoryContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
+bool addToSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
 {
   if (ctx.HelperCheckEdge(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
     return false;
@@ -31,7 +31,7 @@ bool addToSet(ScMemoryContext & ctx, ScAddr const & setAddr, ScAddr const & elAd
   return true;
 }
 
-bool removeFromSet(ScMemoryContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
+bool removeFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
 {
   ScIterator3Ptr it = ctx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, elAddr);
   bool result = false;
@@ -41,7 +41,7 @@ bool removeFromSet(ScMemoryContext & ctx, ScAddr const & setAddr, ScAddr const &
   return result;
 }
 
-bool resolveOrderRoleRelation(ScMemoryContext & ctx, ScAddr const & arcAddr, ScAddr & relationAddr)
+bool resolveOrderRoleRelation(ScAgentContext & ctx, ScAddr const & arcAddr, ScAddr & relationAddr)
 {
   ScIterator3Ptr it = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccess, arcAddr);
   while (it->Next())
@@ -56,7 +56,7 @@ bool resolveOrderRoleRelation(ScMemoryContext & ctx, ScAddr const & arcAddr, ScA
   return false;
 }
 
-bool resolveOrderRoleRelation(ScMemoryContext & ctx, uint8_t const order, ScAddr & relationAddr)
+bool resolveOrderRoleRelation(ScAgentContext & ctx, uint8_t const order, ScAddr & relationAddr)
 {
   switch (order)
   {
@@ -98,7 +98,7 @@ bool resolveOrderRoleRelation(ScMemoryContext & ctx, uint8_t const order, ScAddr
   return relationAddr.IsValid();
 }
 
-bool resolveOperatorType(ScMemoryContext & ctx, ScAddr const & operatorAddr, ScAddr & operatorType)
+bool resolveOperatorType(ScAgentContext & ctx, ScAddr const & operatorAddr, ScAddr & operatorType)
 {
   ScIterator3Ptr it = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccess, operatorAddr);
   while (it->Next())
@@ -113,7 +113,7 @@ bool resolveOperatorType(ScMemoryContext & ctx, ScAddr const & operatorAddr, ScA
   return false;
 }
 
-void printSystemIdentifier(ScMemoryContext & ctx, ScAddr const & elemAddr)
+void printSystemIdentifier(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   if (ctx.GetElementType(elemAddr).IsNode() || ctx.GetElementType(elemAddr).IsLink())
   {
@@ -133,7 +133,7 @@ void printSystemIdentifier(ScMemoryContext & ctx, ScAddr const & elemAddr)
   }
 }
 
-void printInfo(ScMemoryContext & ctx, ScAddr const & elemAddr)
+void printInfo(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   int c_in = 0, c_out = 0;
   assert(ctx.IsElement(elemAddr));
@@ -171,7 +171,7 @@ void printInfo(ScMemoryContext & ctx, ScAddr const & elemAddr)
   cout << "Total output arcs: " << c_out << endl;
 }
 
-bool scLinkContentIsInt(ScMemoryContext & ctx, ScAddr const & elemAddr)
+bool scLinkContentIsInt(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -192,7 +192,7 @@ bool scLinkContentIsInt(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return false;
 }
 
-int scLinkGetContentInt(ScMemoryContext & ctx, ScAddr const & elemAddr)
+int scLinkGetContentInt(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -214,7 +214,7 @@ int scLinkGetContentInt(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return 0;
 }
 
-string scLinkGetString(ScMemoryContext & ctx, ScAddr const & elemAddr)
+string scLinkGetString(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -229,7 +229,7 @@ string scLinkGetString(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return {};
 }
 
-bool scLinkContentIsUint(ScMemoryContext & ctx, ScAddr const & elemAddr)
+bool scLinkContentIsUint(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -250,7 +250,7 @@ bool scLinkContentIsUint(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return false;
 }
 
-int scLinkGetContentUint(ScMemoryContext & ctx, ScAddr const & elemAddr)
+int scLinkGetContentUint(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -273,7 +273,7 @@ int scLinkGetContentUint(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return 0;
 }
 
-bool scLinkContentIsFloat(ScMemoryContext & ctx, ScAddr const & elemAddr)
+bool scLinkContentIsFloat(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -295,7 +295,7 @@ bool scLinkContentIsFloat(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return false;
 }
 
-float scLinkGetContentFloat(ScMemoryContext & ctx, ScAddr const & elemAddr)
+float scLinkGetContentFloat(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -316,7 +316,7 @@ float scLinkGetContentFloat(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return 0;
 }
 
-bool scLinkContentIsDouble(ScMemoryContext & ctx, ScAddr const & elemAddr)
+bool scLinkContentIsDouble(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -337,7 +337,7 @@ bool scLinkContentIsDouble(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return false;
 }
 
-double scLinkGetContentDouble(ScMemoryContext & ctx, ScAddr const & elemAddr)
+double scLinkGetContentDouble(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   ScStreamPtr stream = ctx.GetLinkContent(elemAddr);
   if (stream)
@@ -372,7 +372,7 @@ ScStreamPtr StreamFromString(std::string const & str)
   return std::make_shared<ScStreamMemory>(buff);
 }
 
-string getIntegerString(ScMemoryContext & ctx, ScAddr const & elemAddr)
+string getIntegerString(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   string input = scLinkGetString(ctx, elemAddr);
   regex integer_expr("(\\+|-)?[[:digit:]]+");
@@ -384,7 +384,7 @@ string getIntegerString(ScMemoryContext & ctx, ScAddr const & elemAddr)
   return result;
 }
 
-void printOperatorAnswer(ScMemoryContext & ctx, SCPOperand * nodeAddr, ScAddr const & linkAddr)
+void printOperatorAnswer(ScAgentContext & ctx, SCPOperand * nodeAddr, ScAddr const & linkAddr)
 {
   ScAddr elem1, elem3, elem5, arc1;
   elem1.Reset();
@@ -404,7 +404,7 @@ void printOperatorAnswer(ScMemoryContext & ctx, SCPOperand * nodeAddr, ScAddr co
   nodeAddr->SetValue(elem1);
 }
 
-std::string scLinkPlainNumbers(ScMemoryContext & ctx, ScAddr const & elemAddr)
+std::string scLinkPlainNumbers(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   std::string str_link = Utils::scLinkGetString(ctx, elemAddr);
 
@@ -436,14 +436,14 @@ std::string scLinkPlainNumbers(ScMemoryContext & ctx, ScAddr const & elemAddr)
 }
 
 #ifdef SCP_DEBUG
-void logUnknownOperatorTypeError(ScMemoryContext & ctx, ScAddr & addr)
+void logUnknownOperatorTypeError(ScAgentContext & ctx, ScAddr & addr)
 {
   cout << "SCP Error: Unknown scp-operator type: ";
   printSystemIdentifier(ctx, addr);
   cout << endl;
 }
 
-void logSCPError(ScMemoryContext & ctx, string text, ScAddr const & addr)
+void logSCPError(ScAgentContext & ctx, string text, ScAddr const & addr)
 {
   cout << "SCP Error: " << text << ": ";
   printSystemIdentifier(ctx, addr);

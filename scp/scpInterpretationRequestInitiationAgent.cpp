@@ -9,14 +9,17 @@ namespace scp
 ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
-  ScAddr const & actionExpectedExecutionTimeLink = action.GetExpectedExecutionTimeInMilliseconds();
-  sc_uint32 actionExpectedExecutionTime = 0;
-  if (m_context.IsElement(actionExpectedExecutionTimeLink))
-    m_context.GetLinkContent(actionExpectedExecutionTimeLink, actionExpectedExecutionTime);
+  ScAddr const & maxCustomerWaitingTimeLink = action.GetMaxCustomerWaitingTime();
+  sc_uint32 maxCustomerWaitingTime = 0;
+  if (m_context.IsElement(maxCustomerWaitingTimeLink))
+    m_context.GetLinkContent(maxCustomerWaitingTimeLink, maxCustomerWaitingTime);
 
-  ScAddr const & agentProgram = GetScAgentProgram();
+  ScAddr const & agentProgram = GetAgentProgram();
   if (!m_context.IsElement(agentProgram))
+  {
+    SC_AGENT_LOG_ERROR("Agent program is not valid");
     action.FinishUnsuccessfully();
+  }
 
   ScAddr const & scpParams = m_context.CreateNode(ScType::NodeConst);
   ScAddr const & firstArgumentArc = m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, scpParams, agentProgram);
@@ -32,13 +35,23 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
   ScAddr const & authorArc = m_context.CreateEdge(ScType::EdgeDCommonConst, scpAction, Keynodes::abstract_scp_machine);
   m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, authorArc);
 
-  if (actionExpectedExecutionTime == 0)
+  if (maxCustomerWaitingTime == 0)
     scpAction.InitiateAndWait();
   else
-    scpAction.InitiateAndWait(
-        actionExpectedExecutionTime
-        - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime)
-              .count());
+  {
+    auto const & timeFromStart = GetTimeFromStart(startTime);
+    if (timeFromStart < maxCustomerWaitingTime)
+      scpAction.InitiateAndWait(maxCustomerWaitingTime - timeFromStart);
+    else
+    {
+      SC_AGENT_LOG_WARNING(
+          "Max customer waiting time"
+          << maxCustomerWaitingTime
+          << " has expired before action of class `action_scp_interpretation_request` was initiated because"
+          << timeFromStart << " ms have passed");
+      scpAction.InitiateAndWait();
+    }
+  }
   if (scpAction.IsFinishedSuccessfully())
   {
     ScAddr const & result = scpAction.GetResult();
@@ -53,19 +66,35 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
             {
               return subscribedEvent.GetArcSourceElement() == Keynodes::action_finished;
             });
-    if (actionExpectedExecutionTime == 0)
+    if (maxCustomerWaitingTime == 0)
       waiter->Wait();
     else
-      waiter->Wait(
-          actionExpectedExecutionTime
-          - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime)
-                .count());
+    {
+      auto const & timeFromStart = GetTimeFromStart(startTime);
+      if (timeFromStart < maxCustomerWaitingTime)
+        waiter->Wait(maxCustomerWaitingTime - timeFromStart);
+      else
+      {
+        SC_AGENT_LOG_WARNING(
+            "Max customer waiting time" << maxCustomerWaitingTime
+                                        << " has expired before wait for scp interpretation to finish because"
+                                        << timeFromStart << " ms have passed");
+        waiter->Wait();
+      }
+    }
   }
 
   return action.FinishSuccessfully();
 }
 
-ScAddr SCPInterpretationRequestInitiationAgent::GetScAgentProgram() const
+int64_t SCPInterpretationRequestInitiationAgent::GetTimeFromStart(
+    std::chrono::time_point<std::chrono::high_resolution_clock> const & startTime)
+{
+  return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime)
+      .count();
+}
+
+ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
 {
   if (!m_context.IsElement(m_agentImplementationAddr))
   {
@@ -96,8 +125,7 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetScAgentProgram() const
   }
   if (!agentProgram.IsValid())
   {
-    SC_AGENT_LOG_ERROR(
-        "Not found program for sc-agent \"" << m_context.HelperGetSystemIdtf(GetAbstractAgent()) << "\"");
+    SC_AGENT_LOG_ERROR("Not found program for sc-agent `" << m_context.HelperGetSystemIdtf(GetAbstractAgent()) << "`");
     return ScAddr::Empty;
   }
 
@@ -111,8 +139,8 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetScAgentProgram() const
   if (!programKeyElementIterator->Next())
   {
     SC_AGENT_LOG_ERROR(
-        "Not found process variable in program for sc-agent \"" << m_context.HelperGetSystemIdtf(GetAbstractAgent())
-                                                                << "\"");
+        "Not found process variable in program for sc-agent `" << m_context.HelperGetSystemIdtf(GetAbstractAgent())
+                                                               << "`");
     return ScAddr::Empty;
   }
   return agentProgram;

@@ -14,7 +14,7 @@
 namespace scp
 {
 
-SCPOperatorSearchElStr3::SCPOperatorSearchElStr3(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorSearchElStr3::SCPOperatorSearchElStr3(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr3(ctx, addr)
 {
 }

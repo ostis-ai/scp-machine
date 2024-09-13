@@ -15,7 +15,7 @@ using namespace std;
 namespace scp
 {
 
-SCPOperatorStringToUpperCase::SCPOperatorStringToUpperCase(ScMemoryContext & ctx, ScAddr addr)
+SCPOperatorStringToUpperCase::SCPOperatorStringToUpperCase(ScAgentContext & ctx, ScAddr addr)
   : SCPOperatorElStr2(ctx, addr)
 {
 }

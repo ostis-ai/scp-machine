@@ -15,7 +15,7 @@
 namespace scp
 {
 
-SCPOperatorElStr1::SCPOperatorElStr1(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperatorElStr1::SCPOperatorElStr1(ScAgentContext & ctx_, ScAddr addr_)
   : SCPOperator(ctx_, addr_)
 {
   operands = std::vector<SCPOperand *>(1);
@@ -47,7 +47,7 @@ sc_result SCPOperatorElStr1::Parse()
   return CheckNullValues();
 }
 
-SCPOperatorElStr2::SCPOperatorElStr2(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperatorElStr2::SCPOperatorElStr2(ScAgentContext & ctx_, ScAddr addr_)
   : SCPOperator(ctx_, addr_)
 {
   operands = std::vector<SCPOperand *>(2);
@@ -79,7 +79,7 @@ sc_result SCPOperatorElStr2::Parse()
   return CheckNullValues();
 }
 
-SCPOperatorElStr3::SCPOperatorElStr3(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperatorElStr3::SCPOperatorElStr3(ScAgentContext & ctx_, ScAddr addr_)
   : SCPOperator(ctx_, addr_)
 {
   operands = std::vector<SCPOperand *>(3);
@@ -111,7 +111,7 @@ sc_result SCPOperatorElStr3::Parse()
   return CheckNullValues();
 }
 
-SCPOperatorElStr5::SCPOperatorElStr5(ScMemoryContext & ctx_, ScAddr addr_)
+SCPOperatorElStr5::SCPOperatorElStr5(ScAgentContext & ctx_, ScAddr addr_)
   : SCPOperator(ctx_, addr_)
 {
   operands = std::vector<SCPOperand *>(5);

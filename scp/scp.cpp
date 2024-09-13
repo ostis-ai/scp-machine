@@ -26,7 +26,7 @@
 using namespace scp;
 
 SC_MODULE_REGISTER(scpModule)
-    ->Agent<SCPInterpretationRequestInitiationAgent>()
+    //    ->Agent<SCPInterpretationRequestInitiationAgent>()
     ->Agent<ASCPProcessCreator>()
     ->Agent<ASCPProcessDestroyer>()
     ->Agent<ASCPGenOperatorInterpreter>()
@@ -43,11 +43,8 @@ SC_MODULE_REGISTER(scpModule)
     ->Agent<ASCPStringOperatorInterpreter>()
     ->Agent<ASCPFinishedInterpretationActionProcessor>();
 
-ScMemoryContext scpModule::s_default_ctx;
-
 void scpModule::Initialize(ScMemoryContext * context)
 {
-  ScModule::Initialize(context);
   ASCPGenOperatorInterpreter::InitializeSupportedOperators();
   ASCPEraseOperatorInterpreter::InitializeSupportedOperators();
   ASCPSearchOperatorInterpreter::InitializeSupportedOperators();
@@ -59,15 +56,14 @@ void scpModule::Initialize(ScMemoryContext * context)
   ASCPStringOperatorInterpreter::InitializeSupportedOperators();
   std::cout << "SCP START" << std::endl;
   ScAgentContext agentContext;
-  SCPAgentEvent::register_all_scp_agents(agentContext);
+  SCPAgentEvent::SubscribeAllScpAgents(agentContext);
 }
 
 void scpModule::Shutdown(ScMemoryContext * context)
 {
-  ScModule::Shutdown(context);
   std::cout << "SCP END" << std::endl;
 
   ScAgentContext agentContext;
-  SCPAgentEvent::unregister_all_scp_agents(agentContext);
-  SCPWaitEvent::unregister_all_sys_wait();
+  SCPAgentEvent::UnsubscribeAllScpAgents(agentContext);
+  SCPWaitEvent::DeleteAllSysWaiters();
 }
