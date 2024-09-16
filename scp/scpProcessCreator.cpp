@@ -10,9 +10,7 @@
 
 namespace scp
 {
-ScResult ASCPProcessCreator::DoProgram(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
-    ScAction & action)
+ScResult ASCPProcessCreator::DoProgram(ScAction & action)
 {
   try
   {
@@ -26,11 +24,11 @@ ScResult ASCPProcessCreator::DoProgram(
     }
 
     ScTemplate program_templ;
-    m_context.HelperBuildTemplate(program_templ, program);
+    m_context.BuildTemplate(program_templ, program);
     ScTemplateParams gen_params;
 
     ScAddr process_node;
-    auto const & programKeyElementIterator = m_context.Iterator5(
+    auto const & programKeyElementIterator = m_context.CreateIterator5(
         program,
         ScType::EdgeAccessConstPosPerm,
         ScType::NodeVar,
@@ -44,7 +42,7 @@ ScResult ASCPProcessCreator::DoProgram(
       return action.FinishUnsuccessfully();
     }
 
-    auto const & processParametersIterator = m_context.Iterator5(
+    auto const & processParametersIterator = m_context.CreateIterator5(
         process_node, ScType::EdgeAccessVarPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, program);
 
     //! TODO Make all sc-links constant to allow using constant sc-links within scp-program code
@@ -53,7 +51,7 @@ ScResult ASCPProcessCreator::DoProgram(
       ScAddr order;
       if (Utils::resolveOrderRoleRelation(m_context, processParametersIterator->Get(1), order))
       {
-        auto const & iter_param = m_context.Iterator5(
+        auto const & iter_param = m_context.CreateIterator5(
             params, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, order);
         if (!iter_param->Next())
         {
@@ -67,10 +65,10 @@ ScResult ASCPProcessCreator::DoProgram(
     }
 
     ScTemplateGenResult result;
-    m_context.HelperGenTemplate(program_templ, result, gen_params);
+    m_context.GenerateByTemplate(program_templ, result, gen_params);
 
     ScAddr const_process_node = result[process_node];
-    auto const & generatedProcessDecompositionIterator = m_context.Iterator5(
+    auto const & generatedProcessDecompositionIterator = m_context.CreateIterator5(
         ScType::NodeConst,
         ScType::EdgeDCommonConst,
         const_process_node,
@@ -78,7 +76,7 @@ ScResult ASCPProcessCreator::DoProgram(
         Keynodes::nrel_decomposition_of_action);
     if (generatedProcessDecompositionIterator->Next())
     {
-      ScIterator5Ptr oper_iter = m_context.Iterator5(
+      ScIterator5Ptr oper_iter = m_context.CreateIterator5(
           generatedProcessDecompositionIterator->Get(0),
           ScType::EdgeAccessConstPosPerm,
           ScType::NodeConst,
@@ -87,14 +85,14 @@ ScResult ASCPProcessCreator::DoProgram(
       if (oper_iter->Next())
       {
         action.SetResult(const_process_node);
-        m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, oper_iter->Get(2));
+        m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, oper_iter->Get(2));
       }
       else
       {
 #ifdef SCP_DEBUG
         Utils::logSCPError(m_context, "Missed initial scp-operator", program);
 #endif
-        m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, const_process_node);
+        m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, const_process_node);
       }
     }
     else
@@ -102,7 +100,7 @@ ScResult ASCPProcessCreator::DoProgram(
 #ifdef SCP_DEBUG
       Utils::logSCPError(m_context, "Missed scp-process decomposition", program);
 #endif
-      m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, const_process_node);
+      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, const_process_node);
     }
 
     return action.FinishSuccessfully();
@@ -114,11 +112,6 @@ ScResult ASCPProcessCreator::DoProgram(
   }
 }
 
-ScAddr ASCPProcessCreator::GetEventSubscriptionElement() const noexcept(false)
-{
-  return Keynodes::action_initiated;
-}
-
 ScAddr ASCPProcessCreator::GetActionClass() const
 {
   return Keynodes::action_create_process;
@@ -126,7 +119,15 @@ ScAddr ASCPProcessCreator::GetActionClass() const
 
 bool ASCPProcessCreator::CheckInitiationCondition(ScActionInitiatedEvent const & event)
 {
-  return m_context.HelperCheckEdge(
-      Keynodes::action_scp_interpretation_request, event.GetOtherElement(), ScType::EdgeAccessConstPosPerm);
+  ScAddr const & action = event.GetOtherElement();
+  auto const & actionAuthorIterator = m_context.CreateIterator5(
+      action,
+      ScType::EdgeDCommonConst,
+      Keynodes::abstract_scp_machine,
+      ScType::EdgeAccessConstPosPerm,
+      Keynodes::nrel_authors);
+  if (!actionAuthorIterator->Next())
+    return false;
+  return m_context.CheckConnector(Keynodes::action_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm);
 }
 }  // namespace scp

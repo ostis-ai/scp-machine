@@ -20,7 +20,7 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
   ScAddr const & scpActionParams = scpAction.GetArgument(2);
   if (m_context.IsElement(scpActionParams))
   {
-    auto const & scpParamConnectorIterator = m_context.Iterator5(
+    auto const & scpParamConnectorIterator = m_context.CreateIterator5(
         scpActionParams,
         ScType::EdgeAccessConstPosPerm,
         ScType::EdgeAccessConstPosPerm,
@@ -29,18 +29,17 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     if (scpParamConnectorIterator->Next())
     {
       ScAddr const & scpParamConnector = scpParamConnectorIterator->Get(2);
-      ScAddr connectorSource, connectorTarget;
-      m_context.GetEdgeInfo(scpParamConnector, connectorSource, connectorTarget);
+      auto const & [connectorSource, connectorTarget] = m_context.GetConnectorIncidentElements(scpParamConnector);
       if (connectorSource == Keynodes::action_initiated
-          && !m_context.HelperCheckEdge(Keynodes::action_finished, connectorTarget, ScType::EdgeAccessConstPosPerm))
-        m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, connectorTarget);
+          && !m_context.CheckConnector(Keynodes::action_finished, connectorTarget, ScType::EdgeAccessConstPosPerm))
+        m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, connectorTarget);
     }
   }
 
   ScAddr waitOperatorAddr;
 
   // SCP_CONST case
-  ScIterator5Ptr iter = m_context.Iterator5(
+  ScIterator5Ptr iter = m_context.CreateIterator5(
       ScType::NodeConst,
       ScType::EdgeAccessConstPosPerm,
       scpAction,
@@ -49,8 +48,8 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
   while (iter->Next())
   {
     waitOperatorAddr = iter->Get(0);
-    if (!m_context.HelperCheckEdge(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
-        || !m_context.HelperCheckEdge(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
+    if (!m_context.CheckConnector(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
+        || !m_context.CheckConnector(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
       continue;
 
     SCPOperator::FinishExecutionSuccessfully(m_context, waitOperatorAddr);
@@ -58,10 +57,10 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
   }
 
   // SCP_VAR case
-  ScIterator3Ptr iter3 = m_context.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosTemp, scpAction);
+  ScIterator3Ptr iter3 = m_context.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosTemp, scpAction);
   while (iter3->Next())
   {
-    ScIterator5Ptr iter5 = m_context.Iterator5(
+    ScIterator5Ptr iter5 = m_context.CreateIterator5(
         ScType::NodeConst,
         ScType::EdgeAccessConstPosPerm,
         iter3->Get(0),
@@ -70,8 +69,8 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     while (iter5->Next())
     {
       waitOperatorAddr = iter5->Get(0);
-      if (!m_context.HelperCheckEdge(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
-          || !m_context.HelperCheckEdge(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
+      if (!m_context.CheckConnector(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
+          || !m_context.CheckConnector(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
         continue;
 
       SCPOperator::FinishExecutionSuccessfully(m_context, waitOperatorAddr);
@@ -95,8 +94,16 @@ ScAddr ASCPFinishedInterpretationActionProcessor::GetEventSubscriptionElement() 
 bool ASCPFinishedInterpretationActionProcessor::CheckInitiationCondition(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
 {
-  return m_context.HelperCheckEdge(
-      Keynodes::action_scp_interpretation_request, event.GetOtherElement(), ScType::EdgeAccessConstPosPerm);
+  ScAddr const & action = event.GetOtherElement();
+  auto const & actionAuthorIterator = m_context.CreateIterator5(
+      action,
+      ScType::EdgeDCommonConst,
+      Keynodes::abstract_scp_machine,
+      ScType::EdgeAccessConstPosPerm,
+      Keynodes::nrel_authors);
+  if (!actionAuthorIterator->Next())
+    return false;
+  return m_context.CheckConnector(Keynodes::action_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm);
 }
 
 }  // namespace scp

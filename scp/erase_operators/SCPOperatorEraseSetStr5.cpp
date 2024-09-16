@@ -108,7 +108,7 @@ sc_result SCPOperatorEraseSetStr5::Execute()
   {
   case 0x10000:
   {
-    ScIterator5Ptr iter = m_memoryCtx.Iterator5(
+    ScIterator5Ptr iter = m_memoryCtx.CreateIterator5(
         operands[0]->GetValue(),
         operands[1]->GetType(),
         operands[2]->GetType(),
@@ -165,12 +165,12 @@ sc_result SCPOperatorEraseSetStr5::Execute()
   case 0x00001:
   {
     ScIterator3Ptr iter =
-        m_memoryCtx.Iterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
+        m_memoryCtx.CreateIterator3(operands[4]->GetValue(), operands[3]->GetType(), operands[1]->GetType());
     bool flag = false;
     while (iter->Next())
     {
-      ScAddr elem1 = m_memoryCtx.GetEdgeSource(iter->Get(2));
-      ScAddr elem3 = m_memoryCtx.GetEdgeTarget(iter->Get(2));
+      ScAddr elem1 = m_memoryCtx.GetArcSourceElement(iter->Get(2));
+      ScAddr elem3 = m_memoryCtx.GetArcTargetElement(iter->Get(2));
       ScType type1 = m_memoryCtx.GetElementType(elem1);
       ScType type3 = m_memoryCtx.GetElementType(elem3);
       if (((type1 & operands[0]->GetType()) == operands[0]->GetType())
@@ -222,7 +222,7 @@ sc_result SCPOperatorEraseSetStr5::Execute()
   }
   case 0x00100:
   {
-    ScIterator5Ptr iter = m_memoryCtx.Iterator5(
+    ScIterator5Ptr iter = m_memoryCtx.CreateIterator5(
         operands[0]->GetType(),
         operands[1]->GetType(),
         operands[2]->GetValue(),
@@ -278,7 +278,7 @@ sc_result SCPOperatorEraseSetStr5::Execute()
   }
   case 0x10100:
   {
-    ScIterator5Ptr iter = m_memoryCtx.Iterator5(
+    ScIterator5Ptr iter = m_memoryCtx.CreateIterator5(
         operands[0]->GetValue(),
         operands[1]->GetType(),
         operands[2]->GetValue(),
@@ -323,7 +323,7 @@ sc_result SCPOperatorEraseSetStr5::Execute()
   }
   case 0x00101:
   {
-    ScIterator5Ptr iter = m_memoryCtx.Iterator5(
+    ScIterator5Ptr iter = m_memoryCtx.CreateIterator5(
         operands[0]->GetType(),
         operands[1]->GetType(),
         operands[2]->GetValue(),
@@ -364,7 +364,7 @@ sc_result SCPOperatorEraseSetStr5::Execute()
   }
   case 0x10001:
   {
-    ScIterator5Ptr iter = m_memoryCtx.Iterator5(
+    ScIterator5Ptr iter = m_memoryCtx.CreateIterator5(
         operands[0]->GetValue(),
         operands[1]->GetType(),
         operands[2]->GetType(),
@@ -405,7 +405,7 @@ sc_result SCPOperatorEraseSetStr5::Execute()
   }
   case 0x10101:
   {
-    ScIterator5Ptr iter = m_memoryCtx.Iterator5(
+    ScIterator5Ptr iter = m_memoryCtx.CreateIterator5(
         operands[0]->GetValue(),
         operands[1]->GetType(),
         operands[2]->GetValue(),

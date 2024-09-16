@@ -54,7 +54,7 @@ bool ApplyOperator(ScAgentContext & context, ScAddr const & operatorAddr, size_t
   return context.GenerateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
       operatorAddr,
       [&context, &operatorAddr](){
-        context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, operatorAddr);
+        context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, operatorAddr);
         },
       [](ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm> const & event){
         return event.GetOtherElement() == Keynodes::action_finished_successfully;
@@ -67,13 +67,13 @@ TEST_F(scpGenOperatorsTest, TestGenEl)
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "gen_el_test.scs");
   SubscribeAgents(context);
-  ScAddr const & testOperator = context.HelperFindBySystemIdtf(TEST_OPERATOR);
+  ScAddr const & testOperator = context.SearchElementBySystemIdentifier(TEST_OPERATOR);
   EXPECT_TRUE(testOperator.IsValid());
   EXPECT_TRUE(ApplyOperator(context, testOperator, WAIT_TIME));
-  auto const & operandIterator = context.Iterator5(testOperator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
+  auto const & operandIterator = context.CreateIterator5(testOperator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
   EXPECT_TRUE(operandIterator->Next());
   ScAddr const & operand = operandIterator->Get(2);
-  auto const & operandValueIterator = context.Iterator3(operand, ScType::EdgeAccessConstPosTemp, ScType::NodeConst);
+  auto const & operandValueIterator = context.CreateIterator3(operand, ScType::EdgeAccessConstPosTemp, ScType::NodeConst);
   EXPECT_TRUE(operandValueIterator->Next());
   UnsubscribeAgents(context);
 }
@@ -82,22 +82,24 @@ TEST_F(scpGenOperatorsTest, ComplexAgentsChain)
 {
   ScAgentContext & context = * m_ctx;
   SubscribeAgents(context);
-  context.BeingEventsBlocking();
+  context.BeginEventsBlocking();
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "agent_gen_el.scs");
   context.EndEventsBlocking();
-  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterScpAgent,
-                                   context.HelperFindBySystemIdtf("agent_gen_el_active"));
+  ScAddr const & agent = context.SearchElementBySystemIdentifier("agent_gen_el_active");
+  EXPECT_TRUE(agent.IsValid());
+  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterScpAgent, agent);
   ScAction action = context.GenerateAction(action_gen_el);
-  ScAddr const & setAddr = context.CreateNode(ScType::NodeConst);
+  ScAddr const & setAddr = context.GenerateNode(ScType::NodeConst);
   action.SetArguments(setAddr);
-  auto const & iteratorBefore = context.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  auto const & iteratorBefore = context.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   EXPECT_FALSE(iteratorBefore->Next());
   EXPECT_TRUE(action.InitiateAndWait(WAIT_TIME));
   EXPECT_TRUE(action.IsFinishedSuccessfully());
-  auto const & iteratorAfter = context.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  auto const & iteratorAfter = context.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   EXPECT_TRUE(iteratorAfter->Next());
   EXPECT_FALSE(iteratorAfter->Next());
 
+  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::UnregisterScpAgent, agent);
   UnsubscribeAgents(context);
 }
 

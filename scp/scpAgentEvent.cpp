@@ -27,7 +27,7 @@ void SCPAgentEvent::HandleAllActiveAgents(
     std::function<void(ScAgentContext &, ScAddr const &)> const & handler)
 {
   auto const & activeAgentsIterator =
-      ctx.Iterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      ctx.CreateIterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   while (activeAgentsIterator->Next())
   {
     ScAddr const & agent = activeAgentsIterator->Get(2);
@@ -40,13 +40,14 @@ void SCPAgentEvent::HandleActiveAgent(
     std::function<void(ScAgentContext &, ScAddr const &)> const & handler,
     ScAddr const & agent)
 {
-  auto const & agentImplementationsIterator = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
+  auto const & agentImplementationsIterator =
+      ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
   while (agentImplementationsIterator->Next())
   {
     ScAddr const & agentImplementation = agentImplementationsIterator->Get(0);
     if (agentImplementation == Keynodes::active_sc_agent)
       continue;
-    if (ctx.HelperCheckEdge(
+    if (ctx.CheckConnector(
             Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
       handler(ctx, agentImplementation);
   }
@@ -57,7 +58,7 @@ void SCPAgentEvent::RegisterScpAgent(ScAgentContext & ctx, ScAddr const & agentN
   try
   {
     ctx.SubscribeSpecifiedAgent<SCPInterpretationRequestInitiationAgent>(agentNode);
-    SC_LOG_INFO("Registered " << agentNode.Hash() << ", " << ctx.HelperGetSystemIdtf(agentNode));
+    SC_LOG_INFO("Registered " << agentNode.Hash() << ", " << ctx.GetElementSystemIdentifier(agentNode));
   }
   catch (utils::ScException const & exception)
   {

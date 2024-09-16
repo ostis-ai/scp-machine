@@ -19,7 +19,7 @@ SCPParameter::SCPParameter(ScAgentContext & ctx_, ScAddr addr_)
   : arc_addr(addr_)
   , m_memoryCtx(ctx_)
 {
-  addr = m_memoryCtx.GetEdgeTarget(arc_addr);
+  addr = m_memoryCtx.GetArcTargetElement(arc_addr);
   resolveModifiers();
 }
 
@@ -99,11 +99,11 @@ void SCPParameter::resolveOrder(ScAddr modifier)
 
 void SCPParameter::resolveModifiers()
 {
-  ScIterator3Ptr iter = m_memoryCtx.Iterator3(ScType::NodeConst, ScType::EdgeAccessVarPosPerm, arc_addr);
+  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessVarPosPerm, arc_addr);
   while (iter->Next())
   {
     ScAddr modifier = iter->Get(0);
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.CheckConnector(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
     {
       resolveOrder(modifier);
       continue;

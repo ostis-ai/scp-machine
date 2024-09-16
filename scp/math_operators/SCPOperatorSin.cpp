@@ -133,7 +133,7 @@ sc_result SCPOperatorSIn::Execute()
 
   std::cout << "Link: " << answer_str << std::endl;
 
-  ScAddr answerLink = m_memoryCtx.CreateLink();
+  ScAddr answerLink = m_memoryCtx.GenerateLink();
   ScStreamPtr streamPtr = Utils::StreamFromString(answer_str);
   m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 

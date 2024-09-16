@@ -9,7 +9,7 @@ namespace scp
 ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
-  ScAddr const & maxCustomerWaitingTimeLink = action.GetMaxCustomerWaitingTime();
+  ScAddr const & maxCustomerWaitingTimeLink = action.GetMaxCustomerWaitingTimeLink();
   sc_uint32 maxCustomerWaitingTime = 0;
   if (m_context.IsElement(maxCustomerWaitingTimeLink))
     m_context.GetLinkContent(maxCustomerWaitingTimeLink, maxCustomerWaitingTime);
@@ -21,19 +21,21 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
     action.FinishUnsuccessfully();
   }
 
-  ScAddr const & scpParams = m_context.CreateNode(ScType::NodeConst);
-  ScAddr const & firstArgumentArc = m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, scpParams, agentProgram);
-  m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, firstArgumentArc);
+  ScAddr const & scpParams = m_context.GenerateNode(ScType::NodeConst);
+  ScAddr const & firstArgumentArc =
+      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, scpParams, agentProgram);
+  m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, firstArgumentArc);
 
   ScAddr const & secondArgumentArc =
-      m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, scpParams, event.GetConnector());
-  m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, secondArgumentArc);
+      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, scpParams, event.GetConnector());
+  m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, secondArgumentArc);
 
   ScAction scpAction = m_context.GenerateAction(Keynodes::action_scp_interpretation_request);
   scpAction.SetArguments(agentProgram, scpParams);
 
-  ScAddr const & authorArc = m_context.CreateEdge(ScType::EdgeDCommonConst, scpAction, Keynodes::abstract_scp_machine);
-  m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, authorArc);
+  ScAddr const & authorArc =
+      m_context.GenerateConnector(ScType::EdgeDCommonConst, scpAction, Keynodes::abstract_scp_machine);
+  m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, authorArc);
 
   if (maxCustomerWaitingTime == 0)
     scpAction.InitiateAndWait();
@@ -60,7 +62,7 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
       return action.FinishUnsuccessfully();
     }
     auto const & waiter =
-        m_context.GenerateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
+        m_context.CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
             result,
             [](ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm> const & subscribedEvent)
             {
@@ -103,7 +105,7 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
   }
 
   ScAddr agentProgram;
-  auto const & programsTupleIterator = m_context.Iterator5(
+  auto const & programsTupleIterator = m_context.CreateIterator5(
       ScType::NodeConst,
       ScType::EdgeDCommonConst,
       m_agentImplementationAddr,
@@ -112,10 +114,10 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
   while (programsTupleIterator->Next())
   {
     ScIterator3Ptr programsIterator =
-        m_context.Iterator3(programsTupleIterator->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        m_context.CreateIterator3(programsTupleIterator->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (programsIterator->Next())
     {
-      if (m_context.HelperCheckEdge(
+      if (m_context.CheckConnector(
               Keynodes::agent_scp_program, programsIterator->Get(2), ScType::EdgeAccessConstPosPerm))
       {
         agentProgram = programsIterator->Get(2);
@@ -125,12 +127,13 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
   }
   if (!agentProgram.IsValid())
   {
-    SC_AGENT_LOG_ERROR("Not found program for sc-agent `" << m_context.HelperGetSystemIdtf(GetAbstractAgent()) << "`");
+    SC_AGENT_LOG_ERROR(
+        "Not found program for sc-agent `" << m_context.GetElementSystemIdentifier(GetAbstractAgent()) << "`");
     return ScAddr::Empty;
   }
 
   // Old SCP program check
-  auto const & programKeyElementIterator = m_context.Iterator5(
+  auto const & programKeyElementIterator = m_context.CreateIterator5(
       agentProgram,
       ScType::EdgeAccessConstPosPerm,
       ScType::NodeVar,
@@ -139,8 +142,8 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
   if (!programKeyElementIterator->Next())
   {
     SC_AGENT_LOG_ERROR(
-        "Not found process variable in program for sc-agent `" << m_context.HelperGetSystemIdtf(GetAbstractAgent())
-                                                               << "`");
+        "Not found process variable in program for sc-agent `"
+        << m_context.GetElementSystemIdentifier(GetAbstractAgent()) << "`");
     return ScAddr::Empty;
   }
   return agentProgram;
@@ -149,7 +152,7 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
 bool SCPInterpretationRequestInitiationAgent::CheckInitiationCondition(ScElementaryEvent const & event)
 {
   ScAddr const & action = event.GetOtherElement();
-  auto const & actionAuthorIterator = m_context.Iterator5(
+  auto const & actionAuthorIterator = m_context.CreateIterator5(
       action,
       ScType::EdgeDCommonConst,
       Keynodes::abstract_scp_machine,
@@ -157,7 +160,7 @@ bool SCPInterpretationRequestInitiationAgent::CheckInitiationCondition(ScElement
       Keynodes::nrel_authors);
   if (actionAuthorIterator->Next())
     return false;
-  if (!m_context.HelperCheckEdge(GetActionClass(), action, ScType::EdgeAccessConstPosPerm))
+  if (!m_context.CheckConnector(GetActionClass(), action, ScType::EdgeAccessConstPosPerm))
     return false;
   return true;
 }

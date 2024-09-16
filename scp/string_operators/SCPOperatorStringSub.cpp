@@ -75,7 +75,7 @@ sc_result SCPOperatorStringSub::Execute()
   else
   {
     ScStreamPtr streamPtr = Utils::StreamFromString(to_string((start_pos)));
-    ScAddr answerLink = m_memoryCtx.CreateLink();
+    ScAddr answerLink = m_memoryCtx.GenerateLink();
 
     m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 

@@ -115,9 +115,9 @@ sc_result SCPOperatorGenElStr5::Execute()
     elem1 = operands[0]->GetValue();
     elem3 = operands[2]->GetValue();
     elem5 = operands[4]->GetValue();
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   case 0x00101:
@@ -125,9 +125,9 @@ sc_result SCPOperatorGenElStr5::Execute()
     elem1 = operands[0]->CreateNodeOrLink();
     elem3 = operands[2]->GetValue();
     elem5 = operands[4]->GetValue();
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   case 0x10001:
@@ -135,9 +135,9 @@ sc_result SCPOperatorGenElStr5::Execute()
     elem1 = operands[0]->GetValue();
     elem3 = operands[2]->CreateNodeOrLink();
     elem5 = operands[4]->GetValue();
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   case 0x10100:
@@ -145,9 +145,9 @@ sc_result SCPOperatorGenElStr5::Execute()
     elem1 = operands[0]->GetValue();
     elem3 = operands[2]->GetValue();
     elem5 = operands[4]->CreateNodeOrLink();
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   case 0x10000:
@@ -155,9 +155,9 @@ sc_result SCPOperatorGenElStr5::Execute()
     elem1 = operands[0]->GetValue();
     elem3 = operands[2]->CreateNodeOrLink();
     elem5 = operands[4]->CreateNodeOrLink();
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   case 0x00100:
@@ -165,9 +165,9 @@ sc_result SCPOperatorGenElStr5::Execute()
     elem1 = operands[0]->CreateNodeOrLink();
     elem3 = operands[2]->GetValue();
     elem5 = operands[4]->CreateNodeOrLink();
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   case 0x00001:
@@ -175,31 +175,31 @@ sc_result SCPOperatorGenElStr5::Execute()
     elem1 = operands[0]->CreateNodeOrLink();
     elem3 = operands[2]->CreateNodeOrLink();
     elem5 = operands[4]->GetValue();
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   case 0x00000:
   {
     if (operands[0]->GetType().IsLink())
-      elem1 = m_memoryCtx.CreateLink();
+      elem1 = m_memoryCtx.GenerateLink();
     else
-      elem1 = m_memoryCtx.CreateNode(operands[0]->GetType());
+      elem1 = m_memoryCtx.GenerateNode(operands[0]->GetType());
     if (operands[2]->GetType().IsLink())
-      elem3 = m_memoryCtx.CreateLink();
+      elem3 = m_memoryCtx.GenerateLink();
     else
-      elem3 = m_memoryCtx.CreateNode(operands[2]->GetType());
+      elem3 = m_memoryCtx.GenerateNode(operands[2]->GetType());
     if (operands[4]->GetType().IsLink())
-      elem5 = m_memoryCtx.CreateLink();
+      elem5 = m_memoryCtx.GenerateLink();
     else
-      elem5 = m_memoryCtx.CreateNode(operands[4]->GetType());
+      elem5 = m_memoryCtx.GenerateNode(operands[4]->GetType());
     operands[0]->SetValue(elem1);
     operands[2]->SetValue(elem3);
     operands[4]->SetValue(elem5);
-    arc1 = m_memoryCtx.CreateEdge(operands[1]->GetType(), elem1, elem3);
+    arc1 = m_memoryCtx.GenerateConnector(operands[1]->GetType(), elem1, elem3);
     operands[1]->SetValue(arc1);
-    operands[3]->SetValue(m_memoryCtx.CreateEdge(operands[3]->GetType(), elem5, arc1));
+    operands[3]->SetValue(m_memoryCtx.GenerateConnector(operands[3]->GetType(), elem5, arc1));
     break;
   }
   default:

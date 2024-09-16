@@ -61,7 +61,7 @@ sc_result SCPOperatorCall::Parse()
     return SC_RESULT_ERROR_INVALID_PARAMS;
   }
 
-  ScIterator3Ptr iter_param = m_memoryCtx.Iterator3(param_set, ScType::EdgeAccessConstPosPerm, ScType(0));
+  ScIterator3Ptr iter_param = m_memoryCtx.CreateIterator3(param_set, ScType::EdgeAccessConstPosPerm, ScType(0));
   while (iter_param->Next())
   {
     auto * operand = new SCPOperand(m_memoryCtx, iter_param->Get(1));
@@ -121,7 +121,7 @@ sc_result SCPOperatorCall::Execute()
   }
 
   ScAddr process_node;
-  ScIterator5Ptr iter_temp = m_memoryCtx.Iterator5(
+  ScIterator5Ptr iter_temp = m_memoryCtx.CreateIterator5(
       program_node,
       ScType::EdgeAccessConstPosPerm,
       ScType::NodeVar,
@@ -132,7 +132,7 @@ sc_result SCPOperatorCall::Execute()
   else
     return SC_RESULT_ERROR_INVALID_PARAMS;
 
-  ScIterator5Ptr iter_params = m_memoryCtx.Iterator5(
+  ScIterator5Ptr iter_params = m_memoryCtx.CreateIterator5(
       process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program_node);
   while (iter_params->Next())
   {
@@ -154,7 +154,7 @@ sc_result SCPOperatorCall::Execute()
     }
   }
 
-  ScAddr params_set = m_memoryCtx.CreateNode(ScType::NodeConst);
+  ScAddr params_set = m_memoryCtx.GenerateNode(ScType::NodeConst);
 
   for (size_t i = 0; i < expected_params.size(); i++)
   {
@@ -202,28 +202,28 @@ sc_result SCPOperatorCall::Execute()
           FinishExecutionWithError();
           return SC_RESULT_ERROR_INVALID_PARAMS;
         }
-        arc = m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetValue());
+        arc = m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetValue());
       }
       else
       {
-        arc = m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetAddr());
+        arc = m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, params_set, params[i]->GetAddr());
       }
-      m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, role_rel, arc);
+      m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, role_rel, arc);
     }
   }
 
-  ScAddr scp_quest = m_memoryCtx.CreateNode(ScType::NodeConst);
-  ScAddr arc1 = m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, program_node);
-  m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
+  ScAddr scp_quest = m_memoryCtx.GenerateNode(ScType::NodeConst);
+  ScAddr arc1 = m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, scp_quest, program_node);
+  m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, arc1);
 
-  arc1 = m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, scp_quest, params_set);
-  m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
+  arc1 = m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, scp_quest, params_set);
+  m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, arc1);
 
-  arc1 = m_memoryCtx.CreateEdge(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
-  m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
+  arc1 = m_memoryCtx.GenerateConnector(ScType::EdgeDCommonConst, scp_quest, Keynodes::abstract_scp_machine);
+  m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, arc1);
 
-  m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_scp_interpretation_request, scp_quest);
-  m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_initiated, scp_quest);
+  m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_scp_interpretation_request, scp_quest);
+  m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_initiated, scp_quest);
 
   operands[2]->SetValue(scp_quest);
 

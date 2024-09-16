@@ -92,7 +92,7 @@ sc_result SCPOperatorStringReplace::Execute()
   {
     str1.replace(start_pos, str2.length(), str3);
     ScStreamPtr streamPtr = Utils::StreamFromString(str1);
-    ScAddr answerLink = m_memoryCtx.CreateLink();
+    ScAddr answerLink = m_memoryCtx.GenerateLink();
 
     m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 

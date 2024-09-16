@@ -88,7 +88,7 @@ sc_result SCPOperatorEraseElStr3::Execute()
   case 0x101:
   {
     ScIterator3Ptr iter =
-        m_memoryCtx.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
+        m_memoryCtx.CreateIterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
     if (iter->Next())
     {
       if (operands[1]->IsErase())
@@ -106,7 +106,7 @@ sc_result SCPOperatorEraseElStr3::Execute()
   case 0x001:
   {
     ScIterator3Ptr iter =
-        m_memoryCtx.Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
+        m_memoryCtx.CreateIterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
     if (iter->Next())
     {
       if (operands[0]->IsErase())
@@ -131,7 +131,7 @@ sc_result SCPOperatorEraseElStr3::Execute()
   case 0x100:
   {
     ScIterator3Ptr iter =
-        m_memoryCtx.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
+        m_memoryCtx.CreateIterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
     if (iter->Next())
     {
       if (operands[2]->IsErase())

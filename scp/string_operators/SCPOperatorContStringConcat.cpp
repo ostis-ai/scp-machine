@@ -70,7 +70,7 @@ sc_result SCPOperatorContStringConcat::Execute()
   string str3 = str1 + str2;
 
   ScStreamPtr streamPtr = Utils::StreamFromString(str3);
-  ScAddr answerLink = m_memoryCtx.CreateLink();
+  ScAddr answerLink = m_memoryCtx.GenerateLink();
 
   m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 

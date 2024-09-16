@@ -19,7 +19,7 @@ SCPOperand::SCPOperand(ScAgentContext & ctx_, ScAddr addr_)
   : arc_addr(addr_)
   , m_memoryCtx(ctx_)
 {
-  addr = m_memoryCtx.GetEdgeTarget(arc_addr);
+  addr = m_memoryCtx.GetArcTargetElement(arc_addr);
   resolveModifiers();
   value_addr.Reset();
   if (operand_type == SCP_CONST)
@@ -28,7 +28,7 @@ SCPOperand::SCPOperand(ScAgentContext & ctx_, ScAddr addr_)
   }
   else
   {
-    ScIterator3Ptr iter = m_memoryCtx.Iterator3(
+    ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(
         addr, ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), ScType(0));
     if (iter->Next())
     {
@@ -64,7 +64,7 @@ uint8_t SCPOperand::GetSetOrder()
 
 void SCPOperand::ResetValue()
 {
-  ScIterator3Ptr iter = m_memoryCtx.Iterator3(
+  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(
       addr, ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), ScType(0));
   while (iter->Next())
   {
@@ -76,16 +76,17 @@ void SCPOperand::ResetValue()
 void SCPOperand::SetValue(ScAddr value)
 {
   value_addr = value;
-  m_memoryCtx.CreateEdge(ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
+  m_memoryCtx.GenerateConnector(
+      ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
 }
 
 ScAddr SCPOperand::CreateNodeOrLink()
 {
   if (element_type.IsLink())
-    value_addr = m_memoryCtx.CreateLink();
+    value_addr = m_memoryCtx.GenerateLink();
   else
-    value_addr = m_memoryCtx.CreateNode(element_type);
-  m_memoryCtx.CreateEdge(
+    value_addr = m_memoryCtx.GenerateNode(element_type);
+  m_memoryCtx.GenerateConnector(
       ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
   return value_addr;
 }
@@ -215,11 +216,11 @@ void SCPOperand::resolveSetOrder(ScAddr modifier)
 
 void SCPOperand::resolveModifiers()
 {
-  ScIterator3Ptr iter = m_memoryCtx.Iterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, arc_addr);
+  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, arc_addr);
   while (iter->Next())
   {
     ScAddr modifier = iter->Get(0);
-    if (m_memoryCtx.HelperCheckEdge(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.CheckConnector(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
     {
       resolveOrder(modifier);
       continue;

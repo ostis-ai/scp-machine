@@ -62,7 +62,7 @@ sc_result SCPOperatorStringToUpperCase::Execute()
 
   utils::StringUtils::ToUpperCase(str1);
   ScStreamPtr streamPtr = Utils::StreamFromString(str1);
-  ScAddr answerLink = m_memoryCtx.CreateLink();
+  ScAddr answerLink = m_memoryCtx.GenerateLink();
 
   m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 

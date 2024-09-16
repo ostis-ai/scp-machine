@@ -18,19 +18,18 @@ ScResult ASCPProgramExecutionSyncronizer::DoProgram(
 {
   ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
-  if (m_context.HelperCheckEdge(Keynodes::action_finished_with_error, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
+  if (m_context.CheckConnector(Keynodes::action_finished_with_error, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
   {
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_error);
     return action.FinishSuccessfully();
   }
-  if (m_context.HelperCheckEdge(
-          Keynodes::action_finished_successfully, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
+  if (m_context.CheckConnector(Keynodes::action_finished_successfully, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
   {
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_then);
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_goto);
     return action.FinishSuccessfully();
   }
-  if (m_context.HelperCheckEdge(
+  if (m_context.CheckConnector(
           Keynodes::action_finished_unsuccessfully, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
   {
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_else);
@@ -53,12 +52,12 @@ ScAddr ASCPProgramExecutionSyncronizer::GetEventSubscriptionElement() const
 
 void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr const & scpOperatorAddr, ScAddr const & relation)
 {
-  ScIterator5Ptr iter_error = m_context.Iterator5(
+  ScIterator5Ptr iter_error = m_context.CreateIterator5(
       scpOperatorAddr, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
   while (iter_error->Next())
   {
     ScAddr next_op = iter_error->Get(2);
-    m_context.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
+    m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
   }
 }
 

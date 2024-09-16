@@ -97,7 +97,7 @@ sc_result SCPOperatorSearchElStr3::Execute()
   case 0x101:
   {
     ScIterator3Ptr iter =
-        m_memoryCtx.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
+        m_memoryCtx.CreateIterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetValue());
     if (iter->Next())
     {
       operands[1]->SetValue(iter->Get(1));
@@ -112,7 +112,7 @@ sc_result SCPOperatorSearchElStr3::Execute()
   case 0x001:
   {
     ScIterator3Ptr iter =
-        m_memoryCtx.Iterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
+        m_memoryCtx.CreateIterator3(operands[0]->GetType(), operands[1]->GetType(), operands[2]->GetValue());
     if (iter->Next())
     {
       operands[0]->SetValue(iter->Get(0));
@@ -128,7 +128,7 @@ sc_result SCPOperatorSearchElStr3::Execute()
   case 0x100:
   {
     ScIterator3Ptr iter =
-        m_memoryCtx.Iterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
+        m_memoryCtx.CreateIterator3(operands[0]->GetValue(), operands[1]->GetType(), operands[2]->GetType());
 
     if (iter->Next())
     {
@@ -144,8 +144,8 @@ sc_result SCPOperatorSearchElStr3::Execute()
   }
   case 0x010:
   {
-    ScAddr elem1 = m_memoryCtx.GetEdgeSource(operands[1]->GetValue());
-    ScAddr elem3 = m_memoryCtx.GetEdgeTarget(operands[1]->GetValue());
+    ScAddr elem1 = m_memoryCtx.GetArcSourceElement(operands[1]->GetValue());
+    ScAddr elem3 = m_memoryCtx.GetArcTargetElement(operands[1]->GetValue());
     ScType type1 = m_memoryCtx.GetElementType(elem1);
     ScType type3 = m_memoryCtx.GetElementType(elem3);
     if (((type1 & operands[0]->GetType()) == operands[0]->GetType())
@@ -163,8 +163,8 @@ sc_result SCPOperatorSearchElStr3::Execute()
   }
   case 0x110:
   {
-    ScAddr elem1 = m_memoryCtx.GetEdgeSource(operands[1]->GetValue());
-    ScAddr elem3 = m_memoryCtx.GetEdgeTarget(operands[1]->GetValue());
+    ScAddr elem1 = m_memoryCtx.GetArcSourceElement(operands[1]->GetValue());
+    ScAddr elem3 = m_memoryCtx.GetArcTargetElement(operands[1]->GetValue());
     ScType type3 = m_memoryCtx.GetElementType(elem3);
     if (elem1 == operands[0]->GetValue() && (type3 & operands[2]->GetType()) == operands[2]->GetType())
     {
@@ -179,8 +179,8 @@ sc_result SCPOperatorSearchElStr3::Execute()
   }
   case 0x011:
   {
-    ScAddr elem1 = m_memoryCtx.GetEdgeSource(operands[1]->GetValue());
-    ScAddr elem3 = m_memoryCtx.GetEdgeTarget(operands[1]->GetValue());
+    ScAddr elem1 = m_memoryCtx.GetArcSourceElement(operands[1]->GetValue());
+    ScAddr elem3 = m_memoryCtx.GetArcTargetElement(operands[1]->GetValue());
     ScType type1 = m_memoryCtx.GetElementType(elem1);
     if ((type1 & operands[0]->GetType()) == operands[0]->GetType() && elem3 == operands[2]->GetValue())
     {
@@ -195,8 +195,8 @@ sc_result SCPOperatorSearchElStr3::Execute()
   }
   case 0x111:
   {
-    ScAddr elem1 = m_memoryCtx.GetEdgeSource(operands[1]->GetValue());
-    ScAddr elem3 = m_memoryCtx.GetEdgeTarget(operands[1]->GetValue());
+    ScAddr elem1 = m_memoryCtx.GetArcSourceElement(operands[1]->GetValue());
+    ScAddr elem3 = m_memoryCtx.GetArcTargetElement(operands[1]->GetValue());
     if (elem1 == operands[0]->GetValue() && elem3 == operands[2]->GetValue())
     {
       FinishExecutionSuccessfully();

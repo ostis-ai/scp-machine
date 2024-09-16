@@ -23,17 +23,17 @@ namespace Utils
 
 bool addToSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
 {
-  if (ctx.HelperCheckEdge(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
+  if (ctx.CheckConnector(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
     return false;
 
-  ScAddr arcAddr = ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, elAddr);
+  ScAddr arcAddr = ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, setAddr, elAddr);
   assert(arcAddr.IsValid());
   return true;
 }
 
 bool removeFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
 {
-  ScIterator3Ptr it = ctx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, elAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, elAddr);
   bool result = false;
   while (it->Next())
     ctx.EraseElement(it->Get(1));
@@ -43,10 +43,10 @@ bool removeFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & 
 
 bool resolveOrderRoleRelation(ScAgentContext & ctx, ScAddr const & arcAddr, ScAddr & relationAddr)
 {
-  ScIterator3Ptr it = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccess, arcAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccess, arcAddr);
   while (it->Next())
   {
-    if (ctx.HelperCheckEdge(Keynodes::order_role_relation, it->Get(0), ScType::EdgeAccessConstPosPerm))
+    if (ctx.CheckConnector(Keynodes::order_role_relation, it->Get(0), ScType::EdgeAccessConstPosPerm))
     {
       relationAddr = it->Get(0);
       return true;
@@ -100,10 +100,10 @@ bool resolveOrderRoleRelation(ScAgentContext & ctx, uint8_t const order, ScAddr 
 
 bool resolveOperatorType(ScAgentContext & ctx, ScAddr const & operatorAddr, ScAddr & operatorType)
 {
-  ScIterator3Ptr it = ctx.Iterator3(ScType::NodeConst, ScType::EdgeAccess, operatorAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccess, operatorAddr);
   while (it->Next())
   {
-    if (ctx.HelperCheckEdge(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::EdgeAccessConstPosPerm))
+    if (ctx.CheckConnector(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::EdgeAccessConstPosPerm))
     {
       operatorType = it->Get(0);
       return true;
@@ -117,7 +117,7 @@ void printSystemIdentifier(ScAgentContext & ctx, ScAddr const & elemAddr)
 {
   if (ctx.GetElementType(elemAddr).IsNode() || ctx.GetElementType(elemAddr).IsLink())
   {
-    string s = ctx.HelperGetSystemIdtf(elemAddr);
+    string s = ctx.GetElementSystemIdentifier(elemAddr);
     if (s.empty())
       cout << elemAddr.GetRealAddr().seg << "|" << elemAddr.GetRealAddr().offset;
     else
@@ -126,9 +126,9 @@ void printSystemIdentifier(ScAgentContext & ctx, ScAddr const & elemAddr)
   else
   {
     cout << "(";
-    printSystemIdentifier(ctx, ctx.GetEdgeSource(elemAddr));
+    printSystemIdentifier(ctx, ctx.GetArcSourceElement(elemAddr));
     cout << "->";
-    printSystemIdentifier(ctx, ctx.GetEdgeTarget(elemAddr));
+    printSystemIdentifier(ctx, ctx.GetArcTargetElement(elemAddr));
     cout << ")";
   }
 }
@@ -141,7 +141,7 @@ void printInfo(ScAgentContext & ctx, ScAddr const & elemAddr)
   cout << endl;
 
   cout << "Input arcs:\n";
-  ScIterator3Ptr it = ctx.Iterator3(ScType(0), ScType(0), elemAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(ScType(0), ScType(0), elemAddr);
   while (it->Next())
   {
     c_in++;
@@ -156,7 +156,7 @@ void printInfo(ScAgentContext & ctx, ScAddr const & elemAddr)
   cout << "Total input arcs: " << c_in << endl;
 
   cout << "Output arcs:\n";
-  it = ctx.Iterator3(elemAddr, ScType(0), ScType(0));
+  it = ctx.CreateIterator3(elemAddr, ScType(0), ScType(0));
   while (it->Next())
   {
     c_out++;
@@ -396,8 +396,8 @@ void printOperatorAnswer(ScAgentContext & ctx, SCPOperand * nodeAddr, ScAddr con
   elem3 = linkAddr;
   elem1 = nodeAddr->CreateNodeOrLink();
 
-  arc1 = ctx.CreateEdge(sc_type_arc_common, elem1, elem3);
-  ctx.CreateEdge(sc_type_arc_pos_const_perm, elem5, arc1);
+  arc1 = ctx.GenerateConnector(sc_type_arc_common, elem1, elem3);
+  ctx.GenerateConnector(sc_type_arc_pos_const_perm, elem5, arc1);
   printInfo(ctx, elem5);
   printInfo(ctx, elem3);
   printInfo(ctx, elem1);

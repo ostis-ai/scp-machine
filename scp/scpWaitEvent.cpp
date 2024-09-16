@@ -39,13 +39,13 @@ SCPWaitEvent::SCPWaitEvent(
     ScAddr const & paramAddr)
   : paramAddr(paramAddr)
 {
-  m_event = ctx.GenerateElementaryEventSubscription(
+  m_event = ctx.CreateElementaryEventSubscription(
       eventType,
       addr,
       [&ctx, &paramAddr](ScElementaryEvent const & scEvent)
       {
-        ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, paramAddr);
-        ctx.CreateEdge(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, paramAddr);
+        ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, paramAddr);
+        ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, paramAddr);
 
         auto checker = [&paramAddr](SCPWaitEvent * event)
         {

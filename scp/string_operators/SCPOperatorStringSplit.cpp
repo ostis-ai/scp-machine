@@ -80,15 +80,15 @@ sc_result SCPOperatorStringSplit::Execute()
     current = str1.find_first_of(str2, previous);
   }
   output.push_back(str1.substr(previous, current - previous));
-  ScAddr setNode = m_memoryCtx.CreateNode(ScType::NodeConst);
+  ScAddr setNode = m_memoryCtx.GenerateNode(ScType::NodeConst);
   for (size_t i = 0; i < output.size(); i++)
   {
     ScStreamPtr streamPtr = Utils::StreamFromString(output[i]);
-    ScAddr answerLink = m_memoryCtx.CreateLink();
+    ScAddr answerLink = m_memoryCtx.GenerateLink();
 
     m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 
-    m_memoryCtx.CreateEdge(sc_type_arc_pos_const_perm, setNode, answerLink);
+    m_memoryCtx.GenerateConnector(sc_type_arc_pos_const_perm, setNode, answerLink);
     cout << output[i] << endl;
   }
 

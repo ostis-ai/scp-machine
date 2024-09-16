@@ -11,14 +11,12 @@
 namespace scp
 {
 
-class ASCPProcessCreator : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
+class ASCPProcessCreator : public ScActionInitiatedAgent
 {
 public:
   ScAddr GetActionClass() const override;
 
-  ScResult DoProgram(ScActionInitiatedEvent const & event, ScAction & action) override;
-
-  ScAddr GetEventSubscriptionElement() const noexcept(false) override;
+  ScResult DoProgram(ScAction & action) override;
 
   bool CheckInitiationCondition(ScActionInitiatedEvent const & event) override;
 

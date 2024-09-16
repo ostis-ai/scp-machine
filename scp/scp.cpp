@@ -9,7 +9,6 @@
 #include "scpFinishedInterpretationActionProcessor.hpp"
 #include "scpGenOperatorInterpreter.hpp"
 #include "scpIfOperatorInterpreter.hpp"
-#include "scpInterpretationRequestInitiationAgent.hpp"
 #include "scpMathOperatorInterpreter.hpp"
 #include "scpPrintOperatorInterpreter.hpp"
 #include "scpProcessControlOperatorInterpreter.hpp"
@@ -26,7 +25,6 @@
 using namespace scp;
 
 SC_MODULE_REGISTER(scpModule)
-    //    ->Agent<SCPInterpretationRequestInitiationAgent>()
     ->Agent<ASCPProcessCreator>()
     ->Agent<ASCPProcessDestroyer>()
     ->Agent<ASCPGenOperatorInterpreter>()

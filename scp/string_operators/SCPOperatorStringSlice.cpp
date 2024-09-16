@@ -129,7 +129,7 @@ sc_result SCPOperatorStringSlice::Execute()
   {
     string res = input.substr(startIndex, endIndex - startIndex);
     ScStreamPtr streamPtr = Utils::StreamFromString(res);
-    ScAddr answerLink = m_memoryCtx.CreateLink();
+    ScAddr answerLink = m_memoryCtx.GenerateLink();
 
     m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 

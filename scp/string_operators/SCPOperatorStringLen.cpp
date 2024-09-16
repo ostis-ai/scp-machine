@@ -60,7 +60,7 @@ sc_result SCPOperatorStringLen::Execute()
   size_t len1 = str1.length();
 
   ScStreamPtr streamPtr = Utils::StreamFromString(to_string(len1));
-  ScAddr answerLink = m_memoryCtx.CreateLink();
+  ScAddr answerLink = m_memoryCtx.GenerateLink();
 
   m_memoryCtx.SetLinkContent(answerLink, streamPtr);
 

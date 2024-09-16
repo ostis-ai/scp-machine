@@ -25,7 +25,7 @@ SCPOperatorSetStr3::SCPOperatorSetStr3(ScAgentContext & ctx_, ScAddr addr_)
 sc_result SCPOperatorSetStr3::Parse()
 {
   SCPOperator::Parse();
-  ScIterator3Ptr iter_operator = m_memoryCtx.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+  ScIterator3Ptr iter_operator = m_memoryCtx.CreateIterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
   while (iter_operator->Next())
   {
     SCPOperand * operand = new SCPOperand(m_memoryCtx, iter_operator->Get(1));
@@ -120,7 +120,7 @@ SCPOperatorSetStr5::SCPOperatorSetStr5(ScAgentContext & ctx_, ScAddr addr_)
 sc_result SCPOperatorSetStr5::Parse()
 {
   SCPOperator::Parse();
-  ScIterator3Ptr iter_operator = m_memoryCtx.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
+  ScIterator3Ptr iter_operator = m_memoryCtx.CreateIterator3(addr, ScType::EdgeAccessConstPosPerm, ScType(0));
   while (iter_operator->Next())
   {
     SCPOperand * operand = new SCPOperand(m_memoryCtx, iter_operator->Get(1));
