@@ -4,7 +4,7 @@
 #include "scpAgentEvent.hpp"
 #include "scpAgentProcessor.hpp"
 #include "scpGenOperatorInterpreter.hpp"
-#include "scpProcessCreator.hpp"
+#include "scpProcessInterpreter.hpp"
 #include "scpSearchOperatorInterpreter.hpp"
 #include "scpProcessDestroyer.hpp"
 #include "scpProcessControlOperatorInterpreter.hpp"
@@ -31,7 +31,7 @@ void SubscribeAgents(ScAgentContext & context)
 
   context.SubscribeAgent<ASCPAgentActivator>();
   context.SubscribeAgent<ASCPGenOperatorInterpreter>();
-  context.SubscribeAgent<ASCPProcessCreator>();
+  context.SubscribeAgent<ASCPProcessInterpreter>();
   context.SubscribeAgent<ASCPProcessControlOperatorInterpreter>();
   context.SubscribeAgent<ASCPProcessDestroyer>();
   context.SubscribeAgent<ASCPProgramExecutionSyncronizer>();
@@ -42,7 +42,7 @@ void UnsubscribeAgents(ScAgentContext & context)
 {
   context.UnsubscribeAgent<ASCPAgentActivator>();
   context.UnsubscribeAgent<ASCPGenOperatorInterpreter>();
-  context.UnsubscribeAgent<ASCPProcessCreator>();
+  context.UnsubscribeAgent<ASCPProcessInterpreter>();
   context.UnsubscribeAgent<ASCPProcessControlOperatorInterpreter>();
   context.UnsubscribeAgent<ASCPProcessDestroyer>();
   context.UnsubscribeAgent<ASCPProgramExecutionSyncronizer>();
@@ -51,15 +51,18 @@ void UnsubscribeAgents(ScAgentContext & context)
 
 bool ApplyOperator(ScAgentContext & context, ScAddr const & operatorAddr, size_t waitTime)
 {
-  return context.GenerateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
-      operatorAddr,
-      [&context, &operatorAddr](){
-        context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, operatorAddr);
-        },
-      [](ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm> const & event){
-        return event.GetOtherElement() == Keynodes::action_finished_successfully;
-      }
-  )->Wait(waitTime);
+  return context
+      .CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
+          operatorAddr,
+          [&context, &operatorAddr]()
+          {
+            context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, operatorAddr);
+          },
+          [](ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm> const & event)
+          {
+            return event.GetOtherElement() == Keynodes::action_finished_successfully;
+          })
+      ->Wait(waitTime);
 }
 
 TEST_F(scpGenOperatorsTest, TestGenEl)
@@ -70,17 +73,23 @@ TEST_F(scpGenOperatorsTest, TestGenEl)
   ScAddr const & testOperator = context.SearchElementBySystemIdentifier(TEST_OPERATOR);
   EXPECT_TRUE(testOperator.IsValid());
   EXPECT_TRUE(ApplyOperator(context, testOperator, WAIT_TIME));
-  auto const & operandIterator = context.CreateIterator5(testOperator, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
+  auto const & operandIterator = context.CreateIterator5(
+      testOperator,
+      ScType::EdgeAccessConstPosPerm,
+      ScType::NodeConst,
+      ScType::EdgeAccessConstPosPerm,
+      Keynodes::rrel_1);
   EXPECT_TRUE(operandIterator->Next());
   ScAddr const & operand = operandIterator->Get(2);
-  auto const & operandValueIterator = context.CreateIterator3(operand, ScType::EdgeAccessConstPosTemp, ScType::NodeConst);
+  auto const & operandValueIterator =
+      context.CreateIterator3(operand, ScType::EdgeAccessConstPosTemp, ScType::NodeConst);
   EXPECT_TRUE(operandValueIterator->Next());
   UnsubscribeAgents(context);
 }
 
 TEST_F(scpGenOperatorsTest, ComplexAgentsChain)
 {
-  ScAgentContext & context = * m_ctx;
+  ScAgentContext & context = *m_ctx;
   SubscribeAgents(context);
   context.BeginEventsBlocking();
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "agent_gen_el.scs");

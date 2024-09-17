@@ -134,19 +134,6 @@ public:
 
   static inline ScKeynode const rrel_class{"rrel_class"};
 
-  // Events
-  static inline ScKeynode const sc_event_remove_element{"sc_event_before_erase_element"};
-
-  static inline ScKeynode const sc_event_add_output_arc{"sc_event_after_generate_incoming_arc"};
-
-  static inline ScKeynode const sc_event_add_input_arc{"sc_event_after_generate_outgoing_arc"};
-
-  static inline ScKeynode const sc_event_remove_output_arc{"sc_event_before_erase_outgoing_arc"};
-
-  static inline ScKeynode const sc_event_remove_input_arc{"sc_event_before_erase_incoming_arc"};
-
-  static inline ScKeynode const sc_event_content_changed{"sc_event_before_change_link_content"};
-
   // Order relations
   static inline ScKeynode const rrel_1{"rrel_1"};
 
@@ -269,7 +256,7 @@ public:
   static inline ScKeynode const action_interpret_process_control_operator{
       "action_interpret_process_control_operator",
       ScType::NodeConstClass};
-  static inline ScKeynode const action_create_process{"action_create_process", ScType::NodeConstClass};
+  static inline ScKeynode const action_interpret_process{"action_interpret_process", ScType::NodeConstClass};
   static inline ScKeynode const action_destroy_process{"action_destroy_process", ScType::NodeConstClass};
   static inline ScKeynode const action_synchronize_program_execution{
       "action_synchronize_program_execution",

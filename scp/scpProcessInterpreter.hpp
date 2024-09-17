@@ -11,7 +11,7 @@
 namespace scp
 {
 
-class ASCPProcessCreator : public ScActionInitiatedAgent
+class ASCPProcessInterpreter : public ScActionInitiatedAgent
 {
 public:
   ScAddr GetActionClass() const override;
@@ -20,7 +20,7 @@ public:
 
   bool CheckInitiationCondition(ScActionInitiatedEvent const & event) override;
 
-  static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_process_creation"};
+  static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_process_interpretation"};
 };
 
 }  // namespace scp

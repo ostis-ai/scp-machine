@@ -17,24 +17,6 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     ScAction & action)
 {
   ScAction const & scpAction = m_context.ConvertToAction(event.GetOtherElement());
-  ScAddr const & scpActionParams = scpAction.GetArgument(2);
-  if (m_context.IsElement(scpActionParams))
-  {
-    auto const & scpParamConnectorIterator = m_context.CreateIterator5(
-        scpActionParams,
-        ScType::EdgeAccessConstPosPerm,
-        ScType::EdgeAccessConstPosPerm,
-        ScType::EdgeAccessConstPosPerm,
-        Keynodes::rrel_2);
-    if (scpParamConnectorIterator->Next())
-    {
-      ScAddr const & scpParamConnector = scpParamConnectorIterator->Get(2);
-      auto const & [connectorSource, connectorTarget] = m_context.GetConnectorIncidentElements(scpParamConnector);
-      if (connectorSource == Keynodes::action_initiated
-          && !m_context.CheckConnector(Keynodes::action_finished, connectorTarget, ScType::EdgeAccessConstPosPerm))
-        m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, connectorTarget);
-    }
-  }
 
   ScAddr waitOperatorAddr;
 
@@ -95,14 +77,6 @@ bool ASCPFinishedInterpretationActionProcessor::CheckInitiationCondition(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
 {
   ScAddr const & action = event.GetOtherElement();
-  auto const & actionAuthorIterator = m_context.CreateIterator5(
-      action,
-      ScType::EdgeDCommonConst,
-      Keynodes::abstract_scp_machine,
-      ScType::EdgeAccessConstPosPerm,
-      Keynodes::nrel_authors);
-  if (!actionAuthorIterator->Next())
-    return false;
   return m_context.CheckConnector(Keynodes::action_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm);
 }
 

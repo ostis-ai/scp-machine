@@ -10,6 +10,7 @@
 #include <sc-memory/sc_stream.hpp>
 #include "scpOperand.hpp"
 
+#include <chrono>
 #include <string>
 
 namespace scp
@@ -87,6 +88,8 @@ void printOperatorAnswer(ScAgentContext & ctx, SCPOperand * nodeAddr, ScAddr con
 std::string getIntegerString(ScAgentContext & ctx, ScAddr const & elemAddr);
 
 std::string scLinkPlainNumbers(ScAgentContext & ctx, ScAddr const & elemAddr);
+
+int64_t GetTimeFromStart(std::chrono::time_point<std::chrono::high_resolution_clock> const & startTime);
 
 #ifdef SCP_DEBUG
 /*! Logs error about unknown type of given operator (addr)

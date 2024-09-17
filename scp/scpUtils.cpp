@@ -119,7 +119,7 @@ void printSystemIdentifier(ScAgentContext & ctx, ScAddr const & elemAddr)
   {
     string s = ctx.GetElementSystemIdentifier(elemAddr);
     if (s.empty())
-      cout << elemAddr.GetRealAddr().seg << "|" << elemAddr.GetRealAddr().offset;
+      cout << elemAddr.GetRealAddr().seg << "|" << elemAddr.GetRealAddr().offset << "(" << elemAddr.Hash() << ")";
     else
       cout << s;
   }
@@ -433,6 +433,12 @@ std::string scLinkPlainNumbers(ScAgentContext & ctx, ScAddr const & elemAddr)
   }
 
   return answer_str;
+}
+
+int64_t GetTimeFromStart(std::chrono::time_point<std::chrono::high_resolution_clock> const & startTime)
+{
+  return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime)
+      .count();
 }
 
 #ifdef SCP_DEBUG

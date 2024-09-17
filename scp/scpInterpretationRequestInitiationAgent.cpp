@@ -1,6 +1,7 @@
 #include "scpInterpretationRequestInitiationAgent.hpp"
 
 #include "scpKeynodes.hpp"
+#include "scpUtils.hpp"
 
 #include <chrono>
 
@@ -9,10 +10,7 @@ namespace scp
 ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
-  ScAddr const & maxCustomerWaitingTimeLink = action.GetMaxCustomerWaitingTimeLink();
-  sc_uint32 maxCustomerWaitingTime = 0;
-  if (m_context.IsElement(maxCustomerWaitingTimeLink))
-    m_context.GetLinkContent(maxCustomerWaitingTimeLink, maxCustomerWaitingTime);
+  sc_uint32 const maxCustomerWaitingTime = action.GetMaxCustomerWaitingTime();
 
   ScAddr const & agentProgram = GetAgentProgram();
   if (!m_context.IsElement(agentProgram))
@@ -41,7 +39,7 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
     scpAction.InitiateAndWait();
   else
   {
-    auto const & timeFromStart = GetTimeFromStart(startTime);
+    auto const & timeFromStart = scp::Utils::GetTimeFromStart(startTime);
     if (timeFromStart < maxCustomerWaitingTime)
       scpAction.InitiateAndWait(maxCustomerWaitingTime - timeFromStart);
     else
@@ -54,46 +52,14 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
       scpAction.InitiateAndWait();
     }
   }
-  if (scpAction.IsFinishedSuccessfully())
+  auto const & resIt = m_context.CreateIterator5(
+      action, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, ScKeynodes::nrel_result);
+  if (resIt->Next())
   {
-    ScAddr const & result = scpAction.GetResult();
-    if (!m_context.IsElement(result))
-    {
-      return action.FinishUnsuccessfully();
-    }
-    auto const & waiter =
-        m_context.CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
-            result,
-            [](ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm> const & subscribedEvent)
-            {
-              return subscribedEvent.GetArcSourceElement() == Keynodes::action_finished;
-            });
-    if (maxCustomerWaitingTime == 0)
-      waiter->Wait();
-    else
-    {
-      auto const & timeFromStart = GetTimeFromStart(startTime);
-      if (timeFromStart < maxCustomerWaitingTime)
-        waiter->Wait(maxCustomerWaitingTime - timeFromStart);
-      else
-      {
-        SC_AGENT_LOG_WARNING(
-            "Max customer waiting time" << maxCustomerWaitingTime
-                                        << " has expired before wait for scp interpretation to finish because"
-                                        << timeFromStart << " ms have passed");
-        waiter->Wait();
-      }
-    }
+    ScAddr const & actionResult = resIt->Get(2);
+    action.SetResult(actionResult);
   }
-
   return action.FinishSuccessfully();
-}
-
-int64_t SCPInterpretationRequestInitiationAgent::GetTimeFromStart(
-    std::chrono::time_point<std::chrono::high_resolution_clock> const & startTime)
-{
-  return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime)
-      .count();
 }
 
 ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const

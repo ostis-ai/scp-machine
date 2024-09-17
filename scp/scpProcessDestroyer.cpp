@@ -55,7 +55,9 @@ ScResult ASCPProcessDestroyer::DoProgram(
         while (it_pairs->Next())
         {
           ScAddr curr_pair = it_pairs->Get(2);
-          deleteSCPVarsSet(curr_pair, process);
+          // todo(kilativ-dotcom): review commented method, if it is uncommented then sometimes
+          // scpGenOperatorsTest.ComplexAgentsChain fails
+          //          deleteSCPVarsSet(curr_pair, process);
           m_context.EraseElement(curr_pair);
         }
         m_context.EraseElement(curr_operand);
@@ -74,13 +76,13 @@ ScResult ASCPProcessDestroyer::DoProgram(
         if (m_context.CheckConnector(Keynodes::rrel_scp_const, it_operand->Get(1), ScType::EdgeAccessConstPosPerm))
         {
           ScAddr curr_operand = it_operand->Get(2);
-          deleteSCPVarsSet(curr_operand, process);
+          //          deleteSCPVarsSet(curr_operand, process);
           m_context.EraseElement(curr_operand);
         }
       }
     }
 
-    deleteSCPVarsSet(curr_operator, process);
+    //    deleteSCPVarsSet(curr_operator, process);
     m_context.EraseElement(curr_operator);
   }
 

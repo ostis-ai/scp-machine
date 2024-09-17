@@ -16,23 +16,23 @@ namespace scp
 
 ScAddr SCPOperatorSysWait::resolve_event_type(ScAddr const & event_type_node)
 {
-  if (event_type_node == Keynodes::sc_event_add_output_arc)
+  if (event_type_node == Keynodes::sc_event_after_generate_incoming_arc)
     return event_type_node;
-  if (event_type_node == Keynodes::sc_event_add_input_arc)
-    return event_type_node;
-
-  if (event_type_node == Keynodes::sc_event_remove_output_arc)
-    return event_type_node;
-  if (event_type_node == Keynodes::sc_event_remove_input_arc)
+  if (event_type_node == Keynodes::sc_event_after_generate_outgoing_arc)
     return event_type_node;
 
-  if (event_type_node == Keynodes::sc_event_content_changed)
+  if (event_type_node == Keynodes::sc_event_before_erase_outgoing_arc)
+    return event_type_node;
+  if (event_type_node == Keynodes::sc_event_before_erase_incoming_arc)
     return event_type_node;
 
-  if (event_type_node == Keynodes::sc_event_remove_element)
+  if (event_type_node == Keynodes::sc_event_before_change_link_content)
     return event_type_node;
 
-  return Keynodes::sc_event_add_output_arc;
+  if (event_type_node == Keynodes::sc_event_before_erase_element)
+    return event_type_node;
+
+  return Keynodes::sc_event_after_generate_incoming_arc;
 }
 
 SCPOperatorSysWait::SCPOperatorSysWait(ScAgentContext & ctx, ScAddr addr)

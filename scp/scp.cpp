@@ -12,7 +12,7 @@
 #include "scpMathOperatorInterpreter.hpp"
 #include "scpPrintOperatorInterpreter.hpp"
 #include "scpProcessControlOperatorInterpreter.hpp"
-#include "scpProcessCreator.hpp"
+#include "scpProcessInterpreter.hpp"
 #include "scpProcessDestroyer.hpp"
 #include "scpProgramExecutionSyncronizer.hpp"
 #include "scpSearchOperatorInterpreter.hpp"
@@ -25,7 +25,7 @@
 using namespace scp;
 
 SC_MODULE_REGISTER(scpModule)
-    ->Agent<ASCPProcessCreator>()
+    ->Agent<ASCPProcessInterpreter>()
     ->Agent<ASCPProcessDestroyer>()
     ->Agent<ASCPGenOperatorInterpreter>()
     ->Agent<ASCPEraseOperatorInterpreter>()
