@@ -119,7 +119,7 @@ void printSystemIdentifier(ScAgentContext & ctx, ScAddr const & elemAddr)
   {
     string s = ctx.GetElementSystemIdentifier(elemAddr);
     if (s.empty())
-      cout << elemAddr.GetRealAddr().seg << "|" << elemAddr.GetRealAddr().offset << "(" << elemAddr.Hash() << ")";
+      cout << elemAddr.GetRealAddr().seg << "|" << elemAddr.GetRealAddr().offset;
     else
       cout << s;
   }
