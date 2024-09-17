@@ -43,7 +43,6 @@ sc_agent1
 = [*
 	test_action1 _-> .._action;;
 	action_initiated _-> .._action;;
-	action _-> .._action;;
 	.._action _-> .._parameter;;
 *];;
 
