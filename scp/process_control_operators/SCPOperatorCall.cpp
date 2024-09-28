@@ -130,7 +130,13 @@ sc_result SCPOperatorCall::Execute()
   if (iter_temp->IsValid() && iter_temp->Next())
     process_node = iter_temp->Get(2);
   else
+  {
+#ifdef SCP_DEBUG
+    Utils::logSCPError(m_memoryCtx, m_memoryCtx.GetElementSystemIdentifier(program_node) + " does not have key sc element", addr);
+#endif
+    FinishExecutionWithError();
     return SC_RESULT_ERROR_INVALID_PARAMS;
+  }
 
   ScIterator5Ptr iter_params = m_memoryCtx.CreateIterator5(
       process_node, ScType::EdgeAccessVarPosPerm, ScType::NodeVar, ScType::EdgeAccessConstPosPerm, program_node);
@@ -164,7 +170,7 @@ sc_result SCPOperatorCall::Execute()
       {
 #ifdef SCP_DEBUG
         std::stringstream ss;
-        ss << "Expected parameter " << (i + 1) << " was not passed";
+        ss << "Expected parameter " << (i + 1) << " was not passed for " << m_memoryCtx.GetElementSystemIdentifier(program_node);
         Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
         m_memoryCtx.EraseElement(params_set);
@@ -182,7 +188,7 @@ sc_result SCPOperatorCall::Execute()
           {
 #ifdef SCP_DEBUG
             std::stringstream ss;
-            ss << "Passed param " << (i + 1) << " has modifier FIXED, but has no value";
+            ss << "Passed param " << (i + 1) << " has modifier FIXED, but has no value for " << m_memoryCtx.GetElementSystemIdentifier(program_node);
             Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
             m_memoryCtx.EraseElement(params_set);
@@ -195,7 +201,7 @@ sc_result SCPOperatorCall::Execute()
         {
 #ifdef SCP_DEBUG
           std::stringstream ss;
-          ss << "Passed param " << (i + 1) << " must have FIXED modifier, because corresponds to IN parameter";
+          ss << "Passed param " << (i + 1) << " must have FIXED modifier, because corresponds to IN parameter for " << m_memoryCtx.GetElementSystemIdentifier(program_node);
           Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
           m_memoryCtx.EraseElement(params_set);

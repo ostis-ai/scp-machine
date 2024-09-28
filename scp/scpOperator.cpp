@@ -105,21 +105,25 @@ void SCPOperator::FinishExecutionWithError()
   SCPOperator::FinishExecutionWithError(m_memoryCtx, addr);
 }
 
-void SCPOperator::ClearExecutionState(ScAgentContext & ctx, ScAddr oper_addr)
+void SCPOperator::ClearExecutionState(ScAgentContext & ctx, ScAddr oper_addr, ScAddrUnorderedSet const & ignoredStates)
 {
   std::vector<ScAddr> arcs;
   ScIterator3Ptr iter = ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, oper_addr);
   while (iter->Next())
   {
-    if (iter->Get(0) == Keynodes::active_action)
+    ScAddr const & operatorState = iter->Get(0);
+    if (ignoredStates.count(operatorState))
+      continue;
+
+    if (operatorState == Keynodes::active_action)
       arcs.push_back(iter->Get(1));
-    if (iter->Get(0) == Keynodes::action_finished)
+    if (operatorState == Keynodes::action_finished)
       arcs.push_back(iter->Get(1));
-    if (iter->Get(0) == Keynodes::action_finished_successfully)
+    if (operatorState == Keynodes::action_finished_successfully)
       arcs.push_back(iter->Get(1));
-    if (iter->Get(0) == Keynodes::action_finished_unsuccessfully)
+    if (operatorState == Keynodes::action_finished_unsuccessfully)
       arcs.push_back(iter->Get(1));
-    if (iter->Get(0) == Keynodes::action_finished_with_error)
+    if (operatorState == Keynodes::action_finished_with_error)
       arcs.push_back(iter->Get(1));
   }
   for (auto & arc : arcs)

@@ -10,11 +10,6 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
-extern "C"
-{
-#include "sc-core/sc-store/sc_event_subscription.h"
-}
-
 #include <iostream>
 
 namespace scp
@@ -34,29 +29,36 @@ void SCPWaitEvent::DeleteAllSysWaiters()
 
 SCPWaitEvent::SCPWaitEvent(
     ScAgentContext & ctx,
-    ScAddr const & addr,
+    ScAddr const & subscribedElement,
     ScAddr const & eventType,
-    ScAddr const & paramAddr)
-  : paramAddr(paramAddr)
+    ScAddr const & waitingOperator)
+  : paramAddr(waitingOperator)
 {
+  SC_LOG_INFO("Creating SCPWaitEvent with event type " << ctx.GetElementSystemIdentifier(eventType));
   m_event = ctx.CreateElementaryEventSubscription(
       eventType,
-      addr,
-      [&ctx, &paramAddr](ScElementaryEvent const & scEvent)
+      subscribedElement,
+      [waitingOperator](ScElementaryEvent const & scEvent)
       {
-        ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, paramAddr);
-        ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, paramAddr);
+        if (!ScMemory::ms_globalContext->CheckConnector(Keynodes::action_finished_successfully, waitingOperator, ScType::EdgeAccessConstPosPerm))
+          ScMemory::ms_globalContext->GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully,
+                                                        waitingOperator);
+        else
+          return;
+        if (!ScMemory::ms_globalContext->CheckConnector(Keynodes::action_finished, waitingOperator, ScType::EdgeAccessConstPosPerm))
+          ScMemory::ms_globalContext->GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished,
+                                                        waitingOperator);
+        else
+          return;
 
-        auto checker = [&paramAddr](SCPWaitEvent * event)
+        auto checker = [&waitingOperator](SCPWaitEvent * event)
         {
-          return event->paramAddr == paramAddr;
+          return event->paramAddr == waitingOperator;
         };
 
         SCPWaitEvent * event;
         if (sys_wait_events.extract(checker, event))
-        {
           delete event;
-        }
       });
 }
 

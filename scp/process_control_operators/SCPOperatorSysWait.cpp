@@ -52,6 +52,7 @@ sc_result SCPOperatorSysWait::Parse()
 
 sc_result SCPOperatorSysWait::Execute()
 {
+  ClearExecutionState(m_memoryCtx, addr, {Keynodes::active_action});
   if (SC_RESULT_OK != ResetValues())
     return SC_RESULT_ERROR;
 
