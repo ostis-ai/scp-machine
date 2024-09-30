@@ -78,7 +78,7 @@ ASCPMathOperatorInterpreter::getSupportedOperators() const
          {
            return std::make_unique<SCPOperatorDivRem>(ctx, addr);
          }},
-        {Keynodes::op_ifEq,  // todo(kilativ-dotcom): move to if operators
+        {Keynodes::op_ifEq,  // todo(kilativ-dotcom): move this to math operator in standard
          [](ScAgentContext & ctx, ScAddr addr)
          {
            return std::make_unique<SCPOperatorIfEq>(ctx, addr);
@@ -88,7 +88,7 @@ ASCPMathOperatorInterpreter::getSupportedOperators() const
          {
            return std::make_unique<SCPOperatorContLn>(ctx, addr);
          }},
-        {Keynodes::op_ifGr,  // todo(kilativ-dotcom): move to if operators
+        {Keynodes::op_ifGr,  // todo(kilativ-dotcom): move this to math operator in standard
          [](ScAgentContext & ctx, ScAddr addr)
          {
            return std::make_unique<SCPOperatorIfGr>(ctx, addr);
