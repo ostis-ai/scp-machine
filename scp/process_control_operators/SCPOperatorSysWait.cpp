@@ -84,7 +84,7 @@ sc_result SCPOperatorSysWait::Execute()
 
   auto * event =
       new SCPWaitEvent(m_memoryCtx, operands[1]->GetValue(), resolve_event_type(operands[0]->GetValue()), addr);
-  SCPWaitEvent::sys_wait_events.push(event);
+  SCPWaitEvent::sysWaitEventSubscriptions.push(event);
 
   return SC_RESULT_OK;
 }

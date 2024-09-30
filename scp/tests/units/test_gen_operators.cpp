@@ -22,7 +22,7 @@ size_t const WAIT_TIME = 1000;
 static ScKeynode action_gen_el("action_gen_el", ScType::NodeConstClass);
 static ScKeynode concept_set("concept_set", ScType::NodeConstClass);
 
-using scpGenOperatorsTest = ScMemoryTest;
+using SCPGenOperatorsTest = ScMemoryTest;
 
 void SubscribeAgents(ScAgentContext & context)
 {
@@ -62,7 +62,7 @@ bool ApplyOperator(ScAgentContext & context, ScAddr const & operatorAddr, size_t
       ->Wait(waitTime);
 }
 
-TEST_F(scpGenOperatorsTest, TestGenEl)
+TEST_F(SCPGenOperatorsTest, TestGenEl)
 {
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "gen_el_test.scs");
@@ -84,7 +84,7 @@ TEST_F(scpGenOperatorsTest, TestGenEl)
   UnsubscribeAgents(context);
 }
 
-TEST_F(scpGenOperatorsTest, ComplexAgentsChain)
+TEST_F(SCPGenOperatorsTest, ComplexAgentsChain)
 {
   ScAgentContext & context = *m_ctx;
   SubscribeAgents(context);

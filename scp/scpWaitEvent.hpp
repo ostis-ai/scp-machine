@@ -16,11 +16,11 @@ namespace scp
 class SCPWaitEvent
 {
 private:
-  std::shared_ptr<ScElementaryEventSubscription<ScElementaryEvent>> m_event;
+  std::shared_ptr<ScElementaryEventSubscription<ScElementaryEvent>> m_eventSubscription;
   ScAddr const & paramAddr;
 
 public:
-  static concurrent_deque<SCPWaitEvent *> sys_wait_events;
+  static concurrent_deque<SCPWaitEvent *> sysWaitEventSubscriptions;
   void static DeleteAllSysWaiters();
   SCPWaitEvent(
       ScAgentContext & ctx,

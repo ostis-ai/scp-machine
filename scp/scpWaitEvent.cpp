@@ -15,14 +15,14 @@
 namespace scp
 {
 
-concurrent_deque<SCPWaitEvent *> SCPWaitEvent::sys_wait_events;
+concurrent_deque<SCPWaitEvent *> SCPWaitEvent::sysWaitEventSubscriptions;
 
 void SCPWaitEvent::DeleteAllSysWaiters()
 {
-  while (!sys_wait_events.empty())
+  while (!sysWaitEventSubscriptions.empty())
   {
-    SCPWaitEvent * event = sys_wait_events.front();
-    sys_wait_events.pop();
+    SCPWaitEvent * event = sysWaitEventSubscriptions.front();
+    sysWaitEventSubscriptions.pop();
     delete event;
   }
 }
@@ -34,8 +34,7 @@ SCPWaitEvent::SCPWaitEvent(
     ScAddr const & waitingOperator)
   : paramAddr(waitingOperator)
 {
-  SC_LOG_INFO("Creating SCPWaitEvent with event type " << ctx.GetElementSystemIdentifier(eventType));
-  m_event = ctx.CreateElementaryEventSubscription(
+  m_eventSubscription = ctx.CreateElementaryEventSubscription(
       eventType,
       subscribedElement,
       [waitingOperator](ScElementaryEvent const & scEvent)
@@ -58,9 +57,9 @@ SCPWaitEvent::SCPWaitEvent(
           return event->paramAddr == waitingOperator;
         };
 
-        SCPWaitEvent * event;
-        if (sys_wait_events.extract(checker, event))
-          delete event;
+        SCPWaitEvent * eventSubscription;
+        if (sysWaitEventSubscriptions.extract(checker, eventSubscription))
+          delete eventSubscription;
       });
 }
 
