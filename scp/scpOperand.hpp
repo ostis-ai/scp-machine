@@ -30,7 +30,7 @@ private:
   ScAddr addr;
   ScAddr arc_addr;
   ScAddr value_addr;
-  ScType element_type = ScType(0);
+  ScType element_type = ScType::Unknown;
   SCPParamType param_type = SCP_FIXED;
   SCPOperandType operand_type = SCP_CONST;
   bool isSet = false;

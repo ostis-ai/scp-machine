@@ -39,7 +39,10 @@ public:
   void FinishExecutionSuccessfully();
   void FinishExecutionUnsuccessfully();
   void FinishExecutionWithError();
-  static void ClearExecutionState(ScAgentContext & ctx, ScAddr oper_addr, ScAddrUnorderedSet const & ignoredStates = {});
+  static void ClearExecutionState(
+      ScAgentContext & ctx,
+      ScAddr oper_addr,
+      ScAddrUnorderedSet const & ignoredStates = {});
   static void FinishExecution(ScAgentContext & ctx, ScAddr oper_addr);
   static void FinishExecutionSuccessfully(ScAgentContext & ctx, ScAddr oper_addr);
   static void FinishExecutionUnsuccessfully(ScAgentContext & ctx, ScAddr oper_addr);

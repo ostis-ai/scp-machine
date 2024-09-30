@@ -1,30 +1,23 @@
 #pragma once
 
-#include "scpOperator.hpp"
-
-#include <sc-memory/sc_agent.hpp>
+#include "scpOperatorInterpreter.hpp"
 
 namespace scp
 {
 
-class ASCPMathOperatorInterpreter : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
+class ASCPMathOperatorInterpreter : public ASCPOperatorInterpreter
 {
 public:
   ScAddr GetActionClass() const override;
 
-  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
-      override;
-
-  ScAddr GetEventSubscriptionElement() const override;
-
-  bool CheckInitiationCondition(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event) override;
+  ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+  getSupportedOperators() const override;
 
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_operator_math_interpreting"};
 
-  static void InitializeSupportedOperators();
-
 private:
-  static ScAddrToValueUnorderedMap<std::function<SCPOperator *(ScAgentContext &, ScAddr)>> supportedOperators;
+  static ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+      supportedOperators;
 };
 
 }  // namespace scp

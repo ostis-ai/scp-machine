@@ -43,15 +43,6 @@ SC_MODULE_REGISTER(scpModule)
 
 void scpModule::Initialize(ScMemoryContext * context)
 {
-  ASCPGenOperatorInterpreter::InitializeSupportedOperators();
-  ASCPEraseOperatorInterpreter::InitializeSupportedOperators();
-  ASCPSearchOperatorInterpreter::InitializeSupportedOperators();
-  ASCPIfOperatorInterpreter::InitializeSupportedOperators();
-  ASCPVarValueOperatorInterpreter::InitializeSupportedOperators();
-  ASCPPrintOperatorInterpreter::InitializeSupportedOperators();
-  ASCPProcessControlOperatorInterpreter::InitializeSupportedOperators();
-  ASCPMathOperatorInterpreter::InitializeSupportedOperators();
-  ASCPStringOperatorInterpreter::InitializeSupportedOperators();
   std::cout << "SCP START" << std::endl;
   ScAgentContext agentContext;
   SCPAgentEvent::SubscribeAllScpAgents(agentContext);

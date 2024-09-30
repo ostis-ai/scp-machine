@@ -22,7 +22,11 @@ private:
 public:
   static concurrent_deque<SCPWaitEvent *> sys_wait_events;
   void static DeleteAllSysWaiters();
-  SCPWaitEvent(ScAgentContext & ctx, ScAddr const & subscribedElement, ScAddr const & eventType, ScAddr const & waitingOperator);
+  SCPWaitEvent(
+      ScAgentContext & ctx,
+      ScAddr const & subscribedElement,
+      ScAddr const & eventType,
+      ScAddr const & waitingOperator);
 };
 
 }  // namespace scp

@@ -16,7 +16,7 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
     ScAction & action)
 {
-  ScAction const & scpAction = m_context.ConvertToAction(event.GetOtherElement());
+  ScAddr const & finishedAction = event.GetOtherElement();
 
   ScAddr waitOperatorAddr;
 
@@ -24,7 +24,7 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
   ScIterator5Ptr iter = m_context.CreateIterator5(
       ScType::NodeConst,
       ScType::EdgeAccessConstPosPerm,
-      scpAction,
+      finishedAction,
       ScType::EdgeAccessConstPosPerm,
       Keynodes::rrel_scp_const);
   while (iter->Next())
@@ -39,7 +39,7 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
   }
 
   // SCP_VAR case
-  ScIterator3Ptr iter3 = m_context.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosTemp, scpAction);
+  ScIterator3Ptr iter3 = m_context.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosTemp, finishedAction);
   while (iter3->Next())
   {
     ScIterator5Ptr iter5 = m_context.CreateIterator5(

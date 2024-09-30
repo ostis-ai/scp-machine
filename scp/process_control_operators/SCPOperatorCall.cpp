@@ -61,7 +61,7 @@ sc_result SCPOperatorCall::Parse()
     return SC_RESULT_ERROR_INVALID_PARAMS;
   }
 
-  ScIterator3Ptr iter_param = m_memoryCtx.CreateIterator3(param_set, ScType::EdgeAccessConstPosPerm, ScType(0));
+  ScIterator3Ptr iter_param = m_memoryCtx.CreateIterator3(param_set, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
   while (iter_param->Next())
   {
     auto * operand = new SCPOperand(m_memoryCtx, iter_param->Get(1));
@@ -132,7 +132,8 @@ sc_result SCPOperatorCall::Execute()
   else
   {
 #ifdef SCP_DEBUG
-    Utils::logSCPError(m_memoryCtx, m_memoryCtx.GetElementSystemIdentifier(program_node) + " does not have key sc element", addr);
+    Utils::logSCPError(
+        m_memoryCtx, m_memoryCtx.GetElementSystemIdentifier(program_node) + " does not have key sc element", addr);
 #endif
     FinishExecutionWithError();
     return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -170,7 +171,8 @@ sc_result SCPOperatorCall::Execute()
       {
 #ifdef SCP_DEBUG
         std::stringstream ss;
-        ss << "Expected parameter " << (i + 1) << " was not passed for " << m_memoryCtx.GetElementSystemIdentifier(program_node);
+        ss << "Expected parameter " << (i + 1) << " was not passed for "
+           << m_memoryCtx.GetElementSystemIdentifier(program_node);
         Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
         m_memoryCtx.EraseElement(params_set);
@@ -188,7 +190,8 @@ sc_result SCPOperatorCall::Execute()
           {
 #ifdef SCP_DEBUG
             std::stringstream ss;
-            ss << "Passed param " << (i + 1) << " has modifier FIXED, but has no value for " << m_memoryCtx.GetElementSystemIdentifier(program_node);
+            ss << "Passed param " << (i + 1) << " has modifier FIXED, but has no value for "
+               << m_memoryCtx.GetElementSystemIdentifier(program_node);
             Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
             m_memoryCtx.EraseElement(params_set);
@@ -201,7 +204,8 @@ sc_result SCPOperatorCall::Execute()
         {
 #ifdef SCP_DEBUG
           std::stringstream ss;
-          ss << "Passed param " << (i + 1) << " must have FIXED modifier, because corresponds to IN parameter for " << m_memoryCtx.GetElementSystemIdentifier(program_node);
+          ss << "Passed param " << (i + 1) << " must have FIXED modifier, because corresponds to IN parameter for "
+             << m_memoryCtx.GetElementSystemIdentifier(program_node);
           Utils::logSCPError(m_memoryCtx, ss.str(), addr);
 #endif
           m_memoryCtx.EraseElement(params_set);

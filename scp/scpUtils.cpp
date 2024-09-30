@@ -141,7 +141,7 @@ void printInfo(ScAgentContext & ctx, ScAddr const & elemAddr)
   cout << endl;
 
   cout << "Input arcs:\n";
-  ScIterator3Ptr it = ctx.CreateIterator3(ScType(0), ScType(0), elemAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(ScType::Unknown, ScType::Unknown, elemAddr);
   while (it->Next())
   {
     c_in++;
@@ -156,7 +156,7 @@ void printInfo(ScAgentContext & ctx, ScAddr const & elemAddr)
   cout << "Total input arcs: " << c_in << endl;
 
   cout << "Output arcs:\n";
-  it = ctx.CreateIterator3(elemAddr, ScType(0), ScType(0));
+  it = ctx.CreateIterator3(elemAddr, ScType::Unknown, ScType::Unknown);
   while (it->Next())
   {
     c_out++;

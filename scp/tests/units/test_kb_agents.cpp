@@ -33,16 +33,6 @@ using kbAgentsTest = ScMemoryTest;
 
 void SubscribeAgents(ScAgentContext & context)
 {
-  ASCPGenOperatorInterpreter::InitializeSupportedOperators();
-  ASCPEraseOperatorInterpreter::InitializeSupportedOperators();
-  ASCPSearchOperatorInterpreter::InitializeSupportedOperators();
-  ASCPIfOperatorInterpreter::InitializeSupportedOperators();
-  ASCPVarValueOperatorInterpreter::InitializeSupportedOperators();
-  ASCPPrintOperatorInterpreter::InitializeSupportedOperators();
-  ASCPProcessControlOperatorInterpreter::InitializeSupportedOperators();
-  ASCPMathOperatorInterpreter::InitializeSupportedOperators();
-  ASCPStringOperatorInterpreter::InitializeSupportedOperators();
-
   context.SubscribeAgent<ASCPProcessInterpreter>();
   context.SubscribeAgent<ASCPProcessDestroyer>();
   context.SubscribeAgent<ASCPGenOperatorInterpreter>();

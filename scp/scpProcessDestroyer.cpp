@@ -51,7 +51,8 @@ ScResult ASCPProcessDestroyer::DoProgram(
           continue;
 
         ScAddr curr_operand = it_operand->Get(2);
-        ScIterator3Ptr it_pairs = m_context.CreateIterator3(curr_operand, ScType::EdgeAccessConstPosPerm, ScType(0));
+        ScIterator3Ptr it_pairs =
+            m_context.CreateIterator3(curr_operand, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
         while (it_pairs->Next())
         {
           ScAddr curr_pair = it_pairs->Get(2);

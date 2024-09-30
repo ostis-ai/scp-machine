@@ -1,4 +1,10 @@
-#include "scpInterpretationRequestInitiationAgent.hpp"
+/*
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
+
+#include "scpHandlingEventThatInitiatesAgentSCPProgram.hpp"
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
@@ -7,7 +13,7 @@
 
 namespace scp
 {
-ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent const & event, ScAction & action)
+ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
   sc_uint32 const maxCustomerWaitingTime = action.GetMaxCustomerWaitingTime();
@@ -62,7 +68,7 @@ ScResult SCPInterpretationRequestInitiationAgent::DoProgram(ScElementaryEvent co
   return action.FinishSuccessfully();
 }
 
-ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
+ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
 {
   if (!m_context.IsElement(m_agentImplementationAddr))
   {
@@ -113,21 +119,5 @@ ScAddr SCPInterpretationRequestInitiationAgent::GetAgentProgram() const
     return ScAddr::Empty;
   }
   return agentProgram;
-}
-
-bool SCPInterpretationRequestInitiationAgent::CheckInitiationCondition(ScElementaryEvent const & event)
-{
-  ScAddr const & action = event.GetOtherElement();
-  auto const & actionAuthorIterator = m_context.CreateIterator5(
-      action,
-      ScType::EdgeDCommonConst,
-      Keynodes::abstract_scp_machine,
-      ScType::EdgeAccessConstPosPerm,
-      Keynodes::nrel_authors);
-  if (actionAuthorIterator->Next())
-    return false;
-  if (!m_context.CheckConnector(GetActionClass(), action, ScType::EdgeAccessConstPosPerm))
-    return false;
-  return true;
 }
 }  // namespace scp

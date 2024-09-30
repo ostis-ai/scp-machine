@@ -40,14 +40,16 @@ SCPWaitEvent::SCPWaitEvent(
       subscribedElement,
       [waitingOperator](ScElementaryEvent const & scEvent)
       {
-        if (!ScMemory::ms_globalContext->CheckConnector(Keynodes::action_finished_successfully, waitingOperator, ScType::EdgeAccessConstPosPerm))
-          ScMemory::ms_globalContext->GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully,
-                                                        waitingOperator);
+        if (!ScMemory::ms_globalContext->CheckConnector(
+                Keynodes::action_finished_successfully, waitingOperator, ScType::EdgeAccessConstPosPerm))
+          ScMemory::ms_globalContext->GenerateConnector(
+              ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, waitingOperator);
         else
           return;
-        if (!ScMemory::ms_globalContext->CheckConnector(Keynodes::action_finished, waitingOperator, ScType::EdgeAccessConstPosPerm))
-          ScMemory::ms_globalContext->GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished,
-                                                        waitingOperator);
+        if (!ScMemory::ms_globalContext->CheckConnector(
+                Keynodes::action_finished, waitingOperator, ScType::EdgeAccessConstPosPerm))
+          ScMemory::ms_globalContext->GenerateConnector(
+              ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, waitingOperator);
         else
           return;
 

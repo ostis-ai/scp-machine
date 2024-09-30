@@ -7,7 +7,7 @@
 #include "scpAgentEvent.hpp"
 
 #include "scp.hpp"
-#include "scpInterpretationRequestInitiationAgent.hpp"
+#include "scpHandlingEventThatInitiatesAgentSCPProgram.hpp"
 #include "scpKeynodes.hpp"
 
 namespace scp
@@ -57,7 +57,7 @@ void SCPAgentEvent::RegisterScpAgent(ScAgentContext & ctx, ScAddr const & agentN
 {
   try
   {
-    ctx.SubscribeSpecifiedAgent<SCPInterpretationRequestInitiationAgent>(agentNode);
+    ctx.SubscribeSpecifiedAgent<ASCPHandlingEventThatInitiatesAgentSCPProgram>(agentNode);
     SC_LOG_INFO("Registered " << agentNode.Hash() << ", " << ctx.GetElementSystemIdentifier(agentNode));
   }
   catch (utils::ScException const & exception)
@@ -70,7 +70,7 @@ void SCPAgentEvent::UnregisterScpAgent(ScAgentContext & ctx, ScAddr const & agen
 {
   try
   {
-    ctx.UnsubscribeSpecifiedAgent<SCPInterpretationRequestInitiationAgent>(agentNode);
+    ctx.UnsubscribeSpecifiedAgent<ASCPHandlingEventThatInitiatesAgentSCPProgram>(agentNode);
   }
   catch (utils::ScException const & exception)
   {

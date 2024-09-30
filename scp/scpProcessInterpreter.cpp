@@ -16,18 +16,39 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
   sc_uint32 const maxCustomerWaitingTime = action.GetMaxCustomerWaitingTime();
-  auto const & [program, params] = action.GetArguments<2>();
-  if (!program.IsValid() || !params.IsValid())
+  auto const & [program, paramsForSubstitution] = action.GetArguments<2>();
+  if (!program.IsValid() || !paramsForSubstitution.IsValid())
   {
     SC_AGENT_LOG_ERROR(
-        "Action arguments expected to be valid, but got " << program.Hash() << " and " << params.Hash() << " instead");
+        "Action arguments expected to be valid, but got " << program.Hash() << " and " << paramsForSubstitution.Hash()
+                                                          << " instead");
     return action.FinishUnsuccessfully();
   }
 
   ScTemplate programTemplate;
   m_context.BuildTemplate(programTemplate, program);
-  ScTemplateParams generationParams;
 
+  ScAddr const & variableProcessNode = getProgramProcess(program);
+
+  if (!variableProcessNode.IsValid())
+  {
+    SC_AGENT_LOG_ERROR("Cannot find key element of program " << program.Hash());
+    return action.FinishUnsuccessfully();
+  }
+
+  ScTemplateParams const & generationParams =
+      getProgramGenerationParams(program, paramsForSubstitution, variableProcessNode);
+
+  ScTemplateGenResult result;
+  m_context.GenerateByTemplate(programTemplate, result, generationParams);
+
+  ScAddr const & constProcessNode = result[variableProcessNode];
+  initiateFirstProcessOperatorAndWaitFinish(startTime, maxCustomerWaitingTime, constProcessNode, program);
+  return action.FinishSuccessfully();
+}
+
+ScAddr ASCPProcessInterpreter::getProgramProcess(ScAddr const & program) const
+{
   ScAddr processNode;
   auto const & programKeyElementIterator = m_context.CreateIterator5(
       program,
@@ -37,12 +58,15 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
       Keynodes::rrel_key_sc_element);
   if (programKeyElementIterator->IsValid() && programKeyElementIterator->Next())
     processNode = programKeyElementIterator->Get(2);
-  else
-  {
-    SC_AGENT_LOG_ERROR("Cannot find key element of program " << program.Hash());
-    return action.FinishUnsuccessfully();
-  }
+  return processNode;
+}
 
+ScTemplateParams ASCPProcessInterpreter::getProgramGenerationParams(
+    ScAddr const & program,
+    ScAddr const & paramsForSubstitution,
+    ScAddr const & processNode) const
+{
+  ScTemplateParams generationParams;
   auto const & processParametersIterator = m_context.CreateIterator5(
       processNode, ScType::EdgeAccessVarPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, program);
 
@@ -53,7 +77,11 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
     if (Utils::resolveOrderRoleRelation(m_context, processParametersIterator->Get(1), order))
     {
       auto const & parametersIterator = m_context.CreateIterator5(
-          params, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, order);
+          paramsForSubstitution,
+          ScType::EdgeAccessConstPosPerm,
+          ScType::Unknown,
+          ScType::EdgeAccessConstPosPerm,
+          order);
       if (!parametersIterator->Next())
       {
 #ifdef SCP_DEBUG
@@ -64,15 +92,19 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
       generationParams.Add(processParametersIterator->Get(2), parametersIterator->Get(2));
     }
   }
+  return generationParams;
+}
 
-  ScTemplateGenResult result;
-  m_context.GenerateByTemplate(programTemplate, result, generationParams);
-
-  ScAddr constProcessNode = result[processNode];
+void ASCPProcessInterpreter::initiateFirstProcessOperatorAndWaitFinish(
+    std::chrono::time_point<std::chrono::high_resolution_clock> const & startTime,
+    sc_uint32 const maxCustomerWaitingTime,
+    ScAddr const & processNode,
+    ScAddr const & programNode) const
+{
   auto const & generatedProcessDecompositionIterator = m_context.CreateIterator5(
       ScType::NodeConst,
       ScType::EdgeDCommonConst,
-      constProcessNode,
+      processNode,
       ScType::EdgeAccessConstPosPerm,
       Keynodes::nrel_decomposition_of_action);
   if (generatedProcessDecompositionIterator->Next())
@@ -87,57 +119,57 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
     {
       m_context.GenerateConnector(
           ScType::EdgeAccessConstPosPerm, Keynodes::active_action, firstOperatorIterator->Get(2));
-      auto const & sub = m_context.CreateElementaryEventSubscription<ScEventBeforeEraseElement>(
-          constProcessNode,
-          [](auto const & otherEvent)
-          {
-            SC_LOG_ERROR("\n\n" << otherEvent.GetSubscriptionElement().Hash() << " was erased");
-          });
-      auto const & waiter =
-          m_context.CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
-              constProcessNode,
-              [](auto const & otherEvent)
-              {
-                return otherEvent.GetArcSourceElement() == Keynodes::action_finished;
-              });
-      if (maxCustomerWaitingTime == 0)
-        waiter->Wait();
-      else
-      {
-        auto const & timeFromStart = scp::Utils::GetTimeFromStart(startTime);
-        if (timeFromStart < maxCustomerWaitingTime)
-          waiter->Wait(maxCustomerWaitingTime - timeFromStart);
-        else
-        {
-          SC_AGENT_LOG_WARNING(
-              "Max customer waiting time" << maxCustomerWaitingTime << " has expired before action "
-                                          << constProcessNode.Hash() << " was initiated because" << timeFromStart
-                                          << " ms have passed");
-          waiter->Wait();
-        }
-      }
+      waitProcessFinish(startTime, maxCustomerWaitingTime, processNode);
     }
     else
     {
 #ifdef SCP_DEBUG
-      Utils::logSCPError(m_context, "Missed initial scp-operator", program);
+      Utils::logSCPError(m_context, "Missed initial scp-operator", programNode);
 #endif
-      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, constProcessNode);
+      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, processNode);
     }
   }
   else
   {
 #ifdef SCP_DEBUG
-    Utils::logSCPError(m_context, "Missed scp-process decomposition", program);
+    Utils::logSCPError(m_context, "Missed scp-process decomposition", programNode);
 #endif
-    m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, constProcessNode);
+    m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, processNode);
   }
-  return action.FinishSuccessfully();
+}
+
+void ASCPProcessInterpreter::waitProcessFinish(
+    std::chrono::time_point<std::chrono::high_resolution_clock> const & startTime,
+    sc_uint32 const maxCustomerWaitingTime,
+    ScAddr const & processNode) const
+{
+  auto const & waiter =
+      m_context.CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
+          processNode,
+          [](auto const & otherEvent)
+          {
+            return otherEvent.GetArcSourceElement() == Keynodes::action_finished;
+          });
+  if (maxCustomerWaitingTime == 0)
+    waiter->Wait();
+  else
+  {
+    auto const & timeFromStart = Utils::GetTimeFromStart(startTime);
+    if (timeFromStart < maxCustomerWaitingTime)
+      waiter->Wait(maxCustomerWaitingTime - timeFromStart);
+    else
+    {
+      SC_AGENT_LOG_WARNING(
+          "Max customer waiting time" << maxCustomerWaitingTime << " has expired before action " << processNode.Hash()
+                                      << " was initiated because" << timeFromStart << " ms have passed");
+      waiter->Wait();
+    }
+  }
 }
 
 ScAddr ASCPProcessInterpreter::GetActionClass() const
 {
-  return Keynodes::action_interpret_process;
+  return Keynodes::action_scp_interpretation_request;
 }
 
 bool ASCPProcessInterpreter::CheckInitiationCondition(ScActionInitiatedEvent const & event)

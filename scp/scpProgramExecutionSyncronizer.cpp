@@ -36,6 +36,11 @@ ScResult ASCPProgramExecutionSyncronizer::DoProgram(
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_goto);
     return action.FinishSuccessfully();
   }
+  if (m_context.CheckConnector(Keynodes::action_finished, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
+  {
+    InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_goto);
+    return action.FinishSuccessfully();
+  }
 
   return action.FinishSuccessfully();
 }

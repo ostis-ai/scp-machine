@@ -19,16 +19,13 @@ std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/testStructur
 std::string const TEST_OPERATOR = "test_operator";
 size_t const WAIT_TIME = 1000;
 
-static ScKeynode action_gen_el("action_gen_el");
+static ScKeynode action_gen_el("action_gen_el", ScType::NodeConstClass);
+static ScKeynode concept_set("concept_set", ScType::NodeConstClass);
 
 using scpGenOperatorsTest = ScMemoryTest;
 
 void SubscribeAgents(ScAgentContext & context)
 {
-  ASCPGenOperatorInterpreter::InitializeSupportedOperators();
-  ASCPProcessControlOperatorInterpreter::InitializeSupportedOperators();
-  ASCPSearchOperatorInterpreter::InitializeSupportedOperators();
-
   context.SubscribeAgent<ASCPAgentActivator>();
   context.SubscribeAgent<ASCPGenOperatorInterpreter>();
   context.SubscribeAgent<ASCPProcessInterpreter>();
@@ -99,6 +96,7 @@ TEST_F(scpGenOperatorsTest, ComplexAgentsChain)
   SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterScpAgent, agent);
   ScAction action = context.GenerateAction(action_gen_el);
   ScAddr const & setAddr = context.GenerateNode(ScType::NodeConst);
+  context.GenerateConnector(ScType::EdgeAccessConstPosPerm, concept_set, setAddr);
   action.SetArguments(setAddr);
   auto const & iteratorBefore = context.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   EXPECT_FALSE(iteratorBefore->Next());
