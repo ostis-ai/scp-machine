@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GWF version="2.0">
+    <staticSector>
+        <node type="node/const/perm/general" idtf="" shapeColor="0" id="96576222869216" parent="0" x="414.013" y="376.375" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/group" idtf="scp_operator_atomic_type" shapeColor="0" id="96576213403200" parent="0" left="0" top="0" right="198.328" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="489" y="287" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/group" idtf="" shapeColor="0" id="96576220909360" parent="0" x="489" y="376.375" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/group" idtf="action_finished" shapeColor="0" id="96576217968448" parent="0" left="0" top="0" right="119.813" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="414.013" y="251.5" haveBus="false" idtf_pos="1">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="0" id="96576211286992" parent="0" id_b="96576220909360" id_e="96576222869216" b_x="489" b_y="376.375" e_x="414.013" e_y="376.375" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="0" id="96576228014784" parent="0" id_b="96576213403200" id_e="96576220909360" b_x="489" b_y="287" e_x="489" e_y="376.375" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="0" id="96576213118976" parent="0" id_b="96576217968448" id_e="96576222869216" b_x="414.013" b_y="251.5" e_x="414.013" e_y="376.375" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+    </staticSector>
+</GWF>
