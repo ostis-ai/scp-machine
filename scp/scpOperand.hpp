@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
+#include <sc-memory/sc_agent_context.hpp>
 #include "scpKeynodes.hpp"
+#include "scpType.hpp"
 
 namespace scp
 {
@@ -30,7 +31,7 @@ private:
   ScAddr addr;
   ScAddr arc_addr;
   ScAddr value_addr;
-  ScType element_type = ScType::Unknown;
+  SCPType element_type = SCPType::Unknown;
   SCPParamType param_type = SCP_FIXED;
   SCPOperandType operand_type = SCP_CONST;
   bool isSet = false;

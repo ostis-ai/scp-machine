@@ -23,17 +23,17 @@ namespace Utils
 
 bool addToSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
 {
-  if (ctx.CheckConnector(setAddr, elAddr, ScType::EdgeAccessConstPosPerm))
+  if (ctx.CheckConnector(setAddr, elAddr, ScType::ConstPermPosArc))
     return false;
 
-  ScAddr arcAddr = ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, setAddr, elAddr);
+  ScAddr arcAddr = ctx.GenerateConnector(ScType::ConstPermPosArc, setAddr, elAddr);
   assert(arcAddr.IsValid());
   return true;
 }
 
 bool removeFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
 {
-  ScIterator3Ptr it = ctx.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, elAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(setAddr, ScType::ConstPermPosArc, elAddr);
   bool result = false;
   while (it->Next())
     ctx.EraseElement(it->Get(1));
@@ -43,10 +43,10 @@ bool removeFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & 
 
 bool resolveOrderRoleRelation(ScAgentContext & ctx, ScAddr const & arcAddr, ScAddr & relationAddr)
 {
-  ScIterator3Ptr it = ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccess, arcAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(ScType::ConstNode, ScType::MembershipArc, arcAddr);
   while (it->Next())
   {
-    if (ctx.CheckConnector(Keynodes::order_role_relation, it->Get(0), ScType::EdgeAccessConstPosPerm))
+    if (ctx.CheckConnector(Keynodes::order_role_relation, it->Get(0), ScType::ConstPermPosArc))
     {
       relationAddr = it->Get(0);
       return true;
@@ -100,10 +100,10 @@ bool resolveOrderRoleRelation(ScAgentContext & ctx, uint8_t const order, ScAddr 
 
 bool resolveOperatorType(ScAgentContext & ctx, ScAddr const & operatorAddr, ScAddr & operatorType)
 {
-  ScIterator3Ptr it = ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccess, operatorAddr);
+  ScIterator3Ptr it = ctx.CreateIterator3(ScType::ConstNode, ScType::MembershipArc, operatorAddr);
   while (it->Next())
   {
-    if (ctx.CheckConnector(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::EdgeAccessConstPosPerm))
+    if (ctx.CheckConnector(Keynodes::scp_operator_atomic_type, it->Get(0), ScType::ConstPermPosArc))
     {
       operatorType = it->Get(0);
       return true;
@@ -146,7 +146,7 @@ void printInfo(ScAgentContext & ctx, ScAddr const & elemAddr)
   {
     c_in++;
     cout << "\t" << it->Get(1).GetRealAddr().seg << "|" << it->Get(1).GetRealAddr().offset;
-    if (ctx.GetElementType(it->Get(1)).BitAnd(sc_type_arc_access))
+    if (ctx.GetElementType(it->Get(1)).BitAnd(sc_type_membership_arc))
       cout << " <- ";
     else
       cout << " <= ";
@@ -161,7 +161,7 @@ void printInfo(ScAgentContext & ctx, ScAddr const & elemAddr)
   {
     c_out++;
     cout << "\t" << it->Get(1).GetRealAddr().seg << "|" << it->Get(1).GetRealAddr().offset;
-    if (ctx.GetElementType(it->Get(1)).BitAnd(sc_type_arc_access))
+    if (ctx.GetElementType(it->Get(1)).BitAnd(sc_type_membership_arc))
       cout << " -> ";
     else
       cout << " => ";
@@ -396,8 +396,8 @@ void printOperatorAnswer(ScAgentContext & ctx, SCPOperand * nodeAddr, ScAddr con
   elem3 = linkAddr;
   elem1 = nodeAddr->CreateNodeOrLink();
 
-  arc1 = ctx.GenerateConnector(sc_type_arc_common, elem1, elem3);
-  ctx.GenerateConnector(sc_type_arc_pos_const_perm, elem5, arc1);
+  arc1 = ctx.GenerateConnector(ScType::ConstCommonArc, elem1, elem3);
+  ctx.GenerateConnector(ScType::ConstPermPosArc, elem5, arc1);
   printInfo(ctx, elem5);
   printInfo(ctx, elem3);
   printInfo(ctx, elem1);

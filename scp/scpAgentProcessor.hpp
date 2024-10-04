@@ -11,12 +11,12 @@
 namespace scp
 {
 
-class ASCPAgentActivator : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
+class ASCPAgentActivator : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
   ScAddr GetActionClass() const override;
 
-  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
+  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action)
       override;
 
   ScAddr GetEventSubscriptionElement() const override;
@@ -24,13 +24,12 @@ public:
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_agents_activation"};
 };
 
-class ASCPAgentDeactivator : public ScAgent<ScEventBeforeEraseOutgoingArc<ScType::EdgeAccessConstPosPerm>>
+class ASCPAgentDeactivator : public ScAgent<ScEventBeforeEraseOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
   ScAddr GetActionClass() const override;
 
-  ScResult DoProgram(ScEventBeforeEraseOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
-      override;
+  ScResult DoProgram(ScEventBeforeEraseOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action) override;
 
   ScAddr GetEventSubscriptionElement() const override;
 

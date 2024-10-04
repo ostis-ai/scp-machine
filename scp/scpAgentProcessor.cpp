@@ -13,7 +13,7 @@ namespace scp
 {
 
 ScResult ASCPAgentActivator::DoProgram(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)
 {
   ScAddr agent = event.GetOtherElement();
@@ -34,7 +34,7 @@ ScAddr ASCPAgentActivator::GetEventSubscriptionElement() const
 }
 
 ScResult ASCPAgentDeactivator::DoProgram(
-    ScEventBeforeEraseOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+    ScEventBeforeEraseOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)
 {
   ScAddr agent = event.GetOtherElement();

@@ -12,10 +12,10 @@
 
 namespace scp
 {
-class ASCPOperatorInterpreter : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
+class ASCPOperatorInterpreter : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
-  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
+  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action)
       override;
 
   ScAddr GetEventSubscriptionElement() const override;
@@ -23,7 +23,7 @@ public:
   virtual ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
   getSupportedOperators() const = 0;
 
-  bool CheckInitiationCondition(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event) override;
+  bool CheckInitiationCondition(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event) override;
 
 private:
 };

@@ -25,7 +25,7 @@ std::string SCPOperatorSysSearch::GetTypeName()
 sc_result SCPOperatorSysSearch::Parse()
 {
   SCPOperator::Parse();
-  ScIterator3Ptr const operandIt3 = m_memoryCtx.CreateIterator3(addr, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
+  ScIterator3Ptr const operandIt3 = m_memoryCtx.CreateIterator3(addr, ScType::ConstPermPosArc, ScType::Unknown);
   while (operandIt3->Next())
   {
     auto * operand = new SCPOperand(m_memoryCtx, operandIt3->Get(1));
@@ -110,18 +110,14 @@ sc_result SCPOperatorSysSearch::Execute()
   ScTemplateParams searchParams;
   ScAddr const & searchParamsAddr = operands[2]->GetValue();
   ScIterator3Ptr const paramsMapIt3 =
-      m_memoryCtx.CreateIterator3(searchParamsAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      m_memoryCtx.CreateIterator3(searchParamsAddr, ScType::ConstPermPosArc, ScType::ConstNode);
 
   while (paramsMapIt3->Next())
   {
     ScAddr const & parameterPairAddr = paramsMapIt3->Get(2);
 
     ScIterator5Ptr const varIt5 = m_memoryCtx.CreateIterator5(
-        parameterPairAddr,
-        ScType::EdgeAccessConstPosPerm,
-        ScType::Unknown,
-        ScType::EdgeAccessConstPosPerm,
-        Keynodes::rrel_1);
+        parameterPairAddr, ScType::ConstPermPosArc, ScType::Unknown, ScType::ConstPermPosArc, Keynodes::rrel_1);
 
     ScAddr varAddr;
     if (varIt5->Next())
@@ -136,11 +132,7 @@ sc_result SCPOperatorSysSearch::Execute()
     }
 
     ScIterator5Ptr const replacementIt5 = m_memoryCtx.CreateIterator5(
-        parameterPairAddr,
-        ScType::EdgeAccessConstPosPerm,
-        ScType::Unknown,
-        ScType::EdgeAccessConstPosPerm,
-        Keynodes::rrel_2);
+        parameterPairAddr, ScType::ConstPermPosArc, ScType::Unknown, ScType::ConstPermPosArc, Keynodes::rrel_2);
 
     ScAddr replacementAddr;
     if (replacementIt5->Next())
@@ -201,7 +193,7 @@ sc_result SCPOperatorSysSearch::Execute()
 
   std::set<ScAddr, ScAddrLessFunc> templateVarsSet;
   ScIterator3Ptr const templateIt3 =
-      m_memoryCtx.CreateIterator3(searchTemplateAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
+      m_memoryCtx.CreateIterator3(searchTemplateAddr, ScType::ConstPermPosArc, ScType::Unknown);
   while (templateIt3->Next())
   {
     ScAddr const & templateElementAddr = templateIt3->Get(2);
@@ -220,7 +212,7 @@ sc_result SCPOperatorSysSearch::Execute()
     }
     else
     {
-      foundElementsSetAddr = m_memoryCtx.GenerateNode(ScType::NodeConst);
+      foundElementsSetAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
       operands[3]->ResetValue();
       operands[3]->SetValue(foundElementsSetAddr);
     }
@@ -241,7 +233,7 @@ sc_result SCPOperatorSysSearch::Execute()
           ScAddr replacementsSetAddr;
           if (templateVarAddrsToSearchResultAddrs.find(templateVarAddr) == templateVarAddrsToSearchResultAddrs.cend())
           {
-            replacementsSetAddr = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            replacementsSetAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
             templateVarAddrsToSearchResultAddrs.insert({templateVarAddr, replacementsSetAddr});
           }
           else
@@ -249,12 +241,12 @@ sc_result SCPOperatorSysSearch::Execute()
             replacementsSetAddr = templateVarAddrsToSearchResultAddrs.at(templateVarAddr);
           }
 
-          if (!m_memoryCtx.CheckConnector(replacementsSetAddr, foundAddr, ScType::EdgeAccessConstPosPerm))
-            m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, replacementsSetAddr, foundAddr);
+          if (!m_memoryCtx.CheckConnector(replacementsSetAddr, foundAddr, ScType::ConstPermPosArc))
+            m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, replacementsSetAddr, foundAddr);
 
           if (foundElementsSetAddr.IsValid()
-              && !m_memoryCtx.CheckConnector(foundElementsSetAddr, foundAddr, ScType::EdgeAccessConstPosPerm))
-            m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, foundElementsSetAddr, foundAddr);
+              && !m_memoryCtx.CheckConnector(foundElementsSetAddr, foundAddr, ScType::ConstPermPosArc))
+            m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, foundElementsSetAddr, foundAddr);
         }
       });
 
@@ -265,7 +257,7 @@ sc_result SCPOperatorSysSearch::Execute()
   }
   else
   {
-    templateVarsToSearchResultsSetAddr = m_memoryCtx.GenerateNode(ScType::NodeConst);
+    templateVarsToSearchResultsSetAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
     ;
     operands[1]->ResetValue();
     operands[1]->SetValue(templateVarsToSearchResultsSetAddr);
@@ -276,28 +268,24 @@ sc_result SCPOperatorSysSearch::Execute()
     ScAddr const & templateVarAddr = pair.first;
     ScAddr const & searchResultAddr = pair.second;
 
-    ScAddr const & searchResultSetVariableAddr = m_memoryCtx.GenerateNode(ScType::NodeVar);
-    m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosTemp, searchResultSetVariableAddr, searchResultAddr);
+    ScAddr const & searchResultSetVariableAddr = m_memoryCtx.GenerateNode(ScType::VarNode);
+    m_memoryCtx.GenerateConnector(ScType::ConstTempPosArc, searchResultSetVariableAddr, searchResultAddr);
 
-    ScAddr const & replacementPairAddr = m_memoryCtx.GenerateNode(ScType::NodeConst);
+    ScAddr const & replacementPairAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
 
     ScAddr const & edgeToTemplateVarAddr =
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, replacementPairAddr, templateVarAddr);
-    m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, edgeToTemplateVarAddr);
-    m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_const, edgeToTemplateVarAddr);
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, replacementPairAddr, templateVarAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_1, edgeToTemplateVarAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_scp_const, edgeToTemplateVarAddr);
 
     ScAddr const & edgeToSearchResultSetVariableAddr =
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, replacementPairAddr, searchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, edgeToSearchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(
-        ScType::EdgeAccessConstPosPerm, Keynodes::rrel_scp_var, edgeToSearchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(
-        ScType::EdgeAccessConstPosPerm, Keynodes::rrel_assign, edgeToSearchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(
-        ScType::EdgeAccessConstPosPerm, Keynodes::rrel_set, edgeToSearchResultSetVariableAddr);
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, replacementPairAddr, searchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_2, edgeToSearchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_scp_var, edgeToSearchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_assign, edgeToSearchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_set, edgeToSearchResultSetVariableAddr);
 
-    m_memoryCtx.GenerateConnector(
-        ScType::EdgeAccessConstPosPerm, templateVarsToSearchResultsSetAddr, replacementPairAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, templateVarsToSearchResultsSetAddr, replacementPairAddr);
   }
 
   if (searchResult.IsEmpty())

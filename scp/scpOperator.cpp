@@ -108,7 +108,7 @@ void SCPOperator::FinishExecutionWithError()
 void SCPOperator::ClearExecutionState(ScAgentContext & ctx, ScAddr oper_addr, ScAddrUnorderedSet const & ignoredStates)
 {
   std::vector<ScAddr> arcs;
-  ScIterator3Ptr iter = ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, oper_addr);
+  ScIterator3Ptr iter = ctx.CreateIterator3(ScType::ConstNode, ScType::ConstPermPosArc, oper_addr);
   while (iter->Next())
   {
     ScAddr const & operatorState = iter->Get(0);
@@ -132,27 +132,27 @@ void SCPOperator::ClearExecutionState(ScAgentContext & ctx, ScAddr oper_addr, Sc
 
 void SCPOperator::FinishExecution(ScAgentContext & ctx, ScAddr oper_addr)
 {
-  ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, oper_addr);
+  ctx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished, oper_addr);
 }
 
 void SCPOperator::FinishExecutionSuccessfully(ScAgentContext & ctx, ScAddr oper_addr)
 {
   ClearExecutionState(ctx, oper_addr);
-  ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, oper_addr);
+  ctx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished_successfully, oper_addr);
   FinishExecution(ctx, oper_addr);
 }
 
 void SCPOperator::FinishExecutionUnsuccessfully(ScAgentContext & ctx, ScAddr oper_addr)
 {
   ClearExecutionState(ctx, oper_addr);
-  ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_unsuccessfully, oper_addr);
+  ctx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished_unsuccessfully, oper_addr);
   FinishExecution(ctx, oper_addr);
 }
 
 void SCPOperator::FinishExecutionWithError(ScAgentContext & ctx, ScAddr oper_addr)
 {
   ClearExecutionState(ctx, oper_addr);
-  ctx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_with_error, oper_addr);
+  ctx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished_with_error, oper_addr);
   FinishExecution(ctx, oper_addr);
 }
 

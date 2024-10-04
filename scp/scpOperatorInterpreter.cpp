@@ -11,7 +11,7 @@
 namespace scp
 {
 ScResult ASCPOperatorInterpreter::DoProgram(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)
 {
   ScAddr const & scpOperatorAddr = event.GetOtherElement();
@@ -54,7 +54,7 @@ ScResult ASCPOperatorInterpreter::DoProgram(
 }
 
 bool ASCPOperatorInterpreter::CheckInitiationCondition(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event)
 {
   ScAddr const & scpOperatorAddr = event.GetOtherElement();
 

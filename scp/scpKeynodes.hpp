@@ -56,7 +56,7 @@ public:
 
   static inline ScKeynode const active_action{"active_action"};
 
-  static inline ScKeynode const active_sc_agent{"active_sc_agent", ScType::NodeConstClass};
+  static inline ScKeynode const active_sc_agent{"active_sc_agent", ScType::ConstNodeClass};
 
   static inline ScKeynode const nrel_scp_var_value{"nrel_scp_var_value"};
 
@@ -237,39 +237,39 @@ public:
 
   static inline ScKeynode const op_syncronize{"syncronize"};
 
-  static inline ScKeynode const action_activate_agent{"action_activate_agent", ScType::NodeConstClass};
-  static inline ScKeynode const action_deactivate_agent{"action_deactivate_agent", ScType::NodeConstClass};
+  static inline ScKeynode const action_activate_agent{"action_activate_agent", ScType::ConstNodeClass};
+  static inline ScKeynode const action_deactivate_agent{"action_deactivate_agent", ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_erase_operator{
       "action_interpret_erase_operator",
-      ScType::NodeConstClass};
+      ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_finished_action{
       "action_interpret_finished_action",
-      ScType::NodeConstClass};
-  static inline ScKeynode const action_interpret_gen_operator{"action_interpret_gen_operator", ScType::NodeConstClass};
-  static inline ScKeynode const action_interpret_if_operator{"action_interpret_if_operator", ScType::NodeConstClass};
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_gen_operator{"action_interpret_gen_operator", ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_if_operator{"action_interpret_if_operator", ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_math_operator{
       "action_interpret_math_operator",
-      ScType::NodeConstClass};
+      ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_print_operator{
       "action_interpret_print_operator",
-      ScType::NodeConstClass};
+      ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_process_control_operator{
       "action_interpret_process_control_operator",
-      ScType::NodeConstClass};
-  static inline ScKeynode const action_interpret_process{"action_interpret_process", ScType::NodeConstClass};
-  static inline ScKeynode const action_destroy_process{"action_destroy_process", ScType::NodeConstClass};
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_process{"action_interpret_process", ScType::ConstNodeClass};
+  static inline ScKeynode const action_destroy_process{"action_destroy_process", ScType::ConstNodeClass};
   static inline ScKeynode const action_synchronize_program_execution{
       "action_synchronize_program_execution",
-      ScType::NodeConstClass};
+      ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_search_operator{
       "action_interpret_search_operator",
-      ScType::NodeConstClass};
+      ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_string_operator{
       "action_interpret_string_operator",
-      ScType::NodeConstClass};
+      ScType::ConstNodeClass};
   static inline ScKeynode const action_interpret_var_value_operator{
       "action_interpret_var_value_operator",
-      ScType::NodeConstClass};
+      ScType::ConstNodeClass};
 };
 
 }  // namespace scp

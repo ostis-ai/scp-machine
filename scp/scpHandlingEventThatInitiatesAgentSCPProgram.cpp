@@ -25,21 +25,20 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
     action.FinishUnsuccessfully();
   }
 
-  ScAddr const & scpParams = m_context.GenerateNode(ScType::NodeConst);
-  ScAddr const & firstArgumentArc =
-      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, scpParams, agentProgram);
-  m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1, firstArgumentArc);
+  ScAddr const & scpParams = m_context.GenerateNode(ScType::ConstNode);
+  ScAddr const & firstArgumentArc = m_context.GenerateConnector(ScType::ConstPermPosArc, scpParams, agentProgram);
+  m_context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_1, firstArgumentArc);
 
   ScAddr const & secondArgumentArc =
-      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, scpParams, event.GetConnector());
-  m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2, secondArgumentArc);
+      m_context.GenerateConnector(ScType::ConstPermPosArc, scpParams, event.GetConnector());
+  m_context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_2, secondArgumentArc);
 
   ScAction scpAction = m_context.GenerateAction(Keynodes::action_scp_interpretation_request);
   scpAction.SetArguments(agentProgram, scpParams);
 
   ScAddr const & authorArc =
-      m_context.GenerateConnector(ScType::EdgeDCommonConst, scpAction, Keynodes::abstract_scp_machine);
-  m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::nrel_authors, authorArc);
+      m_context.GenerateConnector(ScType::ConstCommonArc, scpAction, Keynodes::abstract_scp_machine);
+  m_context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::nrel_authors, authorArc);
 
   if (maxCustomerWaitingTime == 0)
     scpAction.InitiateAndWait();
@@ -59,7 +58,7 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
     }
   }
   auto const & resIt = m_context.CreateIterator5(
-      action, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, ScKeynodes::nrel_result);
+      action, ScType::ConstCommonArc, ScType::ConstNode, ScType::ConstPermPosArc, ScKeynodes::nrel_result);
   if (resIt->Next())
   {
     ScAddr const & actionResult = resIt->Get(2);
@@ -78,19 +77,18 @@ ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
 
   ScAddr agentProgram;
   auto const & programsTupleIterator = m_context.CreateIterator5(
-      ScType::NodeConst,
-      ScType::EdgeDCommonConst,
+      ScType::ConstNode,
+      ScType::ConstCommonArc,
       m_agentImplementationAddr,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstPermPosArc,
       Keynodes::nrel_sc_agent_program);
   while (programsTupleIterator->Next())
   {
     ScIterator3Ptr programsIterator =
-        m_context.CreateIterator3(programsTupleIterator->Get(0), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        m_context.CreateIterator3(programsTupleIterator->Get(0), ScType::ConstPermPosArc, ScType::ConstNode);
     while (programsIterator->Next())
     {
-      if (m_context.CheckConnector(
-              Keynodes::agent_scp_program, programsIterator->Get(2), ScType::EdgeAccessConstPosPerm))
+      if (m_context.CheckConnector(Keynodes::agent_scp_program, programsIterator->Get(2), ScType::ConstPermPosArc))
       {
         agentProgram = programsIterator->Get(2);
         break;
@@ -106,11 +104,7 @@ ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
 
   // Old SCP program check
   auto const & programKeyElementIterator = m_context.CreateIterator5(
-      agentProgram,
-      ScType::EdgeAccessConstPosPerm,
-      ScType::NodeVar,
-      ScType::EdgeAccessConstPosPerm,
-      Keynodes::rrel_key_sc_element);
+      agentProgram, ScType::ConstPermPosArc, ScType::VarNode, ScType::ConstPermPosArc, Keynodes::rrel_key_sc_element);
   if (!programKeyElementIterator->Next())
   {
     SC_AGENT_LOG_ERROR(

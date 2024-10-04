@@ -11,17 +11,17 @@
 namespace scp
 {
 
-class ASCPProcessDestroyer : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm>>
+class ASCPProcessDestroyer : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
   ScAddr GetActionClass() const override;
 
-  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event, ScAction & action)
+  ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action)
       override;
 
   ScAddr GetEventSubscriptionElement() const override;
 
-  bool CheckInitiationCondition(ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event) override;
+  bool CheckInitiationCondition(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event) override;
 
   static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_process_destruction"};
 

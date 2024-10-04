@@ -13,30 +13,29 @@
 namespace scp
 {
 ScResult ASCPProgramExecutionSyncronizer::DoProgram(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)
 {
   ScAddr const & scpOperatorAddr = event.GetOtherElement();
 
-  if (m_context.CheckConnector(Keynodes::action_finished_with_error, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
+  if (m_context.CheckConnector(Keynodes::action_finished_with_error, scpOperatorAddr, ScType::ConstPermPosArc))
   {
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_error);
     return action.FinishSuccessfully();
   }
-  if (m_context.CheckConnector(Keynodes::action_finished_successfully, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
+  if (m_context.CheckConnector(Keynodes::action_finished_successfully, scpOperatorAddr, ScType::ConstPermPosArc))
   {
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_then);
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_goto);
     return action.FinishSuccessfully();
   }
-  if (m_context.CheckConnector(
-          Keynodes::action_finished_unsuccessfully, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
+  if (m_context.CheckConnector(Keynodes::action_finished_unsuccessfully, scpOperatorAddr, ScType::ConstPermPosArc))
   {
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_else);
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_goto);
     return action.FinishSuccessfully();
   }
-  if (m_context.CheckConnector(Keynodes::action_finished, scpOperatorAddr, ScType::EdgeAccessConstPosPerm))
+  if (m_context.CheckConnector(Keynodes::action_finished, scpOperatorAddr, ScType::ConstPermPosArc))
   {
     InitOperatorsByRelation(scpOperatorAddr, Keynodes::nrel_goto);
     return action.FinishSuccessfully();
@@ -58,16 +57,16 @@ ScAddr ASCPProgramExecutionSyncronizer::GetEventSubscriptionElement() const
 void ASCPProgramExecutionSyncronizer::InitOperatorsByRelation(ScAddr const & scpOperatorAddr, ScAddr const & relation)
 {
   ScIterator5Ptr iter_error = m_context.CreateIterator5(
-      scpOperatorAddr, ScType::EdgeDCommonConst, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
+      scpOperatorAddr, ScType::ConstCommonArc, ScType::ConstNode, ScType::ConstPermPosArc, relation);
   while (iter_error->Next())
   {
     ScAddr next_op = iter_error->Get(2);
-    m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, next_op);
+    m_context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::active_action, next_op);
   }
 }
 
 bool ASCPProgramExecutionSyncronizer::CheckInitiationCondition(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event)
 {
   ScAddr const & scpOperatorAddr = event.GetOtherElement();
 

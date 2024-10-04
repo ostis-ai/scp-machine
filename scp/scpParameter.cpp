@@ -99,11 +99,11 @@ void SCPParameter::resolveOrder(ScAddr modifier)
 
 void SCPParameter::resolveModifiers()
 {
-  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessVarPosPerm, arc_addr);
+  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(ScType::ConstNode, ScType::VarPermPosArc, arc_addr);
   while (iter->Next())
   {
     ScAddr modifier = iter->Get(0);
-    if (m_memoryCtx.CheckConnector(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.CheckConnector(Keynodes::order_role_relation, modifier, ScType::ConstPermPosArc))
     {
       resolveOrder(modifier);
       continue;

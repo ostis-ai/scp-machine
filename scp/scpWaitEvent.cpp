@@ -40,15 +40,15 @@ SCPWaitEvent::SCPWaitEvent(
       [waitingOperator](ScElementaryEvent const & scEvent)
       {
         if (!ScMemory::ms_globalContext->CheckConnector(
-                Keynodes::action_finished_successfully, waitingOperator, ScType::EdgeAccessConstPosPerm))
+                Keynodes::action_finished_successfully, waitingOperator, ScType::ConstPermPosArc))
           ScMemory::ms_globalContext->GenerateConnector(
-              ScType::EdgeAccessConstPosPerm, Keynodes::action_finished_successfully, waitingOperator);
+              ScType::ConstPermPosArc, Keynodes::action_finished_successfully, waitingOperator);
         else
           return;
         if (!ScMemory::ms_globalContext->CheckConnector(
-                Keynodes::action_finished, waitingOperator, ScType::EdgeAccessConstPosPerm))
+                Keynodes::action_finished, waitingOperator, ScType::ConstPermPosArc))
           ScMemory::ms_globalContext->GenerateConnector(
-              ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, waitingOperator);
+              ScType::ConstPermPosArc, Keynodes::action_finished, waitingOperator);
         else
           return;
 

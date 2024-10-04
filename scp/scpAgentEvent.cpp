@@ -27,7 +27,7 @@ void SCPAgentEvent::HandleAllActiveAgents(
     std::function<void(ScAgentContext &, ScAddr const &)> const & handler)
 {
   auto const & activeAgentsIterator =
-      ctx.CreateIterator3(Keynodes::active_sc_agent, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      ctx.CreateIterator3(Keynodes::active_sc_agent, ScType::ConstPermPosArc, ScType::ConstNode);
   while (activeAgentsIterator->Next())
   {
     ScAddr const & agent = activeAgentsIterator->Get(2);
@@ -40,15 +40,14 @@ void SCPAgentEvent::HandleActiveAgent(
     std::function<void(ScAgentContext &, ScAddr const &)> const & handler,
     ScAddr const & agent)
 {
-  auto const & agentImplementationsIterator =
-      ctx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, agent);
+  auto const & agentImplementationsIterator = ctx.CreateIterator3(ScType::ConstNode, ScType::ConstPermPosArc, agent);
   while (agentImplementationsIterator->Next())
   {
     ScAddr const & agentImplementation = agentImplementationsIterator->Get(0);
     if (agentImplementation == Keynodes::active_sc_agent)
       continue;
     if (ctx.CheckConnector(
-            Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::EdgeAccessConstPosPerm))
+            Keynodes::platform_independent_abstract_sc_agent, agentImplementation, ScType::ConstPermPosArc))
       handler(ctx, agentImplementation);
   }
 }

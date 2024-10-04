@@ -13,7 +13,7 @@ namespace scp
 {
 
 ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event,
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)
 {
   ScAddr const & finishedAction = event.GetOtherElement();
@@ -22,16 +22,12 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
 
   // SCP_CONST case
   ScIterator5Ptr iter = m_context.CreateIterator5(
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
-      finishedAction,
-      ScType::EdgeAccessConstPosPerm,
-      Keynodes::rrel_scp_const);
+      ScType::ConstNode, ScType::ConstPermPosArc, finishedAction, ScType::ConstPermPosArc, Keynodes::rrel_scp_const);
   while (iter->Next())
   {
     waitOperatorAddr = iter->Get(0);
-    if (!m_context.CheckConnector(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
-        || !m_context.CheckConnector(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
+    if (!m_context.CheckConnector(Keynodes::op_waitReturn, waitOperatorAddr, ScType::ConstPermPosArc)
+        || !m_context.CheckConnector(Keynodes::active_action, waitOperatorAddr, ScType::ConstPermPosArc))
       continue;
 
     SCPOperator::FinishExecutionSuccessfully(m_context, waitOperatorAddr);
@@ -39,20 +35,16 @@ ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
   }
 
   // SCP_VAR case
-  ScIterator3Ptr iter3 = m_context.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosTemp, finishedAction);
+  ScIterator3Ptr iter3 = m_context.CreateIterator3(ScType::ConstNode, ScType::ConstTempPosArc, finishedAction);
   while (iter3->Next())
   {
     ScIterator5Ptr iter5 = m_context.CreateIterator5(
-        ScType::NodeConst,
-        ScType::EdgeAccessConstPosPerm,
-        iter3->Get(0),
-        ScType::EdgeAccessConstPosPerm,
-        Keynodes::rrel_scp_var);
+        ScType::ConstNode, ScType::ConstPermPosArc, iter3->Get(0), ScType::ConstPermPosArc, Keynodes::rrel_scp_var);
     while (iter5->Next())
     {
       waitOperatorAddr = iter5->Get(0);
-      if (!m_context.CheckConnector(Keynodes::op_waitReturn, waitOperatorAddr, ScType::EdgeAccessConstPosPerm)
-          || !m_context.CheckConnector(Keynodes::active_action, waitOperatorAddr, ScType::EdgeAccessConstPosPerm))
+      if (!m_context.CheckConnector(Keynodes::op_waitReturn, waitOperatorAddr, ScType::ConstPermPosArc)
+          || !m_context.CheckConnector(Keynodes::active_action, waitOperatorAddr, ScType::ConstPermPosArc))
         continue;
 
       SCPOperator::FinishExecutionSuccessfully(m_context, waitOperatorAddr);
@@ -74,10 +66,10 @@ ScAddr ASCPFinishedInterpretationActionProcessor::GetEventSubscriptionElement() 
 }
 
 bool ASCPFinishedInterpretationActionProcessor::CheckInitiationCondition(
-    ScEventAfterGenerateOutgoingArc<ScType::EdgeAccessConstPosPerm> const & event)
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event)
 {
   ScAddr const & action = event.GetOtherElement();
-  return m_context.CheckConnector(Keynodes::action_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm);
+  return m_context.CheckConnector(Keynodes::action_scp_interpretation_request, action, ScType::ConstPermPosArc);
 }
 
 }  // namespace scp

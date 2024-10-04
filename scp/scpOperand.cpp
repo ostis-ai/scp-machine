@@ -28,8 +28,7 @@ SCPOperand::SCPOperand(ScAgentContext & ctx_, ScAddr addr_)
   }
   else
   {
-    ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(
-        addr, ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), ScType::Unknown);
+    ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(addr, ScType::ConstTempPosArc, ScType::Unknown);
     if (iter->Next())
     {
       value_addr = iter->Get(2);
@@ -64,8 +63,7 @@ uint8_t SCPOperand::GetSetOrder()
 
 void SCPOperand::ResetValue()
 {
-  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(
-      addr, ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), ScType::Unknown);
+  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(addr, ScType::ConstTempPosArc, ScType::Unknown);
   while (iter->Next())
   {
     m_memoryCtx.EraseElement(iter->Get(1));
@@ -76,8 +74,7 @@ void SCPOperand::ResetValue()
 void SCPOperand::SetValue(ScAddr value)
 {
   value_addr = value;
-  m_memoryCtx.GenerateConnector(
-      ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value);
+  m_memoryCtx.GenerateConnector(ScType::ConstTempPosArc, addr, value);
 }
 
 ScAddr SCPOperand::CreateNodeOrLink()
@@ -86,8 +83,7 @@ ScAddr SCPOperand::CreateNodeOrLink()
     value_addr = m_memoryCtx.GenerateLink();
   else
     value_addr = m_memoryCtx.GenerateNode(element_type);
-  m_memoryCtx.GenerateConnector(
-      ScType(sc_type_arc_access | sc_type_arc_temp | sc_type_arc_pos | sc_type_const), addr, value_addr);
+  m_memoryCtx.GenerateConnector(ScType::ConstTempPosArc, addr, value_addr);
   return value_addr;
 }
 
@@ -216,11 +212,11 @@ void SCPOperand::resolveSetOrder(ScAddr modifier)
 
 void SCPOperand::resolveModifiers()
 {
-  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, arc_addr);
+  ScIterator3Ptr iter = m_memoryCtx.CreateIterator3(ScType::ConstNode, ScType::ConstPermPosArc, arc_addr);
   while (iter->Next())
   {
     ScAddr modifier = iter->Get(0);
-    if (m_memoryCtx.CheckConnector(Keynodes::order_role_relation, modifier, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.CheckConnector(Keynodes::order_role_relation, modifier, ScType::ConstPermPosArc))
     {
       resolveOrder(modifier);
       continue;
@@ -283,38 +279,38 @@ void SCPOperand::resolveModifiers()
     }
     if (modifier == Keynodes::rrel_link)
     {
-      element_type = element_type | ScType::Link | ScType::Node;
+      element_type = element_type | ScType::NodeLink;
       continue;
     }
     if (modifier == Keynodes::rrel_struct)
     {
-      element_type = ScType(*element_type | sc_type_node_struct);
+      element_type = element_type | ScType::NodeStructure;
       continue;
     }
     if (modifier == Keynodes::rrel_norole_relation)
     {
-      element_type = ScType(*element_type | sc_type_node_norole);
+      element_type = element_type | ScType::NodeNoRole;
       continue;
     }
     if (modifier == Keynodes::rrel_role_relation)
     {
-      element_type = ScType(*element_type | sc_type_node_role);
+      element_type = element_type | ScType::NodeRole;
       continue;
     }
     if (modifier == Keynodes::rrel_class)
     {
-      element_type = ScType(*element_type | sc_type_node_class);
+      element_type = element_type | ScType::NodeClass;
       continue;
     }
 
     if (modifier == Keynodes::rrel_edge)
     {
-      element_type = element_type | ScType::EdgeUCommon;
+      element_type = element_type | ScType::CommonEdge;
       continue;
     }
     if (modifier == Keynodes::rrel_common)
     {
-      element_type = element_type | ScType::EdgeDCommon;
+      element_type = element_type | ScType::CommonArc;
       continue;
     }
 
@@ -322,37 +318,37 @@ void SCPOperand::resolveModifiers()
 
     if (modifier == Keynodes::rrel_access)
     {
-      element_type = element_type | ScType::EdgeAccess;
+      element_type = element_type | ScType::MembershipArc;
       continue;
     }
     if (modifier == Keynodes::rrel_temp)
     {
-      element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_temp);
+      element_type = element_type | ScType::TempArc;
       continue;
     }
     if (modifier == Keynodes::rrel_perm)
     {
-      element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_perm);
+      element_type = element_type | ScType::PermArc;
       continue;
     }
     if (modifier == Keynodes::rrel_pos)
     {
-      element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_pos);
+      element_type = element_type | ScType::PosArc;
       continue;
     }
     if (modifier == Keynodes::rrel_neg)
     {
-      element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_neg);
+      element_type = element_type | ScType::NegArc;
       continue;
     }
     if (modifier == Keynodes::rrel_fuz)
     {
-      element_type = ScType(*element_type | sc_type_arc_access | sc_type_arc_fuz);
+      element_type = element_type | ScType::FuzArc;
       continue;
     }
     if (modifier == Keynodes::rrel_pos_const_perm)
     {
-      element_type = ScType(element_type | ScType::EdgeAccessConstPosPerm);
+      element_type = element_type | ScType::ConstPermPosArc;
       continue;
     }
   }

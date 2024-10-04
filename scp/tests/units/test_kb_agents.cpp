@@ -27,7 +27,7 @@ std::string const TEST_AGENT_FILES_DIR_PATH =
 std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/testStructures/agentTest/";
 size_t const WAIT_TIME = 1000;
 
-static ScKeynode test_action1{"test_action1", ScType::NodeConstClass};
+static ScKeynode test_action1{"test_action1", ScType::ConstNodeClass};
 
 using kbAgentsTest = ScMemoryTest;
 
@@ -83,7 +83,7 @@ TEST_F(kbAgentsTest, Test_sc_agent1_scp)
   SubscribeAgents(context);
   ScAddr const & agent = context.SearchElementBySystemIdentifier("sc_agent1_scp");
   EXPECT_TRUE(agent.IsValid());
-  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterScpAgent, agent);
+  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterSCPAgent, agent);
 
   ScAddr const & actionArgument = context.SearchElementBySystemIdentifier("test_node");
   EXPECT_TRUE(actionArgument.IsValid());
@@ -96,16 +96,16 @@ TEST_F(kbAgentsTest, Test_sc_agent1_scp)
   ScAddr const & actionResult = action.GetResult();
   EXPECT_TRUE(context.IsElement(actionResult));
   auto const & actionExpectedResultIterator =
-      context.CreateIterator3(actionExpectedResult, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
+      context.CreateIterator3(actionExpectedResult, ScType::ConstPermPosArc, ScType::Unknown);
   while (actionExpectedResultIterator->Next())
   {
     ScAddr const & actionResultElement = actionExpectedResultIterator->Get(2);
-    EXPECT_TRUE(context.CheckConnector(actionResult, actionResultElement, ScType::EdgeAccessConstPosPerm))
+    EXPECT_TRUE(context.CheckConnector(actionResult, actionResultElement, ScType::ConstPermPosArc))
         << "action result does not have element with hash " << actionResultElement.Hash() << " ans system identifier "
         << context.GetElementSystemIdentifier(actionResultElement);
   }
 
-  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::UnregisterScpAgent, agent);
+  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::UnregisterSCPAgent, agent);
   UnsubscribeAgents(context);
 }
 

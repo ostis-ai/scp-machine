@@ -185,12 +185,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set1 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set1 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[1]->SetValue(set1);
           }
           operands[1]->SetValue(iter->Get(1));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set1, iter->Get(1));
       }
       if (set_operands[2] != nullptr)
       {
@@ -202,12 +202,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set2 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set2 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[2]->SetValue(set2);
           }
           operands[2]->SetValue(iter->Get(2));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set2, iter->Get(2));
       }
       if (set_operands[3] != nullptr)
       {
@@ -219,12 +219,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set3 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set3 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[3]->SetValue(set3);
           }
           operands[3]->SetValue(iter->Get(3));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set3, iter->Get(3));
       }
       if (set_operands[4] != nullptr)
       {
@@ -236,12 +236,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set4 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set4 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[4]->SetValue(set4);
           }
           operands[4]->SetValue(iter->Get(4));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set4, iter->Get(4));
       }
       found = SC_TRUE;
     }
@@ -279,12 +279,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
             }
             else
             {
-              set0 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+              set0 = m_memoryCtx.GenerateNode(ScType::ConstNode);
               set_operands[0]->SetValue(set0);
             }
             operands[0]->SetValue(elem0);
           }
-          m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set0, elem0);
+          m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set0, elem0);
         }
         if (set_operands[1] != nullptr)
         {
@@ -296,12 +296,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
             }
             else
             {
-              set1 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+              set1 = m_memoryCtx.GenerateNode(ScType::ConstNode);
               set_operands[1]->SetValue(set1);
             }
             operands[1]->SetValue(iter->Get(1));
           }
-          m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+          m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set1, iter->Get(1));
         }
         if (set_operands[2] != nullptr)
         {
@@ -313,12 +313,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
             }
             else
             {
-              set2 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+              set2 = m_memoryCtx.GenerateNode(ScType::ConstNode);
               set_operands[2]->SetValue(set2);
             }
             operands[2]->SetValue(elem2);
           }
-          m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set2, elem2);
+          m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set2, elem2);
         }
         if (set_operands[3] != nullptr)
         {
@@ -330,12 +330,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
             }
             else
             {
-              set3 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+              set3 = m_memoryCtx.GenerateNode(ScType::ConstNode);
               set_operands[3]->SetValue(set3);
             }
             operands[3]->SetValue(iter->Get(3));
           }
-          m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+          m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set3, iter->Get(3));
         }
         found = SC_TRUE;
       }
@@ -370,12 +370,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set0 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set0 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[0]->SetValue(set0);
           }
           operands[0]->SetValue(iter->Get(0));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set0, iter->Get(0));
       }
       if (set_operands[1] != nullptr)
       {
@@ -387,12 +387,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set1 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set1 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[1]->SetValue(set1);
           }
           operands[1]->SetValue(iter->Get(1));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set1, iter->Get(1));
       }
       if (set_operands[3] != nullptr)
       {
@@ -404,12 +404,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set3 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set3 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[3]->SetValue(set3);
           }
           operands[3]->SetValue(iter->Get(3));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set3, iter->Get(3));
       }
       if (set_operands[4] != nullptr)
       {
@@ -421,12 +421,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set4 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set4 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[4]->SetValue(set4);
           }
           operands[4]->SetValue(iter->Get(4));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set4, iter->Get(4));
       }
       found = SC_TRUE;
     }
@@ -459,12 +459,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set1 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set1 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[1]->SetValue(set1);
           }
           operands[1]->SetValue(iter->Get(1));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set1, iter->Get(1));
       }
       if (set_operands[3] != nullptr)
       {
@@ -476,12 +476,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set3 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set3 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[3]->SetValue(set3);
           }
           operands[3]->SetValue(iter->Get(3));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set3, iter->Get(3));
       }
       if (set_operands[4] != nullptr)
       {
@@ -493,12 +493,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set4 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set4 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[4]->SetValue(set4);
           }
           operands[4]->SetValue(iter->Get(4));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set4, iter->Get(4));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set4, iter->Get(4));
       }
       found = SC_TRUE;
     }
@@ -531,12 +531,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set0 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set0 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[0]->SetValue(set0);
           }
           operands[0]->SetValue(iter->Get(0));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set0, iter->Get(0));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set0, iter->Get(0));
       }
       if (set_operands[1] != nullptr)
       {
@@ -548,12 +548,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set1 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set1 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[1]->SetValue(set1);
           }
           operands[1]->SetValue(iter->Get(1));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set1, iter->Get(1));
       }
       if (set_operands[3] != nullptr)
       {
@@ -565,12 +565,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set3 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set3 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[3]->SetValue(set3);
           }
           operands[3]->SetValue(iter->Get(3));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set3, iter->Get(3));
       }
       found = SC_TRUE;
     }
@@ -603,12 +603,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set1 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set1 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[1]->SetValue(set1);
           }
           operands[1]->SetValue(iter->Get(1));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set1, iter->Get(1));
       }
       if (set_operands[2] != nullptr)
       {
@@ -620,12 +620,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set2 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set2 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[2]->SetValue(set2);
           }
           operands[2]->SetValue(iter->Get(2));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set2, iter->Get(2));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set2, iter->Get(2));
       }
       if (set_operands[3] != nullptr)
       {
@@ -637,12 +637,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set3 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set3 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[3]->SetValue(set3);
           }
           operands[3]->SetValue(iter->Get(3));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set3, iter->Get(3));
       }
       found = SC_TRUE;
     }
@@ -676,12 +676,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set1 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set1 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[1]->SetValue(set1);
           }
           operands[1]->SetValue(iter->Get(1));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set1, iter->Get(1));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set1, iter->Get(1));
       }
       if (set_operands[3] != nullptr)
       {
@@ -693,12 +693,12 @@ sc_result SCPOperatorSearchSetStr5::Execute()
           }
           else
           {
-            set3 = m_memoryCtx.GenerateNode(ScType::NodeConst);
+            set3 = m_memoryCtx.GenerateNode(ScType::ConstNode);
             set_operands[3]->SetValue(set3);
           }
           operands[3]->SetValue(iter->Get(3));
         }
-        m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, set3, iter->Get(3));
+        m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, set3, iter->Get(3));
       }
       found = SC_TRUE;
     }

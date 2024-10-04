@@ -32,14 +32,14 @@ sc_result SCPOperatorReturn::Execute()
 {
   sc_bool flag = SC_FALSE;
   ScAddr process_node;
-  ScIterator3Ptr iter1 = m_memoryCtx.CreateIterator3(ScType::NodeConst, ScType::EdgeAccessConstPosPerm, this->addr);
+  ScIterator3Ptr iter1 = m_memoryCtx.CreateIterator3(ScType::ConstNode, ScType::ConstPermPosArc, this->addr);
   while (iter1->Next())
   {
     ScIterator5Ptr iter2 = m_memoryCtx.CreateIterator5(
         iter1->Get(0),
-        ScType::EdgeDCommonConst,
-        ScType::NodeConst,
-        ScType::EdgeAccessConstPosPerm,
+        ScType::ConstCommonArc,
+        ScType::ConstNode,
+        ScType::ConstPermPosArc,
         Keynodes::nrel_decomposition_of_action);
     if (iter2->Next())
     {
@@ -55,16 +55,12 @@ sc_result SCPOperatorReturn::Execute()
   else
   {
     ScIterator5Ptr iter3 = m_memoryCtx.CreateIterator5(
-        ScType::NodeConst,
-        ScType::EdgeDCommonConst,
-        process_node,
-        ScType::EdgeAccessConstPosPerm,
-        Keynodes::nrel_result);
+        ScType::ConstNode, ScType::ConstCommonArc, process_node, ScType::ConstPermPosArc, Keynodes::nrel_result);
     if (iter3->Next())
     {
-      m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, iter3->Get(0));
+      m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished, iter3->Get(0));
     }
-    m_memoryCtx.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, process_node);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished, process_node);
   }
   return SC_RESULT_OK;
 }

@@ -51,7 +51,7 @@ sc_result SCPOperatorWaitReturn::Execute()
     return SC_RESULT_ERROR_INVALID_PARAMS;
   }
 
-  if (m_memoryCtx.CheckConnector(Keynodes::action_finished, operands[0]->GetValue(), ScType::EdgeAccessConstPosPerm))
+  if (m_memoryCtx.CheckConnector(Keynodes::action_finished, operands[0]->GetValue(), ScType::ConstPermPosArc))
   {
     FinishExecutionSuccessfully();
   }

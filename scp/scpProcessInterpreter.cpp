@@ -51,11 +51,7 @@ ScAddr ASCPProcessInterpreter::getProgramProcess(ScAddr const & program) const
 {
   ScAddr processNode;
   auto const & programKeyElementIterator = m_context.CreateIterator5(
-      program,
-      ScType::EdgeAccessConstPosPerm,
-      ScType::NodeVar,
-      ScType::EdgeAccessConstPosPerm,
-      Keynodes::rrel_key_sc_element);
+      program, ScType::ConstPermPosArc, ScType::VarNode, ScType::ConstPermPosArc, Keynodes::rrel_key_sc_element);
   if (programKeyElementIterator->IsValid() && programKeyElementIterator->Next())
     processNode = programKeyElementIterator->Get(2);
   return processNode;
@@ -67,8 +63,8 @@ ScTemplateParams ASCPProcessInterpreter::getProgramGenerationParams(
     ScAddr const & processNode) const
 {
   ScTemplateParams generationParams;
-  auto const & processParametersIterator = m_context.CreateIterator5(
-      processNode, ScType::EdgeAccessVarPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, program);
+  auto const & processParametersIterator =
+      m_context.CreateIterator5(processNode, ScType::VarPermPosArc, ScType::Unknown, ScType::ConstPermPosArc, program);
 
   //! TODO Make all sc-links constant to allow using constant sc-links within scp-program code
   while (processParametersIterator->Next())
@@ -77,11 +73,7 @@ ScTemplateParams ASCPProcessInterpreter::getProgramGenerationParams(
     if (Utils::resolveOrderRoleRelation(m_context, processParametersIterator->Get(1), order))
     {
       auto const & parametersIterator = m_context.CreateIterator5(
-          paramsForSubstitution,
-          ScType::EdgeAccessConstPosPerm,
-          ScType::Unknown,
-          ScType::EdgeAccessConstPosPerm,
-          order);
+          paramsForSubstitution, ScType::ConstPermPosArc, ScType::Unknown, ScType::ConstPermPosArc, order);
       if (!parametersIterator->Next())
       {
 #ifdef SCP_DEBUG
@@ -102,23 +94,22 @@ void ASCPProcessInterpreter::initiateFirstProcessOperatorAndWaitFinish(
     ScAddr const & programNode) const
 {
   auto const & generatedProcessDecompositionIterator = m_context.CreateIterator5(
-      ScType::NodeConst,
-      ScType::EdgeDCommonConst,
+      ScType::ConstNode,
+      ScType::ConstCommonArc,
       processNode,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstPermPosArc,
       Keynodes::nrel_decomposition_of_action);
   if (generatedProcessDecompositionIterator->Next())
   {
     ScIterator5Ptr firstOperatorIterator = m_context.CreateIterator5(
         generatedProcessDecompositionIterator->Get(0),
-        ScType::EdgeAccessConstPosPerm,
-        ScType::NodeConst,
-        ScType::EdgeAccessConstPosPerm,
+        ScType::ConstPermPosArc,
+        ScType::ConstNode,
+        ScType::ConstPermPosArc,
         Keynodes::rrel_1);
     if (firstOperatorIterator->Next())
     {
-      m_context.GenerateConnector(
-          ScType::EdgeAccessConstPosPerm, Keynodes::active_action, firstOperatorIterator->Get(2));
+      m_context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::active_action, firstOperatorIterator->Get(2));
       waitProcessFinish(startTime, maxCustomerWaitingTime, processNode);
     }
     else
@@ -126,7 +117,7 @@ void ASCPProcessInterpreter::initiateFirstProcessOperatorAndWaitFinish(
 #ifdef SCP_DEBUG
       Utils::logSCPError(m_context, "Missed initial scp-operator", programNode);
 #endif
-      m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, processNode);
+      m_context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished, processNode);
     }
   }
   else
@@ -134,7 +125,7 @@ void ASCPProcessInterpreter::initiateFirstProcessOperatorAndWaitFinish(
 #ifdef SCP_DEBUG
     Utils::logSCPError(m_context, "Missed scp-process decomposition", programNode);
 #endif
-    m_context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::action_finished, processNode);
+    m_context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::action_finished, processNode);
   }
 }
 
@@ -143,13 +134,12 @@ void ASCPProcessInterpreter::waitProcessFinish(
     sc_uint32 const maxCustomerWaitingTime,
     ScAddr const & processNode) const
 {
-  auto const & waiter =
-      m_context.CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
-          processNode,
-          [](auto const & otherEvent)
-          {
-            return otherEvent.GetArcSourceElement() == Keynodes::action_finished;
-          });
+  auto const & waiter = m_context.CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::ConstPermPosArc>>(
+      processNode,
+      [](auto const & otherEvent)
+      {
+        return otherEvent.GetArcSourceElement() == Keynodes::action_finished;
+      });
   if (maxCustomerWaitingTime == 0)
     waiter->Wait();
   else
@@ -175,6 +165,6 @@ ScAddr ASCPProcessInterpreter::GetActionClass() const
 bool ASCPProcessInterpreter::CheckInitiationCondition(ScActionInitiatedEvent const & event)
 {
   ScAddr const & action = event.GetOtherElement();
-  return m_context.CheckConnector(Keynodes::action_scp_interpretation_request, action, ScType::EdgeAccessConstPosPerm);
+  return m_context.CheckConnector(Keynodes::action_scp_interpretation_request, action, ScType::ConstPermPosArc);
 }
 }  // namespace scp

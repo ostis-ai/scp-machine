@@ -19,8 +19,8 @@ std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/testStructur
 std::string const TEST_OPERATOR = "test_operator";
 size_t const WAIT_TIME = 1000;
 
-static ScKeynode action_gen_el("action_gen_el", ScType::NodeConstClass);
-static ScKeynode concept_set("concept_set", ScType::NodeConstClass);
+static ScKeynode action_gen_el("action_gen_el", ScType::ConstNodeClass);
+static ScKeynode concept_set("concept_set", ScType::ConstNodeClass);
 
 using SCPGenOperatorsTest = ScMemoryTest;
 
@@ -49,13 +49,13 @@ void UnsubscribeAgents(ScAgentContext & context)
 bool ApplyOperator(ScAgentContext & context, ScAddr const & operatorAddr, size_t waitTime)
 {
   return context
-      .CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm>>(
+      .CreateConditionWaiter<ScEventAfterGenerateIncomingArc<ScType::ConstPermPosArc>>(
           operatorAddr,
           [&context, &operatorAddr]()
           {
-            context.GenerateConnector(ScType::EdgeAccessConstPosPerm, Keynodes::active_action, operatorAddr);
+            context.GenerateConnector(ScType::ConstPermPosArc, Keynodes::active_action, operatorAddr);
           },
-          [](ScEventAfterGenerateIncomingArc<ScType::EdgeAccessConstPosPerm> const & event)
+          [](ScEventAfterGenerateIncomingArc<ScType::ConstPermPosArc> const & event)
           {
             return event.GetOtherElement() == Keynodes::action_finished_successfully;
           })
@@ -71,15 +71,10 @@ TEST_F(SCPGenOperatorsTest, TestGenEl)
   EXPECT_TRUE(testOperator.IsValid());
   EXPECT_TRUE(ApplyOperator(context, testOperator, WAIT_TIME));
   auto const & operandIterator = context.CreateIterator5(
-      testOperator,
-      ScType::EdgeAccessConstPosPerm,
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
-      Keynodes::rrel_1);
+      testOperator, ScType::ConstPermPosArc, ScType::ConstNode, ScType::ConstPermPosArc, Keynodes::rrel_1);
   EXPECT_TRUE(operandIterator->Next());
   ScAddr const & operand = operandIterator->Get(2);
-  auto const & operandValueIterator =
-      context.CreateIterator3(operand, ScType::EdgeAccessConstPosTemp, ScType::NodeConst);
+  auto const & operandValueIterator = context.CreateIterator3(operand, ScType::ConstTempPosArc, ScType::ConstNode);
   EXPECT_TRUE(operandValueIterator->Next());
   UnsubscribeAgents(context);
 }
@@ -93,20 +88,20 @@ TEST_F(SCPGenOperatorsTest, ComplexAgentsChain)
   context.EndEventsBlocking();
   ScAddr const & agent = context.SearchElementBySystemIdentifier("agent_gen_el_active");
   EXPECT_TRUE(agent.IsValid());
-  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterScpAgent, agent);
+  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterSCPAgent, agent);
   ScAction action = context.GenerateAction(action_gen_el);
-  ScAddr const & setAddr = context.GenerateNode(ScType::NodeConst);
-  context.GenerateConnector(ScType::EdgeAccessConstPosPerm, concept_set, setAddr);
+  ScAddr const & setAddr = context.GenerateNode(ScType::ConstNode);
+  context.GenerateConnector(ScType::ConstPermPosArc, concept_set, setAddr);
   action.SetArguments(setAddr);
-  auto const & iteratorBefore = context.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  auto const & iteratorBefore = context.CreateIterator3(setAddr, ScType::ConstPermPosArc, ScType::ConstNode);
   EXPECT_FALSE(iteratorBefore->Next());
   EXPECT_TRUE(action.InitiateAndWait(WAIT_TIME));
   EXPECT_TRUE(action.IsFinishedSuccessfully());
-  auto const & iteratorAfter = context.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  auto const & iteratorAfter = context.CreateIterator3(setAddr, ScType::ConstPermPosArc, ScType::ConstNode);
   EXPECT_TRUE(iteratorAfter->Next());
   EXPECT_FALSE(iteratorAfter->Next());
 
-  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::UnregisterScpAgent, agent);
+  SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::UnregisterSCPAgent, agent);
   UnsubscribeAgents(context);
 }
 
