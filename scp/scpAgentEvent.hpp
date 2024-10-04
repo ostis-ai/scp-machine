@@ -14,13 +14,13 @@ namespace scp
 class SCPAgentEvent
 {
 public:
-  void static SubscribeAllScpAgents(ScAgentContext & ctx);
-  void static UnsubscribeAllScpAgents(ScAgentContext & ctx);
+  void static SubscribeAllSCPAgents(ScAgentContext & ctx);
+  void static UnsubscribeAllSCPAgents(ScAgentContext & ctx);
   void static HandleAllActiveAgents(
       ScAgentContext & ctx,
       std::function<void(ScAgentContext &, ScAddr const &)> const & handler);
-  void static RegisterScpAgent(ScAgentContext & ctx, ScAddr const & agentNode);
-  void static UnregisterScpAgent(ScAgentContext & ctx, ScAddr const & agentNode);
+  void static RegisterSCPAgent(ScAgentContext & ctx, ScAddr const & agentNode);
+  void static UnregisterSCPAgent(ScAgentContext & ctx, ScAddr const & agentNode);
 
   static void HandleActiveAgent(
       ScAgentContext & ctx,

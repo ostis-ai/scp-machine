@@ -12,14 +12,14 @@
 
 namespace scp
 {
-void SCPAgentEvent::SubscribeAllScpAgents(ScAgentContext & ctx)
+void SCPAgentEvent::SubscribeAllSCPAgents(ScAgentContext & ctx)
 {
-  HandleAllActiveAgents(ctx, RegisterScpAgent);
+  HandleAllActiveAgents(ctx, RegisterSCPAgent);
 }
 
-void SCPAgentEvent::UnsubscribeAllScpAgents(ScAgentContext & ctx)
+void SCPAgentEvent::UnsubscribeAllSCPAgents(ScAgentContext & ctx)
 {
-  HandleAllActiveAgents(ctx, UnregisterScpAgent);
+  HandleAllActiveAgents(ctx, UnregisterSCPAgent);
 }
 
 void SCPAgentEvent::HandleAllActiveAgents(
@@ -53,12 +53,11 @@ void SCPAgentEvent::HandleActiveAgent(
   }
 }
 
-void SCPAgentEvent::RegisterScpAgent(ScAgentContext & ctx, ScAddr const & agentNode)
+void SCPAgentEvent::RegisterSCPAgent(ScAgentContext & ctx, ScAddr const & agentNode)
 {
   try
   {
     ctx.SubscribeSpecifiedAgent<ASCPHandlingEventThatInitiatesAgentSCPProgram>(agentNode);
-    SC_LOG_INFO("Registered " << agentNode.Hash() << ", " << ctx.GetElementSystemIdentifier(agentNode));
   }
   catch (utils::ScException const & exception)
   {
@@ -66,7 +65,7 @@ void SCPAgentEvent::RegisterScpAgent(ScAgentContext & ctx, ScAddr const & agentN
   }
 }
 
-void SCPAgentEvent::UnregisterScpAgent(ScAgentContext & ctx, ScAddr const & agentNode)
+void SCPAgentEvent::UnregisterSCPAgent(ScAgentContext & ctx, ScAddr const & agentNode)
 {
   try
   {

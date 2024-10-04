@@ -45,7 +45,7 @@ void scpModule::Initialize(ScMemoryContext * context)
 {
   std::cout << "SCP START" << std::endl;
   ScAgentContext agentContext;
-  SCPAgentEvent::SubscribeAllScpAgents(agentContext);
+  SCPAgentEvent::SubscribeAllSCPAgents(agentContext);
 }
 
 void scpModule::Shutdown(ScMemoryContext * context)
@@ -53,6 +53,6 @@ void scpModule::Shutdown(ScMemoryContext * context)
   std::cout << "SCP END" << std::endl;
 
   ScAgentContext agentContext;
-  SCPAgentEvent::UnsubscribeAllScpAgents(agentContext);
+  SCPAgentEvent::UnsubscribeAllSCPAgents(agentContext);
   SCPWaitEvent::DeleteAllSysWaiters();
 }
