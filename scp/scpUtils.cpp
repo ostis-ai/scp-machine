@@ -31,7 +31,7 @@ bool addToSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAdd
   return true;
 }
 
-bool removeFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
+bool eraseFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr)
 {
   ScIterator3Ptr it = ctx.CreateIterator3(setAddr, ScType::ConstPermPosArc, elAddr);
   bool result = false;

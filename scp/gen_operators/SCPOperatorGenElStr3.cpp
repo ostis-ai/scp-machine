@@ -49,7 +49,7 @@ sc_result SCPOperatorGenElStr3::Execute()
   if (operands[1]->GetType().IsNode())
   {
 #ifdef SCP_DEBUG
-    Utils::logSCPError(m_memoryCtx, "Operand 2 must have ARC type", addr);
+    Utils::logSCPError(m_memoryCtx, "Operand 2 must have Connector type", addr);
 #endif
     FinishExecutionWithError();
     return SC_RESULT_ERROR_INVALID_PARAMS;

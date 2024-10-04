@@ -273,17 +273,17 @@ sc_result SCPOperatorSysSearch::Execute()
 
     ScAddr const & replacementPairAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
 
-    ScAddr const & edgeToTemplateVarAddr =
+    ScAddr const & arcToTemplateVarAddr =
         m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, replacementPairAddr, templateVarAddr);
-    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_1, edgeToTemplateVarAddr);
-    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_scp_const, edgeToTemplateVarAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_1, arcToTemplateVarAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_scp_const, arcToTemplateVarAddr);
 
-    ScAddr const & edgeToSearchResultSetVariableAddr =
+    ScAddr const & arcToSearchResultSetVariableAddr =
         m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, replacementPairAddr, searchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_2, edgeToSearchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_scp_var, edgeToSearchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_assign, edgeToSearchResultSetVariableAddr);
-    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_set, edgeToSearchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_2, arcToSearchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_scp_var, arcToSearchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_assign, arcToSearchResultSetVariableAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, Keynodes::rrel_set, arcToSearchResultSetVariableAddr);
 
     m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, templateVarsToSearchResultsSetAddr, replacementPairAddr);
   }

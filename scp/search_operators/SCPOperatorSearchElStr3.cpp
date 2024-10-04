@@ -61,7 +61,7 @@ sc_result SCPOperatorSearchElStr3::Execute()
     if (!m_memoryCtx.GetElementType(operands[1]->GetValue()).IsConnector())
     {
 #ifdef SCP_DEBUG
-      Utils::logSCPError(m_memoryCtx, "Operand 2 should be an edge", addr);
+      Utils::logSCPError(m_memoryCtx, "Operand 2 should be a connector", addr);
 #endif
       FinishExecutionUnsuccessfully();
       return SC_RESULT_ERROR_INVALID_PARAMS;

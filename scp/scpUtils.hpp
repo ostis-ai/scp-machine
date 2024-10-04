@@ -34,11 +34,11 @@ private:
  */
 bool addToSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr);
 
-/*! Remove element (elAddr) from set (setAddr)
+/*! Erase element (elAddr) from set (setAddr)
  * @returns If element doesn't exist in set, then do nothing and returns false. Otherwise
- * remove element from set and returns true.
+ * erase element from set and returns true.
  */
-bool removeFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr);
+bool eraseFromSet(ScAgentContext & ctx, ScAddr const & setAddr, ScAddr const & elAddr);
 
 /*! Resolves order role relation (1'-10') (relationAddr) of given arc (arcAddr)
  * @returns true, if relation resolved
