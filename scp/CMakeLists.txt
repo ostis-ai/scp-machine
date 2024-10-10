@@ -17,9 +17,11 @@ target_link_libraries(scp
     LINK_PUBLIC sc-memory
     LINK_PUBLIC sc-kpm-common
 )
+
 target_include_directories(scp
     PUBLIC ${SCP_SRC}
-    PUBLIC ${SC_MEMORY_SRC}
+    PUBLIC ${SC_MEMORY_PATH}
+    PUBLIC ${SC_CORE_PATH}
 )
 
 if (${SCP_CLANG_FORMAT_CODE})

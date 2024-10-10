@@ -1,5 +1,5 @@
-#include <tests/sc-memory/_test/sc_test.hpp>
-#include <scs_loader.hpp>
+#include <sc-memory/test/sc_test.hpp>
+#include <sc-builder/scs_loader.hpp>
 
 #include "scpAgentEvent.hpp"
 #include "scpAgentProcessor.hpp"
