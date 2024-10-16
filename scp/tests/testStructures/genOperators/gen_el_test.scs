@@ -1,0 +1,12 @@
+test_operator
+<- genEl;
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_node: rrel_const: ... (* -> test_scp_var_value1;; *);
+=> nrel_goto: ...;;
+
+scp_operator_atomic_type
+    <- sc_node_class;
+    -> genEl;;
+
+order_role_relation
+    <- sc_node_class;
+    -> rrel_1;;

@@ -1,401 +1,275 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #pragma once
+#include <sc-memory/sc_keynodes.hpp>
 
-#include <sc-memory/sc_addr.hpp>
-#include <sc-memory/sc_object.hpp>
-
-#include "scpKeynodes.generated.hpp"
-
-namespace scp {
-SC_CLASS()
-class Keynodes : public ScObject
+namespace scp
 {
-    SC_GENERATED_BODY()
-
+class Keynodes : public ScKeynodes
+{
 public:
+  static inline ScKeynode const scp_program{"scp_program"};
 
-    SC_PROPERTY(Keynode("scp_program"), ForceCreate)
-    static ScAddr scp_program;
+  static inline ScKeynode const agent_scp_program{"agent_scp_program"};
 
-    SC_PROPERTY(Keynode("agent_scp_program"), ForceCreate)
-    static ScAddr agent_scp_program;
+  static inline ScKeynode const platform_independent_abstract_sc_agent{"platform_independent_abstract_sc_agent"};
 
-    SC_PROPERTY(Keynode("platform_independent_abstract_sc_agent"), ForceCreate)
-    static ScAddr platform_independent_abstract_sc_agent;
+  static inline ScKeynode const abstract_sc_agent{"abstract_sc_agent"};
 
-    SC_PROPERTY(Keynode("abstract_sc_agent"), ForceCreate)
-    static ScAddr abstract_sc_agent;
+  static inline ScKeynode const nrel_sc_agent_program{"nrel_sc_agent_program"};
 
-    SC_PROPERTY(Keynode("nrel_sc_agent_program"), ForceCreate)
-    static ScAddr nrel_sc_agent_program;
+  static inline ScKeynode const nrel_inclusion{"nrel_inclusion"};
 
-    SC_PROPERTY(Keynode("nrel_inclusion"), ForceCreate)
-    static ScAddr nrel_inclusion;
+  static inline ScKeynode const nrel_sc_agent_action_class{"nrel_sc_agent_action_class"};
 
-    SC_PROPERTY(Keynode("nrel_sc_agent_action_class"), ForceCreate)
-    static ScAddr nrel_sc_agent_action_class;
+  static inline ScKeynode const nrel_primary_initiation_condition{"nrel_primary_initiation_condition"};
 
-    SC_PROPERTY(Keynode("nrel_primary_initiation_condition"), ForceCreate)
-    static ScAddr nrel_primary_initiation_condition;
+  static inline ScKeynode const action_scp_interpretation_request{"action_scp_interpretation_request"};
 
-    SC_PROPERTY(Keynode("action_scp_interpretation_request"), ForceCreate)
-    static ScAddr action_scp_interpretation_request;
+  static inline ScKeynode const action_initiated{"action_initiated"};
 
-    SC_PROPERTY(Keynode("action_initiated"), ForceCreate)
-    static ScAddr action_initiated;
+  static inline ScKeynode const action_finished{"action_finished"};
 
-    SC_PROPERTY(Keynode("action_finished"), ForceCreate)
-    static ScAddr action_finished;
+  static inline ScKeynode const action_finished_successfully{"action_finished_successfully"};
 
-    SC_PROPERTY(Keynode("action_finished_successfully"), ForceCreate)
-    static ScAddr action_finished_successfully;
+  static inline ScKeynode const action_finished_unsuccessfully{"action_finished_unsuccessfully"};
 
-    SC_PROPERTY(Keynode("action_finished_unsuccessfully"), ForceCreate)
-    static ScAddr action_finished_unsuccessfully;
+  static inline ScKeynode const action_finished_with_error{"action_finished_with_error"};
 
-    SC_PROPERTY(Keynode("action_finished_with_error"), ForceCreate)
-    static ScAddr action_finished_with_error;
+  static inline ScKeynode const scp_process{"scp_process"};
 
-    SC_PROPERTY(Keynode("scp_process"), ForceCreate)
-    static ScAddr scp_process;
+  static inline ScKeynode const abstract_scp_machine{"abstract_scp_machine"};
 
-    SC_PROPERTY(Keynode("abstract_scp_machine"), ForceCreate)
-    static ScAddr abstract_scp_machine;
+  static inline ScKeynode const nrel_decomposition_of_action{"nrel_decomposition_of_action"};
 
-    SC_PROPERTY(Keynode("nrel_decomposition_of_action"), ForceCreate)
-    static ScAddr nrel_decomposition_of_action;
+  static inline ScKeynode const nrel_scp_process{"nrel_scp_process"};
 
-    SC_PROPERTY(Keynode("nrel_scp_process"), ForceCreate)
-    static ScAddr nrel_scp_process;
+  static inline ScKeynode const rrel_key_sc_element{"rrel_key_sc_element"};
 
-    SC_PROPERTY(Keynode("rrel_key_sc_element"), ForceCreate)
-    static ScAddr rrel_key_sc_element;
+  static inline ScKeynode const nrel_authors{"nrel_authors"};
 
-    SC_PROPERTY(Keynode("nrel_authors"), ForceCreate)
-    static ScAddr nrel_authors;
+  static inline ScKeynode const nrel_system_identifier{"nrel_system_identifier"};
 
-    SC_PROPERTY(Keynode("nrel_system_identifier"), ForceCreate)
-    static ScAddr nrel_system_identifier;
+  static inline ScKeynode const active_action{"active_action"};
 
-    SC_PROPERTY(Keynode("active_action"), ForceCreate)
-    static ScAddr active_action;
+  static inline ScKeynode const active_sc_agent{"active_sc_agent", ScType::ConstNodeClass};
 
-    SC_PROPERTY(Keynode("active_sc_agent"), ForceCreate)
-    static ScAddr active_sc_agent;
+  static inline ScKeynode const nrel_scp_var_value{"nrel_scp_var_value"};
 
-    SC_PROPERTY(Keynode("nrel_scp_var_value"), ForceCreate)
-    static ScAddr nrel_scp_var_value;
+  // rrels
+  static inline ScKeynode const nrel_then{"nrel_then"};
 
-// rrels
-    SC_PROPERTY(Keynode("nrel_then"), ForceCreate)
-    static ScAddr nrel_then;
+  static inline ScKeynode const nrel_else{"nrel_else"};
 
-    SC_PROPERTY(Keynode("nrel_else"), ForceCreate)
-    static ScAddr nrel_else;
+  static inline ScKeynode const nrel_goto{"nrel_goto"};
 
-    SC_PROPERTY(Keynode("nrel_goto"), ForceCreate)
-    static ScAddr nrel_goto;
+  static inline ScKeynode const nrel_error{"nrel_error"};
 
-    SC_PROPERTY(Keynode("nrel_error"), ForceCreate)
-    static ScAddr nrel_error;
+  static inline ScKeynode const nrel_result{"nrel_result"};
 
-    SC_PROPERTY(Keynode("nrel_result"), ForceCreate)
-    static ScAddr nrel_result;
+  static inline ScKeynode const rrel_in{"rrel_in"};
 
-    SC_PROPERTY(Keynode("rrel_in"), ForceCreate)
-    static ScAddr rrel_in;
+  static inline ScKeynode const rrel_out{"rrel_out"};
 
-    SC_PROPERTY(Keynode("rrel_out"), ForceCreate)
-    static ScAddr rrel_out;
+  static inline ScKeynode const rrel_fixed{"rrel_fixed"};
 
-    SC_PROPERTY(Keynode("rrel_fixed"), ForceCreate)
-    static ScAddr rrel_fixed;
+  static inline ScKeynode const rrel_assign{"rrel_assign"};
 
-    SC_PROPERTY(Keynode("rrel_assign"), ForceCreate)
-    static ScAddr rrel_assign;
+  static inline ScKeynode const rrel_set{"rrel_set"};
 
-    SC_PROPERTY(Keynode("rrel_set"), ForceCreate)
-    static ScAddr rrel_set;
+  static inline ScKeynode const rrel_set_1{"rrel_set_1"};
 
-    SC_PROPERTY(Keynode("rrel_set_1"), ForceCreate)
-    static ScAddr rrel_set_1;
+  static inline ScKeynode const rrel_set_2{"rrel_set_2"};
 
-    SC_PROPERTY(Keynode("rrel_set_2"), ForceCreate)
-    static ScAddr rrel_set_2;
+  static inline ScKeynode const rrel_set_3{"rrel_set_3"};
 
-    SC_PROPERTY(Keynode("rrel_set_3"), ForceCreate)
-    static ScAddr rrel_set_3;
+  static inline ScKeynode const rrel_set_4{"rrel_set_4"};
 
-    SC_PROPERTY(Keynode("rrel_set_4"), ForceCreate)
-    static ScAddr rrel_set_4;
+  static inline ScKeynode const rrel_set_5{"rrel_set_5"};
 
-    SC_PROPERTY(Keynode("rrel_set_5"), ForceCreate)
-    static ScAddr rrel_set_5;
+  static inline ScKeynode const rrel_erase{"rrel_erase"};
 
-    SC_PROPERTY(Keynode("rrel_erase"), ForceCreate)
-    static ScAddr rrel_erase;
+  static inline ScKeynode const rrel_const{"rrel_const"};
 
-    SC_PROPERTY(Keynode("rrel_const"), ForceCreate)
-    static ScAddr rrel_const;
+  static inline ScKeynode const rrel_var{"rrel_var"};
 
-    SC_PROPERTY(Keynode("rrel_var"), ForceCreate)
-    static ScAddr rrel_var;
+  static inline ScKeynode const rrel_scp_const{"rrel_scp_const"};
 
-    SC_PROPERTY(Keynode("rrel_scp_const"), ForceCreate)
-    static ScAddr rrel_scp_const;
+  static inline ScKeynode const rrel_scp_var{"rrel_scp_var"};
 
-    SC_PROPERTY(Keynode("rrel_scp_var"), ForceCreate)
-    static ScAddr rrel_scp_var;
+  static inline ScKeynode const rrel_node{"rrel_node"};
 
-    SC_PROPERTY(Keynode("rrel_node"), ForceCreate)
-    static ScAddr rrel_node;
+  static inline ScKeynode const rrel_link{"rrel_link"};
 
-    SC_PROPERTY(Keynode("rrel_link"), ForceCreate)
-    static ScAddr rrel_link;
+  static inline ScKeynode const rrel_arc{"rrel_arc"};
 
-    SC_PROPERTY(Keynode("rrel_arc"), ForceCreate)
-    static ScAddr rrel_arc;
+  static inline ScKeynode const rrel_edge{"rrel_edge"};
 
-    SC_PROPERTY(Keynode("rrel_edge"), ForceCreate)
-    static ScAddr rrel_edge;
+  static inline ScKeynode const rrel_pos{"rrel_pos"};
 
-    SC_PROPERTY(Keynode("rrel_pos"), ForceCreate)
-    static ScAddr rrel_pos;
+  static inline ScKeynode const rrel_neg{"rrel_neg"};
 
-    SC_PROPERTY(Keynode("rrel_neg"), ForceCreate)
-    static ScAddr rrel_neg;
+  static inline ScKeynode const rrel_fuz{"rrel_fuz"};
 
-    SC_PROPERTY(Keynode("rrel_fuz"), ForceCreate)
-    static ScAddr rrel_fuz;
+  static inline ScKeynode const rrel_temp{"rrel_temp"};
 
-    SC_PROPERTY(Keynode("rrel_temp"), ForceCreate)
-    static ScAddr rrel_temp;
+  static inline ScKeynode const rrel_perm{"rrel_perm"};
 
-    SC_PROPERTY(Keynode("rrel_perm"), ForceCreate)
-    static ScAddr rrel_perm;
+  static inline ScKeynode const rrel_access{"rrel_access"};
 
-    SC_PROPERTY(Keynode("rrel_access"), ForceCreate)
-    static ScAddr rrel_access;
+  static inline ScKeynode const rrel_common{"rrel_common"};
 
-    SC_PROPERTY(Keynode("rrel_common"), ForceCreate)
-    static ScAddr rrel_common;
+  static inline ScKeynode const rrel_pos_const_perm{"rrel_pos_const_perm"};
 
-    SC_PROPERTY(Keynode("rrel_pos_const_perm"), ForceCreate)
-    static ScAddr rrel_pos_const_perm;
+  // Node types
+  static inline ScKeynode const rrel_struct{"rrel_struct"};
 
-//Node types
-    SC_PROPERTY(Keynode("rrel_struct"), ForceCreate)
-    static ScAddr rrel_struct;
+  static inline ScKeynode const rrel_role_relation{"rrel_role_relation"};
 
-    SC_PROPERTY(Keynode("rrel_role_relation"), ForceCreate)
-    static ScAddr rrel_role_relation;
+  static inline ScKeynode const rrel_norole_relation{"rrel_norole_relation"};
 
-    SC_PROPERTY(Keynode("rrel_norole_relation"), ForceCreate)
-    static ScAddr rrel_norole_relation;
+  static inline ScKeynode const rrel_class{"rrel_class"};
 
-    SC_PROPERTY(Keynode("rrel_class"), ForceCreate)
-    static ScAddr rrel_class;
+  // Order relations
+  static inline ScKeynode const rrel_1{"rrel_1"};
 
-// Events
-    SC_PROPERTY(Keynode("sc_event_remove_element"), ForceCreate)
-    static ScAddr sc_event_remove_element;
+  static inline ScKeynode const rrel_2{"rrel_2"};
 
-    SC_PROPERTY(Keynode("sc_event_add_output_arc"), ForceCreate)
-    static ScAddr sc_event_add_output_arc;
+  static inline ScKeynode const rrel_3{"rrel_3"};
 
-    SC_PROPERTY(Keynode("sc_event_add_input_arc"), ForceCreate)
-    static ScAddr sc_event_add_input_arc;
+  static inline ScKeynode const rrel_4{"rrel_4"};
 
-    SC_PROPERTY(Keynode("sc_event_remove_output_arc"), ForceCreate)
-    static ScAddr sc_event_remove_output_arc;
+  static inline ScKeynode const rrel_5{"rrel_5"};
 
-    SC_PROPERTY(Keynode("sc_event_remove_input_arc"), ForceCreate)
-    static ScAddr sc_event_remove_input_arc;
+  static inline ScKeynode const rrel_6{"rrel_6"};
 
-    SC_PROPERTY(Keynode("sc_event_content_changed"), ForceCreate)
-    static ScAddr sc_event_content_changed;
+  static inline ScKeynode const rrel_7{"rrel_7"};
 
-// Order relations
-    SC_PROPERTY(Keynode("rrel_1"), ForceCreate)
-    static ScAddr rrel_1;
+  static inline ScKeynode const rrel_8{"rrel_8"};
 
-    SC_PROPERTY(Keynode("rrel_2"), ForceCreate)
-    static ScAddr rrel_2;
+  static inline ScKeynode const rrel_9{"rrel_9"};
 
-    SC_PROPERTY(Keynode("rrel_3"), ForceCreate)
-    static ScAddr rrel_3;
+  static inline ScKeynode const rrel_10{"rrel_10"};
 
-    SC_PROPERTY(Keynode("rrel_4"), ForceCreate)
-    static ScAddr rrel_4;
+  static inline ScKeynode const order_role_relation{"order_role_relation"};
 
-    SC_PROPERTY(Keynode("rrel_5"), ForceCreate)
-    static ScAddr rrel_5;
+  // Operators
+  static inline ScKeynode const scp_operator_atomic_type{"scp_operator_atomic_type"};
 
-    SC_PROPERTY(Keynode("rrel_6"), ForceCreate)
-    static ScAddr rrel_6;
+  static inline ScKeynode const op_searchElStr3{"searchElStr3"};
+  static inline ScKeynode const op_searchElStr5{"searchElStr5"};
 
-    SC_PROPERTY(Keynode("rrel_7"), ForceCreate)
-    static ScAddr rrel_7;
+  static inline ScKeynode const op_searchSetStr3{"searchSetStr3"};
+  static inline ScKeynode const op_searchSetStr5{"searchSetStr5"};
 
-    SC_PROPERTY(Keynode("rrel_8"), ForceCreate)
-    static ScAddr rrel_8;
+  static inline ScKeynode const op_genEl{"genEl"};
+  static inline ScKeynode const op_genElStr3{"genElStr3"};
+  static inline ScKeynode const op_genElStr5{"genElStr5"};
 
-    SC_PROPERTY(Keynode("rrel_9"), ForceCreate)
-    static ScAddr rrel_9;
+  static inline ScKeynode const op_eraseEl{"eraseEl"};
+  static inline ScKeynode const op_eraseElStr3{"eraseElStr3"};
+  static inline ScKeynode const op_eraseElStr5{"eraseElStr5"};
+  static inline ScKeynode const op_eraseSetStr3{"eraseSetStr3"};
+  static inline ScKeynode const op_eraseSetStr5{"eraseSetStr5"};
 
-    SC_PROPERTY(Keynode("rrel_10"), ForceCreate)
-    static ScAddr rrel_10;
+  static inline ScKeynode const op_ifVarAssign{"ifVarAssign"};
+  static inline ScKeynode const op_ifFormCont{"ifFormCont"};
+  static inline ScKeynode const op_ifCoin{"ifCoin"};
+  static inline ScKeynode const op_ifType{"ifType"};
 
-    SC_PROPERTY(Keynode("order_role_relation"), ForceCreate)
-    static ScAddr order_role_relation;
-
-//Operators
-    SC_PROPERTY(Keynode("scp_operator_atomic_type"), ForceCreate)
-    static ScAddr scp_operator_atomic_type;
-
-    SC_PROPERTY(Keynode("searchElStr3"), ForceCreate)
-    static ScAddr op_searchElStr3;
-    SC_PROPERTY(Keynode("searchElStr5"), ForceCreate)
-    static ScAddr op_searchElStr5;
-
-    SC_PROPERTY(Keynode("searchSetStr3"), ForceCreate)
-    static ScAddr op_searchSetStr3;
-    SC_PROPERTY(Keynode("searchSetStr5"), ForceCreate)
-    static ScAddr op_searchSetStr5;
-
-    SC_PROPERTY(Keynode("genEl"), ForceCreate)
-    static ScAddr op_genEl;
-    SC_PROPERTY(Keynode("genElStr3"), ForceCreate)
-    static ScAddr op_genElStr3;
-    SC_PROPERTY(Keynode("genElStr5"), ForceCreate)
-    static ScAddr op_genElStr5;
-
-    SC_PROPERTY(Keynode("eraseEl"), ForceCreate)
-    static ScAddr op_eraseEl;
-    SC_PROPERTY(Keynode("eraseElStr3"), ForceCreate)
-    static ScAddr op_eraseElStr3;
-    SC_PROPERTY(Keynode("eraseElStr5"), ForceCreate)
-    static ScAddr op_eraseElStr5;
-    SC_PROPERTY(Keynode("eraseSetStr3"), ForceCreate)
-    static ScAddr op_eraseSetStr3;
-    SC_PROPERTY(Keynode("eraseSetStr5"), ForceCreate)
-    static ScAddr op_eraseSetStr5;
-
-    SC_PROPERTY(Keynode("ifVarAssign"), ForceCreate)
-    static ScAddr op_ifVarAssign;
-    SC_PROPERTY(Keynode("ifFormCont"), ForceCreate)
-    static ScAddr op_ifFormCont;
-    SC_PROPERTY(Keynode("ifCoin"), ForceCreate)
-    static ScAddr op_ifCoin;
-    SC_PROPERTY(Keynode("ifType"), ForceCreate)
-    static ScAddr op_ifType;
-
-    SC_PROPERTY(Keynode("varAssign"), ForceCreate)
-    static ScAddr op_varAssign;
-    SC_PROPERTY(Keynode("varErase"), ForceCreate)
-    static ScAddr op_varErase;
-
-    SC_PROPERTY(Keynode("ifEq"), ForceCreate)
-    static ScAddr op_ifEq;
-    SC_PROPERTY(Keynode("ifGr"), ForceCreate)
-    static ScAddr op_ifGr;
-
-    SC_PROPERTY(Keynode("contAdd"), ForceCreate)
-    static ScAddr op_contAdd;
-    SC_PROPERTY(Keynode("contDiv"), ForceCreate)
-    static ScAddr op_contDiv;
-    SC_PROPERTY(Keynode("contMult"), ForceCreate)
-    static ScAddr op_contMult;
-    SC_PROPERTY(Keynode("contSub"), ForceCreate)
-    static ScAddr op_contSub;
-    SC_PROPERTY(Keynode("contPow"), ForceCreate)
-    static ScAddr op_contPow;
-
-    SC_PROPERTY(Keynode("contLn"), ForceCreate)
-    static ScAddr op_contLn;
-    SC_PROPERTY(Keynode("contSin"), ForceCreate)
-    static ScAddr op_contSin;
-    SC_PROPERTY(Keynode("contCos"), ForceCreate)
-    static ScAddr op_contCos;
-    SC_PROPERTY(Keynode("contTg"), ForceCreate)
-    static ScAddr op_contTg;
-    SC_PROPERTY(Keynode("contASin"), ForceCreate)
-    static ScAddr op_contASin;
-    SC_PROPERTY(Keynode("contACos"), ForceCreate)
-    static ScAddr op_contACos;
-    SC_PROPERTY(Keynode("contATg"), ForceCreate)
-    static ScAddr op_contATg;
-
-    SC_PROPERTY(Keynode("contDivInt"), ForceCreate)
-    static ScAddr op_contDivInt;
-    SC_PROPERTY(Keynode("contDivRem"), ForceCreate)
-    static ScAddr op_contDivRem;
-
-    SC_PROPERTY(Keynode("contStringConcat"), ForceCreate)
-    static ScAddr op_contStringConcat;
-
-
-    SC_PROPERTY(Keynode("stringIfEq"), ForceCreate)
-    static ScAddr op_stringIfEq;
-    SC_PROPERTY(Keynode("stringIfGr"), ForceCreate)
-    static ScAddr op_stringIfGr;
-    SC_PROPERTY(Keynode("stringSplit"), ForceCreate)
-    static ScAddr op_stringSplit;
-    SC_PROPERTY(Keynode("stringLen"), ForceCreate)
-    static ScAddr op_stringLen;
-    SC_PROPERTY(Keynode("stringSub"), ForceCreate)
-    static ScAddr op_stringSub;
-    SC_PROPERTY(Keynode("stringSlice"), ForceCreate)
-    static ScAddr op_stringSlice;
-    SC_PROPERTY(Keynode("stringStartsWith"), ForceCreate)
-    static ScAddr op_stringStartsWith;
-    SC_PROPERTY(Keynode("stringEndsWith"), ForceCreate)
-    static ScAddr op_stringEndsWith;
-    SC_PROPERTY(Keynode("stringReplace"), ForceCreate)
-    static ScAddr op_stringReplace;
-    SC_PROPERTY(Keynode("stringToUpperCase"), ForceCreate)
-    static ScAddr op_stringToUpperCase;
-    SC_PROPERTY(Keynode("stringToLowerCase"), ForceCreate)
-    static ScAddr op_stringToLowerCase;
-
-
-    SC_PROPERTY(Keynode("contAssign"), ForceCreate)
-    static ScAddr op_contAssign;
-    SC_PROPERTY(Keynode("contErase"), ForceCreate)
-    static ScAddr op_contErase;
-
-    SC_PROPERTY(Keynode("print"), ForceCreate)
-    static ScAddr op_print;
-    SC_PROPERTY(Keynode("printNl"), ForceCreate)
-    static ScAddr op_printNl;
-    SC_PROPERTY(Keynode("printEl"), ForceCreate)
-    static ScAddr op_printEl;
-
-    SC_PROPERTY(Keynode("sys_search"), ForceCreate)
-    static ScAddr op_sys_search;
-    SC_PROPERTY(Keynode("sys_gen"), ForceCreate)
-    static ScAddr op_sys_gen;
-
-    SC_PROPERTY(Keynode("call"), ForceCreate)
-    static ScAddr op_call;
-    SC_PROPERTY(Keynode("waitReturn"), ForceCreate)
-    static ScAddr op_waitReturn;
-    SC_PROPERTY(Keynode("waitReturnSet"), ForceCreate)
-    static ScAddr op_waitReturnSet;
-    SC_PROPERTY(Keynode("return"), ForceCreate)
-    static ScAddr op_return;
-
-    SC_PROPERTY(Keynode("sys_wait"), ForceCreate)
-    static ScAddr op_sys_wait;
-
-    SC_PROPERTY(Keynode("syncronize"), ForceCreate)
-    static ScAddr op_syncronize;
+  static inline ScKeynode const op_varAssign{"varAssign"};
+  static inline ScKeynode const op_varErase{"varErase"};
 
+  static inline ScKeynode const op_ifEq{"ifEq"};
+  static inline ScKeynode const op_ifGr{"ifGr"};
+
+  static inline ScKeynode const op_contAdd{"contAdd"};
+  static inline ScKeynode const op_contDiv{"contDiv"};
+  static inline ScKeynode const op_contMult{"contMult"};
+  static inline ScKeynode const op_contSub{"contSub"};
+  static inline ScKeynode const op_contPow{"contPow"};
+
+  static inline ScKeynode const op_contLn{"contLn"};
+  static inline ScKeynode const op_contSin{"contSin"};
+  static inline ScKeynode const op_contCos{"contCos"};
+  static inline ScKeynode const op_contTg{"contTg"};
+  static inline ScKeynode const op_contASin{"contASin"};
+  static inline ScKeynode const op_contACos{"contACos"};
+  static inline ScKeynode const op_contATg{"contATg"};
+
+  static inline ScKeynode const op_contDivInt{"contDivInt"};
+  static inline ScKeynode const op_contDivRem{"contDivRem"};
+
+  static inline ScKeynode const op_contStringConcat{"contStringConcat"};
+
+  static inline ScKeynode const op_stringIfEq{"stringIfEq"};
+  static inline ScKeynode const op_stringIfGr{"stringIfGr"};
+  static inline ScKeynode const op_stringSplit{"stringSplit"};
+  static inline ScKeynode const op_stringLen{"stringLen"};
+  static inline ScKeynode const op_stringSub{"stringSub"};
+  static inline ScKeynode const op_stringSlice{"stringSlice"};
+  static inline ScKeynode const op_stringStartsWith{"stringStartsWith"};
+  static inline ScKeynode const op_stringEndsWith{"stringEndsWith"};
+  static inline ScKeynode const op_stringReplace{"stringReplace"};
+  static inline ScKeynode const op_stringToUpperCase{"stringToUpperCase"};
+  static inline ScKeynode const op_stringToLowerCase{"stringToLowerCase"};
+
+  static inline ScKeynode const op_contAssign{"contAssign"};
+  static inline ScKeynode const op_contErase{"contErase"};
+
+  static inline ScKeynode const op_print{"print"};
+  static inline ScKeynode const op_printNl{"printNl"};
+  static inline ScKeynode const op_printEl{"printEl"};
+
+  static inline ScKeynode const op_sys_search{"sys_search"};
+  static inline ScKeynode const op_sys_gen{"sys_gen"};
+
+  static inline ScKeynode const op_call{"call"};
+  static inline ScKeynode const op_waitReturn{"waitReturn"};
+  static inline ScKeynode const op_waitReturnSet{"waitReturnSet"};
+  static inline ScKeynode const op_return{"return"};
+
+  static inline ScKeynode const op_sys_wait{"sys_wait"};
+
+  static inline ScKeynode const op_syncronize{"syncronize"};
+
+  static inline ScKeynode const action_activate_agent{"action_activate_agent", ScType::ConstNodeClass};
+  static inline ScKeynode const action_deactivate_agent{"action_deactivate_agent", ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_erase_operator{
+      "action_interpret_erase_operator",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_finished_action{
+      "action_interpret_finished_action",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_gen_operator{"action_interpret_gen_operator", ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_if_operator{"action_interpret_if_operator", ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_math_operator{
+      "action_interpret_math_operator",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_print_operator{
+      "action_interpret_print_operator",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_process_control_operator{
+      "action_interpret_process_control_operator",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_process{"action_interpret_process", ScType::ConstNodeClass};
+  static inline ScKeynode const action_destroy_process{"action_destroy_process", ScType::ConstNodeClass};
+  static inline ScKeynode const action_synchronize_program_execution{
+      "action_synchronize_program_execution",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_search_operator{
+      "action_interpret_search_operator",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_string_operator{
+      "action_interpret_string_operator",
+      ScType::ConstNodeClass};
+  static inline ScKeynode const action_interpret_var_value_operator{
+      "action_interpret_var_value_operator",
+      ScType::ConstNodeClass};
 };
 
-}
+}  // namespace scp

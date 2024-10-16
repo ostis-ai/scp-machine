@@ -1,66 +1,48 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
+#include "scpIfOperatorInterpreter.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpIfOperatorInterpreter.hpp"
+
 #include "if_operators/SCPOperatorIfCoin.hpp"
 #include "if_operators/SCPOperatorIfType.hpp"
 #include "if_operators/SCPOperatorIfVarAssign.hpp"
-#include "sc-memory/sc_memory.hpp"
-#include <iostream>
 
 namespace scp
 {
-ScAddr ASCPIfOperatorInterpreter::msAgentKeynode;
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+    ASCPIfOperatorInterpreter::supportedOperators = {};
 
-SC_AGENT_IMPLEMENTATION(ASCPIfOperatorInterpreter)
+ScAddr ASCPIfOperatorInterpreter::GetActionClass() const
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
-
-    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
-
-    ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-        return SC_RESULT_ERROR_INVALID_TYPE;
-
-    SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_ifCoin)
-    {
-        oper = new SCPOperatorIfCoin(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_ifType)
-    {
-        oper = new SCPOperatorIfType(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_ifVarAssign)
-    {
-        oper = new SCPOperatorIfVarAssign(m_memoryCtx, scp_operator);
-    }
-
-    if (oper == nullptr)
-        return SC_RESULT_ERROR_INVALID_PARAMS;
-
-#ifdef SCP_DEBUG
-    std::cout << oper->GetTypeName() << std::endl;
-#endif
-    sc_result parse_result = oper->Parse();
-    if (parse_result != SC_RESULT_OK)
-    {
-        delete oper;
-        return parse_result;
-    }
-    else
-    {
-        sc_result execute_result;
-        execute_result = oper->Execute();
-        delete oper;
-        return execute_result;
-    }
+  return Keynodes::action_interpret_if_operator;
 }
 
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+ASCPIfOperatorInterpreter::getSupportedOperators() const
+{
+  if (supportedOperators.empty())
+    supportedOperators = {
+        {Keynodes::op_ifCoin,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorIfCoin>(ctx, addr);
+         }},
+        {Keynodes::op_ifType,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorIfType>(ctx, addr);
+         }},
+        {Keynodes::op_ifVarAssign,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorIfVarAssign>(ctx, addr);
+         }},
+    };
+  return supportedOperators;
 }
+}  // namespace scp

@@ -21,3 +21,15 @@ manifest.json
 .vscode
 __pycache__
 .idea
+
+# docs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.gz
+docs/*.log
+*.pdf
+*.run.xml

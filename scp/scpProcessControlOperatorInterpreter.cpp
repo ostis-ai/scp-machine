@@ -1,69 +1,55 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
+#include "scpProcessControlOperatorInterpreter.hpp"
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpProcessControlOperatorInterpreter.hpp"
+
 #include "process_control_operators/SCPOperatorReturn.hpp"
 #include "process_control_operators/SCPOperatorSysWait.hpp"
 #include "process_control_operators/SCPOperatorCall.hpp"
 #include "process_control_operators/SCPOperatorWaitReturn.hpp"
-#include "sc-memory/sc_memory.hpp"
-#include <iostream>
 
-namespace scp {
-ScAddr ASCPProcessControlOperatorInterpreter::msAgentKeynode;
-
-SC_AGENT_IMPLEMENTATION(ASCPProcessControlOperatorInterpreter)
+namespace scp
 {
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+    ASCPProcessControlOperatorInterpreter::supportedOperators = {};
 
-    ScAddr scp_operator = m_memoryCtx.GetEdgeTarget(edgeAddr);
-
-    ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-        return SC_RESULT_ERROR_INVALID_TYPE;
-
-    SCPOperator* oper;
-    if (type == Keynodes::op_return)
-    {
-        oper = new SCPOperatorReturn(m_memoryCtx, scp_operator);
-    }
-    else if (type == Keynodes::op_sys_wait)
-    {
-        oper = new SCPOperatorSysWait(m_memoryCtx, scp_operator);
-    }
-    else if (type == Keynodes::op_call)
-    {
-        oper = new SCPOperatorCall(m_memoryCtx, scp_operator);
-    }
-    else if (type == Keynodes::op_waitReturn)
-    {
-        oper = new SCPOperatorWaitReturn(m_memoryCtx, scp_operator);
-    }
-    else
-        return SC_RESULT_ERROR_INVALID_PARAMS;
-
-#ifdef SCP_DEBUG
-    std::cout << oper->GetTypeName() << std::endl;
-#endif
-    sc_result parse_result = oper->Parse();
-    if (parse_result != SC_RESULT_OK)
-    {
-        delete oper;
-        return parse_result;
-    }
-    else
-    {
-        sc_result execute_result;
-        execute_result = oper->Execute();
-        delete oper;
-        return execute_result;
-    }
+ScAddr ASCPProcessControlOperatorInterpreter::GetActionClass() const
+{
+  return Keynodes::action_interpret_process_control_operator;
 }
 
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+ASCPProcessControlOperatorInterpreter::getSupportedOperators() const
+{
+  if (supportedOperators.empty())
+    supportedOperators = {
+        {Keynodes::op_return,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorReturn>(ctx, addr);
+         }},
+        {Keynodes::op_sys_wait,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorSysWait>(ctx, addr);
+         }},
+        {Keynodes::op_call,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorCall>(ctx, addr);
+         }},
+        {Keynodes::op_waitReturn,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorWaitReturn>(ctx, addr);
+         }},
+    };
+  return supportedOperators;
 }
+
+}  // namespace scp

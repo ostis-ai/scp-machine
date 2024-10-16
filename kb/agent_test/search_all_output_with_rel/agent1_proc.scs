@@ -5,7 +5,6 @@ agent1_proc
 <- agent_scp_program;
 <- scp_program;
 -> rrel_key_sc_element: _process1;;
-
 agent1_proc = [*
 _process1 
 _<- scp_process;
@@ -55,7 +54,7 @@ _<= nrel_decomposition_of_action:: _... (*
 			(*
 			_<- genElStr3;;
 
-			_-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_node:: rrel_const:: _answer;;
+			_-> rrel_1:: rrel_assign:: rrel_scp_var:: rrel_node:: rrel_const:: rrel_struct:: _result;;
 			_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_pos_const_perm:: _arc1;;
 			_-> rrel_3:: rrel_fixed:: rrel_scp_var:: _param;;
 
@@ -71,10 +70,10 @@ _<= nrel_decomposition_of_action:: _... (*
 			_-> rrel_3:: rrel_assign:: rrel_scp_var:: rrel_const:: _elem;;
 			
 			_-> rrel_set_2:: rrel_assign:: rrel_scp_var:: _arc_set;;
-			_-> rrel_set_3:: rrel_fixed:: rrel_scp_var:: _answer;;
+			_-> rrel_set_3:: rrel_fixed:: rrel_scp_var:: _result;;
 
 			_=> nrel_then:: _..operator6;;
-			_=> nrel_else:: _..operator_answer;;
+			_=> nrel_else:: _..operator_result;;
 			*);;
 			
 		_-> _..operator6
@@ -106,7 +105,7 @@ _<= nrel_decomposition_of_action:: _... (*
 			_-> rrel_2:: rrel_fixed:: rrel_scp_const:: _..params 
 					(* 
 					_-> rrel_1:: rrel_fixed:: rrel_scp_var:: _curr_arc;;
-					_-> rrel_2:: rrel_fixed:: rrel_scp_var:: _answer;;
+					_-> rrel_2:: rrel_fixed:: rrel_scp_var:: _result;;
 					*);;
 			_-> rrel_3:: rrel_assign:: rrel_scp_var:: _descr;;
 						
@@ -126,7 +125,7 @@ _<= nrel_decomposition_of_action:: _... (*
 			(*
 			_<- genElStr3;;
 
-			_-> rrel_1:: rrel_fixed:: rrel_scp_var:: _answer;;
+			_-> rrel_1:: rrel_fixed:: rrel_scp_var:: _result;;
 			_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_pos_const_perm:: _arc1;;
 			_-> rrel_3:: rrel_fixed:: rrel_scp_var:: _curr_arc;;
 
@@ -139,18 +138,18 @@ _<= nrel_decomposition_of_action:: _... (*
 
 			_-> rrel_1:: rrel_fixed:: rrel_scp_var:: _arc_set;;
 							
-			_=> nrel_goto:: _..operator_answer;;
+			_=> nrel_goto:: _..operator_result;;
 			*);;
 
-		_-> _..operator_answer
+		_-> _..operator_result
 			(*
 			_<- genElStr5;;
 
 			_-> rrel_1:: rrel_fixed:: rrel_scp_var:: _quest;;
 			_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_common:: rrel_arc:: _arc1;;
-			_-> rrel_3:: rrel_fixed:: rrel_scp_var:: _answer;;
+			_-> rrel_3:: rrel_fixed:: rrel_scp_var:: _result;;
 			_-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_pos_const_perm:: _arc2;;
-			_-> rrel_5:: rrel_fixed:: rrel_scp_const:: nrel_answer;;
+			_-> rrel_5:: rrel_fixed:: rrel_scp_const:: nrel_result;;
 
 			_=> nrel_goto:: _..operator_return;;
 			*);;

@@ -1,14 +1,14 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #include "scpStringOperatorInterpreter.hpp"
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
-#include "scpStringOperatorInterpreter.hpp"
+
 #include "string_operators/SCPOperatorStringSplit.hpp"
 #include "string_operators/SCPOperatorStringReplace.hpp"
 #include "string_operators/SCPOperatorStringSlice.hpp"
@@ -21,93 +21,84 @@
 #include "string_operators/SCPOperatorStringSub.hpp"
 #include "string_operators/SCPOperatorStringIfEq.hpp"
 #include "string_operators/SCPOperatorStringIfGr.hpp"
-#include "sc-memory/sc_memory.hpp"
-#include <iostream>
 
 namespace scp
 {
-ScAddr ASCPStringOperatorInterpreter::msAgentKeynode;
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+    ASCPStringOperatorInterpreter::supportedOperators = {};
 
-SC_AGENT_IMPLEMENTATION(ASCPStringOperatorInterpreter)
+ScAddr ASCPStringOperatorInterpreter::GetActionClass() const
 {
-    if (!edgeAddr.IsValid())
-            return SC_RESULT_ERROR;
-
-        ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
-
-        ScAddr type;
-        if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-            return SC_RESULT_ERROR_INVALID_TYPE;
-
-        SCPOperator* oper = nullptr;
-        if (type == Keynodes::op_stringSplit)
-        {
-            oper = new SCPOperatorStringSplit(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringSlice)
-        {
-            oper = new SCPOperatorStringSlice(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringReplace)
-        {
-            oper = new SCPOperatorStringReplace(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_contStringConcat)
-        {
-            oper = new SCPOperatorContStringConcat(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringIfEq)
-        {
-            oper = new SCPOperatorStringIfEq(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringIfGr)
-        {
-            oper = new SCPOperatorStringIfGr(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringLen)
-        {
-            oper = new SCPOperatorStringLen(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringSub)
-        {
-            oper = new SCPOperatorStringSub(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringStartsWith)
-        {
-            oper = new SCPOperatorStringStartsWith(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringEndsWith)
-        {
-            oper = new SCPOperatorStringEndsWith(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringToUpperCase)
-        {
-            oper = new SCPOperatorStringToUpperCase(m_memoryCtx, scp_operator);
-        }
-        if (type == Keynodes::op_stringToLowerCase)
-        {
-            oper = new SCPOperatorStringToLowerCase(m_memoryCtx, scp_operator);
-        }
-        if (oper == nullptr)
-            return SC_RESULT_ERROR_INVALID_PARAMS;
-
-#ifdef SCP_DEBUG
-    std::cout << oper->GetTypeName() << std::endl;
-#endif
-
-    sc_result parse_result = oper->Parse();
-    if (parse_result != SC_RESULT_OK)
-    {
-        delete oper;
-        return parse_result;
-    }
-    else
-    {
-        sc_result execute_result;
-        execute_result = oper->Execute();
-        delete oper;
-        return execute_result;
-    }
+  return Keynodes::action_interpret_string_operator;
 }
 
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+ASCPStringOperatorInterpreter::getSupportedOperators() const
+{
+  if (supportedOperators.empty())
+    supportedOperators = {
+        {Keynodes::op_stringSplit,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringSplit>(ctx, addr);
+         }},
+        {Keynodes::op_stringSlice,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringSlice>(ctx, addr);
+         }},
+        {Keynodes::op_stringReplace,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringReplace>(ctx, addr);
+         }},
+        {Keynodes::op_contStringConcat,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContStringConcat>(ctx, addr);
+         }},
+        {Keynodes::op_stringIfEq,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringIfEq>(ctx, addr);
+         }},
+        {Keynodes::op_stringIfGr,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringIfGr>(ctx, addr);
+         }},
+        {Keynodes::op_stringLen,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringLen>(ctx, addr);
+         }},
+        {Keynodes::op_stringSub,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringSub>(ctx, addr);
+         }},
+        {Keynodes::op_stringStartsWith,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringStartsWith>(ctx, addr);
+         }},
+        {Keynodes::op_stringEndsWith,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringEndsWith>(ctx, addr);
+         }},
+        {Keynodes::op_stringToUpperCase,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringToUpperCase>(ctx, addr);
+         }},
+        {Keynodes::op_stringToLowerCase,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorStringToLowerCase>(ctx, addr);
+         }},
+    };
+  return supportedOperators;
 }
+
+}  // namespace scp

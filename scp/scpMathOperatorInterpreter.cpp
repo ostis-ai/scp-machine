@@ -20,109 +20,106 @@
 #include "math_operators/SCPOperatorContPow.hpp"
 #include "math_operators/SCPOperatorContDiv.hpp"
 
-#include "sc-memory/sc_memory.hpp"
 #include <iostream>
 #include <string>
 
-namespace scp {
-ScAddr ASCPMathOperatorInterpreter::msAgentKeynode;
+namespace scp
+{
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+    ASCPMathOperatorInterpreter::supportedOperators = {};
 
-SC_AGENT_IMPLEMENTATION(ASCPMathOperatorInterpreter){
-    if (!edgeAddr.IsValid())
-        return SC_RESULT_ERROR;
-
-    ScAddr scp_operator =m_memoryCtx.GetEdgeTarget(edgeAddr);
-
-    ScAddr type;
-    if (SC_TRUE != Utils::resolveOperatorType(m_memoryCtx, scp_operator, type))
-        return SC_RESULT_ERROR_INVALID_TYPE;
-
-    SCPOperator* oper = nullptr;
-    if (type == Keynodes::op_contSin)
-    {
-        oper = new SCPOperatorSIn(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contCos)
-    {
-        oper = new SCPOperatorCos(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contTg)
-    {
-        oper = new SCPOperatorTg(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contASin)
-    {
-        oper = new SCPOperatorASin(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contACos)
-    {
-        oper = new SCPOperatorACos(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contATg)
-    {
-        oper = new SCPOperatorATg(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contDivInt)
-    {
-        oper = new SCPOperatorDivInt(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contDivRem)
-    {
-        oper = new SCPOperatorDivRem(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_ifEq)
-    {
-        oper = new SCPOperatorIfEq(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contLn)
-    {
-        oper = new SCPOperatorContLn(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_ifGr)
-    {
-        oper = new SCPOperatorIfGr(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contAdd)
-    {
-        oper = new SCPOperatorContAdd(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contSub)
-    {
-        oper = new SCPOperatorContSub(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contMult)
-    {
-        oper = new SCPOperatorContMult(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contDiv)
-    {
-        oper = new SCPOperatorContDiv(m_memoryCtx, scp_operator);
-    }
-    if (type == Keynodes::op_contPow)
-    {
-        oper = new SCPOperatorContPow(m_memoryCtx, scp_operator);
-    }
-
-    if (oper == nullptr){
-        return SC_RESULT_ERROR_INVALID_PARAMS;
-    }
-
-
-    std::cout << oper->GetTypeName() << std::endl;
-
-    sc_result parse_result = oper->Parse();
-    if (parse_result != SC_RESULT_OK)
-    {
-        delete oper;
-        return parse_result;
-    }
-    else
-    {
-        sc_result execute_result;
-        execute_result = oper->Execute();
-        delete oper;
-        return execute_result;
-    }
+ScAddr ASCPMathOperatorInterpreter::GetActionClass() const
+{
+  return Keynodes::action_interpret_math_operator;
 }
 
+ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+ASCPMathOperatorInterpreter::getSupportedOperators() const
+{
+  if (supportedOperators.empty())
+    supportedOperators = {
+        {Keynodes::op_contSin,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorSIn>(ctx, addr);
+         }},
+        {Keynodes::op_contCos,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorCos>(ctx, addr);
+         }},
+        {Keynodes::op_contTg,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorTg>(ctx, addr);
+         }},
+        {Keynodes::op_contASin,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorASin>(ctx, addr);
+         }},
+        {Keynodes::op_contACos,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorACos>(ctx, addr);
+         }},
+        {Keynodes::op_contATg,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorATg>(ctx, addr);
+         }},
+        {Keynodes::op_contDivInt,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorDivInt>(ctx, addr);
+         }},
+        {Keynodes::op_contDivRem,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorDivRem>(ctx, addr);
+         }},
+        {Keynodes::op_ifEq,  // todo(kilativ-dotcom): move this to math operator in standard
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorIfEq>(ctx, addr);
+         }},
+        {Keynodes::op_contLn,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContLn>(ctx, addr);
+         }},
+        {Keynodes::op_ifGr,  // todo(kilativ-dotcom): move this to math operator in standard
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorIfGr>(ctx, addr);
+         }},
+        {Keynodes::op_contAdd,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContAdd>(ctx, addr);
+         }},
+        {Keynodes::op_contSub,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContSub>(ctx, addr);
+         }},
+        {Keynodes::op_contMult,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContMult>(ctx, addr);
+         }},
+        {Keynodes::op_contDiv,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContDiv>(ctx, addr);
+         }},
+        {Keynodes::op_contPow,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContPow>(ctx, addr);
+         }},
+    };
+  return supportedOperators;
 }
+
+}  // namespace scp

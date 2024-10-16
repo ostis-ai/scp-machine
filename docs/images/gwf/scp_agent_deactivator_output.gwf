@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GWF version="2.0">
+    <staticSector>
+        <node type="node/const/perm/group" idtf="action_deactivate_agent" shapeColor="193" id="107641267265184" parent="0" left="0" top="0" right="187.109" bottom="25" textColor="244" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="547.5" y="359" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/group" idtf="action_finished_successfully" shapeColor="193" id="107641258687968" parent="0" left="0" top="0" right="215.25" bottom="25" textColor="244" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="633.5" y="499.75" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/group" idtf="action_finished" shapeColor="193" id="107641262553872" parent="0" left="0" top="0" right="119.813" bottom="25" textColor="244" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="624.5" y="458.5" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/general" idtf="some_agent" shapeColor="0" id="107641258735616" parent="0" left="0" top="0" right="96.8281" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="268.5" y="445.5" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/group" idtf="action_initiated" shapeColor="193" id="107641264287904" parent="0" left="0" top="0" right="122.688" bottom="25" textColor="244" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="609" y="405" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/group" idtf="active_agent" shapeColor="0" id="107641258234992" parent="0" left="0" top="0" right="102.234" bottom="25" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="268.5" y="335.5" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <node type="node/const/perm/general" idtf="" shapeColor="193" id="107641265091936" parent="0" x="547.5" y="499.75" haveBus="false" idtf_pos="0">
+            <content type="0" mime_type="" content_visibility="false" file_name=""/>
+        </node>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="0" id="107641259413952" parent="0" id_b="107641258234992" id_e="107641258735616" b_x="268.5" b_y="335.5" e_x="268.5" e_y="445.5" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="193" id="107641267898368" parent="0" id_b="107641262553872" id_e="107641265091936" b_x="624.5" b_y="458.5" e_x="547.5" e_y="499.75" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="193" id="107641263207904" parent="0" id_b="107641267265184" id_e="107641265091936" b_x="547.5" b_y="359" e_x="547.5" e_y="499.75" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="193" id="107641263207424" parent="0" id_b="107641264287904" id_e="107641265091936" b_x="609" b_y="405" e_x="547.5" e_y="499.75" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+        <pair type="pair/const/pos/perm/orient/membership" idtf="" shapeColor="193" id="107641263207664" parent="0" id_b="107641258687968" id_e="107641265091936" b_x="633.5" b_y="499.75" e_x="547.5" e_y="499.75" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+    </staticSector>
+</GWF>

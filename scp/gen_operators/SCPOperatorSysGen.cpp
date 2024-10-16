@@ -1,8 +1,8 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #include "scpUtils.hpp"
 #include "SCPOperatorSysGen.hpp"
@@ -10,10 +10,11 @@
 namespace scp
 {
 using namespace utils;
-SCPOperatorSysGen::SCPOperatorSysGen(ScMemoryContext &ctx, ScAddr addr)
+
+SCPOperatorSysGen::SCPOperatorSysGen(ScAgentContext & ctx, ScAddr addr)
   : SCPOperator(ctx, addr)
 {
-  operands = std::vector<SCPOperand*>(4);
+  operands = std::vector<SCPOperand *>(4);
 }
 
 std::string SCPOperatorSysGen::GetTypeName()
@@ -24,7 +25,7 @@ std::string SCPOperatorSysGen::GetTypeName()
 sc_result SCPOperatorSysGen::Parse()
 {
   SCPOperator::Parse();
-  ScIterator3Ptr const operandIt3 = m_memoryCtx.Iterator3(addr, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
+  ScIterator3Ptr const operandIt3 = m_memoryCtx.CreateIterator3(addr, ScType::ConstPermPosArc, ScType::Unknown);
   while (operandIt3->Next())
   {
     auto * operand = new SCPOperand(m_memoryCtx, operandIt3->Get(1));
@@ -108,15 +109,15 @@ sc_result SCPOperatorSysGen::Execute()
 
   ScTemplateParams generationParams;
   ScAddr const & generationParamsAddr = operands[2]->GetValue();
-  ScIterator3Ptr const paramsMapIt3 = m_memoryCtx.Iterator3(
-      generationParamsAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  ScIterator3Ptr const paramsMapIt3 =
+      m_memoryCtx.CreateIterator3(generationParamsAddr, ScType::ConstPermPosArc, ScType::ConstNode);
 
   while (paramsMapIt3->Next())
   {
     ScAddr const & parameterPairAddr = paramsMapIt3->Get(2);
 
-    ScIterator5Ptr const varIt5 = m_memoryCtx.Iterator5(
-        parameterPairAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_1);
+    ScIterator5Ptr const varIt5 = m_memoryCtx.CreateIterator5(
+        parameterPairAddr, ScType::ConstPermPosArc, ScType::Unknown, ScType::ConstPermPosArc, Keynodes::rrel_1);
 
     ScAddr varAddr;
     if (varIt5->Next())
@@ -130,8 +131,8 @@ sc_result SCPOperatorSysGen::Execute()
       return SC_RESULT_ERROR_INVALID_PARAMS;
     }
 
-    ScIterator5Ptr const replacementIt5 = m_memoryCtx.Iterator5(
-        parameterPairAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown, ScType::EdgeAccessConstPosPerm, Keynodes::rrel_2);
+    ScIterator5Ptr const replacementIt5 = m_memoryCtx.CreateIterator5(
+        parameterPairAddr, ScType::ConstPermPosArc, ScType::Unknown, ScType::ConstPermPosArc, Keynodes::rrel_2);
 
     ScAddr replacementAddr;
     if (replacementIt5->Next())
@@ -152,7 +153,8 @@ sc_result SCPOperatorSysGen::Execute()
     catch (utils::ScException const & e)
     {
 #ifdef SCP_DEBUG
-      Utils::logSCPError(m_memoryCtx, "Generation parameters pair must has one replacement, but has two or more replacements", addr);
+      Utils::logSCPError(
+          m_memoryCtx, "Generation parameters pair must has one replacement, but has two or more replacements", addr);
 #endif
       FinishExecutionWithError();
       return SC_RESULT_ERROR_INVALID_PARAMS;
@@ -164,7 +166,7 @@ sc_result SCPOperatorSysGen::Execute()
 
   try
   {
-    m_memoryCtx.HelperBuildTemplate(generationTemplate, generationTemplateAddr, generationParams);
+    m_memoryCtx.BuildTemplate(generationTemplate, generationTemplateAddr, generationParams);
   }
   catch (utils::ScException const & e)
   {
@@ -178,7 +180,7 @@ sc_result SCPOperatorSysGen::Execute()
   ScTemplateGenResult generationResult;
   try
   {
-    m_memoryCtx.HelperGenTemplate(generationTemplate, generationResult);
+    m_memoryCtx.GenerateByTemplate(generationTemplate, generationResult);
   }
   catch (utils::ScException const & e)
   {
@@ -190,8 +192,8 @@ sc_result SCPOperatorSysGen::Execute()
   }
 
   std::set<ScAddr, ScAddrLessFunc> templateVarsSet;
-  ScIterator3Ptr const templateIt3 = m_memoryCtx.Iterator3(
-      generationTemplateAddr, ScType::EdgeAccessConstPosPerm, ScType::Unknown);
+  ScIterator3Ptr const templateIt3 =
+      m_memoryCtx.CreateIterator3(generationTemplateAddr, ScType::ConstPermPosArc, ScType::Unknown);
   while (templateIt3->Next())
   {
     ScAddr const & templateElementAddr = templateIt3->Get(2);
@@ -210,7 +212,7 @@ sc_result SCPOperatorSysGen::Execute()
     }
     else
     {
-      generatedElementsSetAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
+      generatedElementsSetAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
       operands[3]->ResetValue();
       operands[3]->SetValue(generatedElementsSetAddr);
     }
@@ -227,7 +229,7 @@ sc_result SCPOperatorSysGen::Execute()
     ScAddr replacementsAddr;
     if (templateVarAddrsToGenerationResultAddrs.find(templateVarAddr) == templateVarAddrsToGenerationResultAddrs.cend())
     {
-      replacementsAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
+      replacementsAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
       templateVarAddrsToGenerationResultAddrs.insert({templateVarAddr, replacementsAddr});
     }
     else
@@ -236,8 +238,8 @@ sc_result SCPOperatorSysGen::Execute()
     }
 
     if (generatedElementsSetAddr.IsValid()
-      && !m_memoryCtx.HelperCheckEdge(generatedElementsSetAddr, generatedAddr, ScType::EdgeAccessConstPosPerm))
-      m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, generatedElementsSetAddr, generatedAddr);
+        && !m_memoryCtx.CheckConnector(generatedElementsSetAddr, generatedAddr, ScType::ConstPermPosArc))
+      m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, generatedElementsSetAddr, generatedAddr);
   }
 
   ScAddr templateVarsToGenerationResultsSetAddr;
@@ -247,7 +249,8 @@ sc_result SCPOperatorSysGen::Execute()
   }
   else
   {
-    templateVarsToGenerationResultsSetAddr = m_memoryCtx.CreateNode(ScType::NodeConst);;
+    templateVarsToGenerationResultsSetAddr = m_memoryCtx.GenerateNode(ScType::ConstNode);
+    ;
     operands[1]->ResetValue();
     operands[1]->SetValue(templateVarsToGenerationResultsSetAddr);
   }
@@ -257,10 +260,10 @@ sc_result SCPOperatorSysGen::Execute()
     ScAddr const & templateVarAddr = pair.first;
     ScAddr const & generationResultAddr = pair.second;
 
-    ScAddr const & replacementPairAddr = m_memoryCtx.CreateEdge(
-        ScType::EdgeDCommonConst, templateVarAddr, generationResultAddr);
+    ScAddr const & replacementPairAddr =
+        m_memoryCtx.GenerateConnector(ScType::ConstCommonArc, templateVarAddr, generationResultAddr);
 
-    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, templateVarsToGenerationResultsSetAddr, replacementPairAddr);
+    m_memoryCtx.GenerateConnector(ScType::ConstPermPosArc, templateVarsToGenerationResultsSetAddr, replacementPairAddr);
   }
 
   FinishExecutionSuccessfully();

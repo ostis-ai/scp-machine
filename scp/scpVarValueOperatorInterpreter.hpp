@@ -1,31 +1,29 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
-#include "sc-memory/sc_object.hpp"
-#include "sc-memory/kpm/sc_agent.hpp"
-#include "scpKeynodes.hpp"
-
-#include "scpVarValueOperatorInterpreter.generated.hpp"
+#include "scpOperatorInterpreter.hpp"
 
 namespace scp
 {
 
-class ASCPVarValueOperatorInterpreter : public ScAgent
+class ASCPVarValueOperatorInterpreter : public ASCPOperatorInterpreter
 {
-    SC_CLASS(Agent, Event(Keynodes::active_action, ScEvent::Type::AddOutputEdge))
-    SC_GENERATED_BODY()
-
 public:
-    SC_PROPERTY(Keynode("sc_agent_of_scp_variables_values_control"), ForceCreate)
-    static ScAddr msAgentKeynode;
+  ScAddr GetActionClass() const override;
 
+  ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+  getSupportedOperators() const override;
+
+  static inline ScKeynode const msAgentKeynode{"sc_agent_of_scp_variables_values_control"};
+
+private:
+  static ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
+      supportedOperators;
 };
 
-}
-
+}  // namespace scp

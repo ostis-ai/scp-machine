@@ -1,32 +1,57 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #include "scpAgentProcessor.hpp"
-#include "sc-memory/sc_memory.hpp"
 
-namespace scp {
+#include "scpAgentEvent.hpp"
+#include "scpKeynodes.hpp"
 
-ScAddr ASCPAgentActivator::msAgentKeynode;
-ScAddr ASCPAgentDeactivator::msAgentKeynode;
-
-SC_AGENT_IMPLEMENTATION(ASCPAgentActivator)
+namespace scp
 {
-    ScAddr agent =m_memoryCtx.GetEdgeTarget(edgeAddr);
 
-    SCPAgentEvent::register_scp_agent(m_memoryCtx, agent);
-
-    return SC_RESULT_OK;
-}
-
-SC_AGENT_IMPLEMENTATION(ASCPAgentDeactivator)
+ScResult ASCPAgentActivator::DoProgram(
+    ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
+    ScAction & action)
 {
-    ScAddr agent = otherAddr;
-    SCPAgentEvent::unregister_scp_agent(m_memoryCtx, agent);
+  ScAddr agent = event.GetOtherElement();
 
-    return SC_RESULT_OK;
+  SCPAgentEvent::HandleActiveAgent(m_context, SCPAgentEvent::RegisterSCPAgent, agent);
+
+  return action.FinishSuccessfully();
 }
 
+ScAddr ASCPAgentActivator::GetActionClass() const
+{
+  return Keynodes::action_activate_agent;
 }
+
+ScAddr ASCPAgentActivator::GetEventSubscriptionElement() const
+{
+  return Keynodes::active_sc_agent;
+}
+
+ScResult ASCPAgentDeactivator::DoProgram(
+    ScEventBeforeEraseOutgoingArc<ScType::ConstPermPosArc> const & event,
+    ScAction & action)
+{
+  ScAddr agent = event.GetOtherElement();
+
+  SCPAgentEvent::HandleActiveAgent(m_context, SCPAgentEvent::UnregisterSCPAgent, agent);
+
+  return action.FinishSuccessfully();
+}
+
+ScAddr ASCPAgentDeactivator::GetActionClass() const
+{
+  return Keynodes::action_deactivate_agent;
+}
+
+ScAddr ASCPAgentDeactivator::GetEventSubscriptionElement() const
+{
+  return Keynodes::active_sc_agent;
+}
+
+}  // namespace scp

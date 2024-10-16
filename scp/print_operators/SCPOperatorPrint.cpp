@@ -1,8 +1,8 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
@@ -14,64 +14,65 @@
 namespace scp
 {
 
-SCPOperatorPrint::SCPOperatorPrint(ScMemoryContext &ctx, ScAddr addr, sc_bool newline_): SCPOperatorElStr1(ctx, addr)
+SCPOperatorPrint::SCPOperatorPrint(ScAgentContext & ctx, ScAddr addr, sc_bool newline_)
+  : SCPOperatorElStr1(ctx, addr)
 {
-    newline = newline_;
+  newline = newline_;
 }
 
 std::string SCPOperatorPrint::GetTypeName()
 {
-    if (SC_TRUE == newline)
-        return "printNl";
-    else
-        return "print";
+  if (SC_TRUE == newline)
+    return "printNl";
+  else
+    return "print";
 }
 
 sc_result SCPOperatorPrint::Parse()
 {
-    return SCPOperatorElStr1::Parse();
+  return SCPOperatorElStr1::Parse();
 }
 
 sc_result SCPOperatorPrint::Execute()
 {
-    if (SC_RESULT_OK != ResetValues())
-        return SC_RESULT_ERROR;
+  if (SC_RESULT_OK != ResetValues())
+    return SC_RESULT_ERROR;
 
-    if (!operands[0]->IsFixed())
-    {
+  if (!operands[0]->IsFixed())
+  {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(m_memoryCtx, "Operand must have FIXED modifier", addr);
+    Utils::logSCPError(m_memoryCtx, "Operand must have FIXED modifier", addr);
 #endif
-        FinishExecutionWithError();
-        return SC_RESULT_ERROR_INVALID_PARAMS;
-    }
-    if (!operands[0]->GetValue().IsValid())
-    {
+    FinishExecutionWithError();
+    return SC_RESULT_ERROR_INVALID_PARAMS;
+  }
+  if (!operands[0]->GetValue().IsValid())
+  {
 #ifdef SCP_DEBUG
-        Utils::logSCPError(m_memoryCtx, "Operand has modifier FIXED, but has no value", addr);
+    Utils::logSCPError(m_memoryCtx, "Operand has modifier FIXED, but has no value", addr);
 #endif
-        FinishExecutionWithError();
-        return SC_RESULT_ERROR_INVALID_PARAMS;
-    }
+    FinishExecutionWithError();
+    return SC_RESULT_ERROR_INVALID_PARAMS;
+  }
 
-    ScStreamPtr stream =m_memoryCtx.GetLinkContent(operands[0]->GetValue());
-    if (stream)
+  ScStreamPtr stream = m_memoryCtx.GetLinkContent(operands[0]->GetValue());
+  if (stream)
+  {
+    std::string str;
+    if (ScStreamConverter::StreamToString(stream, str))
     {
-        std::string str;
-        if (ScStreamConverter::StreamToString(stream, str))
-        {
-            std::cout << str;
-            if (SC_TRUE == newline)
-                std::cout << std::endl;
-            FinishExecutionSuccessfully();
-        }
-        else
-            FinishExecutionWithError();
+      std::cout << str;
+      if (SC_TRUE == newline)
+        std::cout << std::endl;
+      FinishExecutionSuccessfully();
     }
     else
-        FinishExecutionWithError();
+      FinishExecutionWithError();
+  }
+  else
+    FinishExecutionWithError();
 
-    return SC_RESULT_OK;
+  return SC_RESULT_OK;
 }
 
-}
+}  // namespace scp
