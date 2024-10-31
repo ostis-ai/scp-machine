@@ -130,7 +130,7 @@ public:
 
   static inline ScKeynode const rrel_role_relation{"rrel_role_relation"};
 
-  static inline ScKeynode const rrel_norole_relation{"rrel_norole_relation"};
+  static inline ScKeynode const rrel_non_role_relation{"rrel_non_role_relation"};
 
   static inline ScKeynode const rrel_class{"rrel_class"};
 

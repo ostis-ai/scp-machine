@@ -13,7 +13,7 @@ _event <- sc_node;;
 action_initiated <- sc_node_class;;
 set1 <- sc_node;;
 ui_start_sc_element <- sc_node;;
-nrel_authors <- sc_node_norole_relation;;
+nrel_authors <- sc_node_non_role_relation;;
 abstract_scp_machine <- sc_node;;
 rrel_1 <- sc_node_role_relation;;
 ..node0 <- sc_node;;

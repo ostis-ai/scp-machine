@@ -287,9 +287,9 @@ void SCPOperand::resolveModifiers()
       element_type = element_type | ScType::NodeStructure;
       continue;
     }
-    if (modifier == Keynodes::rrel_norole_relation)
+    if (modifier == Keynodes::rrel_non_role_relation)
     {
-      element_type = element_type | ScType::NodeNoRole;
+      element_type = element_type | ScType::NodeNonRole;
       continue;
     }
     if (modifier == Keynodes::rrel_role_relation)
