@@ -158,6 +158,9 @@ sc_result SCPOperatorContSub::Execute()
   operands[0]->ResetValue();
   operands[0]->SetValue(answerLink);
 
+  std::cout << "SCPOperatorContSub execute(): end";
+  FinishExecutionSuccessfully();
+
   return SC_RESULT_OK;
 }
 
