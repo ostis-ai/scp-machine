@@ -187,6 +187,8 @@ public:
   static inline ScKeynode const op_ifEq{"ifEq"};
   static inline ScKeynode const op_ifGr{"ifGr"};
 
+  static inline ScKeynode const op_contRandom{"contRandom"};
+
   static inline ScKeynode const op_contAdd{"contAdd"};
   static inline ScKeynode const op_contDiv{"contDiv"};
   static inline ScKeynode const op_contMult{"contMult"};

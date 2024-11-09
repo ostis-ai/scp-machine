@@ -19,6 +19,7 @@
 #include "math_operators/SCPOperatorContMult.hpp"
 #include "math_operators/SCPOperatorContPow.hpp"
 #include "math_operators/SCPOperatorContDiv.hpp"
+#include "math_operators/SCPOperatorContRandom.hpp"
 
 #include <iostream>
 #include <string>
@@ -117,6 +118,11 @@ ASCPMathOperatorInterpreter::getSupportedOperators() const
          [](ScAgentContext & ctx, ScAddr addr)
          {
            return std::make_unique<SCPOperatorContPow>(ctx, addr);
+         }},
+        {Keynodes::op_contRandom,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorContRandom>(ctx, addr);
          }},
     };
   return supportedOperators;
