@@ -1,7 +1,7 @@
 sc_agent_search_all_outgoing_arcs_with_relations
 => nrel_main_idtf:
-	[sc-агент поиска всех выходящих sc-дуг с отношениями] (* <- lang_ru;; *);
-	[sc-agent to search all outgoing sc-arcs with relations] (* <- lang_ru;; *);
+	[sc-агент поиска всех выходящих базовых sc-дуг с отношениями] (* <- lang_ru;; *);
+	[sc-agent to search all outgoing basic sc-arcs with relations] (* <- lang_ru;; *);
 
 <- abstract_sc_agent;
 

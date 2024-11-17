@@ -3,6 +3,7 @@ project(scp-machine)
 set(CMAKE_CXX_STANDARD 17)
 get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
 
+set(CMAKE_BUILD_TYPE Debug)
 set(SCP_MACHINE_CMAKE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 if(NOT SC_BIN_PATH)

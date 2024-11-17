@@ -14,5 +14,4 @@ ui_menu_test
 *];
 
 => ui_nrel_command_lang_template: [Работает ли sc-агент поиска всех выходящих sc-дуг с отношениями для множества $ui_arg_1?] (* <- lang_ru;; *);
-
 => ui_nrel_command_lang_template: [Does the sc-agent to search all outgoing sc-arcs with relations for set $ui_arg_1?] (* <- lang_en;; *);;

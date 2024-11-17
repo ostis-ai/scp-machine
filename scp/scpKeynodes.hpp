@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <unordered_map>
+
 #include <sc-memory/sc_keynodes.hpp>
 
 namespace scp
@@ -137,14 +139,17 @@ public:
   static inline ScKeynode const rrel_neg_arc{"rrel_neg_arc", ScType::ConstNodeRole};
   static inline ScKeynode const rrel_neg{"rrel_neg"};  // deprecated
 
-  static inline ScKeynode const rrel_fuz_arc{"rrel_fuz", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_fuz_arc{"rrel_fuz_arc", ScType::ConstNodeRole};
   static inline ScKeynode const rrel_fuz{"rrel_fuz"};  // deprecated
+
+  static inline ScKeynode const rrel_perm_arc{"rrel_perm_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_perm{"rrel_perm"};  // deprecated
 
   static inline ScKeynode const rrel_temp_arc{"rrel_temp_arc", ScType::ConstNodeRole};
   static inline ScKeynode const rrel_temp{"rrel_temp"};  // deprecated
 
-  static inline ScKeynode const rrel_perm_arc{"rrel_perm_arc", ScType::ConstNodeRole};
-  static inline ScKeynode const rrel_perm{"rrel_perm"};  // deprecated
+  static inline ScKeynode const rrel_actual_arc{"rrel_actual_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_inactual_arc{"rrel_inactual_arc", ScType::ConstNodeRole};
 
   static inline ScKeynode const rrel_const_perm_pos_arc{"rrel_const_perm_pos_arc", ScType::ConstNodeRole};
   static inline ScKeynode const rrel_pos_const_perm{"rrel_pos_const_perm"};  // deprecated
@@ -285,6 +290,11 @@ public:
   static inline ScKeynode const action_interpret_var_value_operator{
       "action_interpret_var_value_operator",
       ScType::ConstNodeClass};
+
+  static std::unordered_map<ScAddr, ScKeynode, ScAddrHashFunc> m_deprecatedKeynodes;
+  static std::unordered_map<ScAddr, std::string, ScAddrHashFunc> m_deprecatedKeynodeIdentifiers;
+
+  static void InitializeDeprecatedKeynodes();
 };
 
 }  // namespace scp

@@ -1,7 +1,7 @@
 agent_program_search_all_outgoing_arcs_with_relations
 => nrel_main_idtf:
-	[агентная scp-программа поиска всех выходящих sc-дуг с отношениями] (* <- lang_ru;; *);
-	[agent scp-program to search all outgoing sc-arcs with relations] (* <- lang_en;; *);
+	[агентная scp-программа поиска всех выходящих базовых sc-дуг с отношениями] (* <- lang_ru;; *);
+	[agent scp-program to search all outgoing basic sc-arcs with relations] (* <- lang_en;; *);
 <- agent_scp_program;
 <- scp_program;
 -> rrel_key_sc_element: .._process;;
@@ -45,7 +45,7 @@ _-> rrel_2:: rrel_in:: .._incoming_arc;
 		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._action;;
 		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc1;;
 		_-> rrel_3:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_node:: .._param;;
-	    _-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc2;;
+		_-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc2;;
 		_-> rrel_5:: rrel_fixed:: rrel_scp_const:: rrel_1;;
 
 		_=> nrel_then:: .._operator4;;
@@ -148,7 +148,7 @@ _-> rrel_2:: rrel_in:: .._incoming_arc;
 		<-_ genElStr5;;
 
 		_-> rrel_1:: rrel_fixed:: rrel_scp_var:: .._action;;
-		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_common_arc:: rrel_arc:: .._arc1;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const:: rrel_common_arc:: .._arc1;;
 		_-> rrel_3:: rrel_fixed:: rrel_scp_var:: .._result;;
 		_-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc2;;
 		_-> rrel_5:: rrel_fixed:: rrel_scp_const:: nrel_result;;
