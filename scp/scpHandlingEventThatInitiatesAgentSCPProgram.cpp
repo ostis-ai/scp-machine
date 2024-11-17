@@ -50,9 +50,9 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
     else
     {
       SC_AGENT_LOG_WARNING(
-          "Max customer waiting time"
+          "Max customer waiting time "
           << maxCustomerWaitingTime
-          << " has expired before action of class `action_scp_interpretation_request` was initiated because"
+          << " has expired before action of class `action_scp_interpretation_request` was initiated because "
           << timeFromStart << " ms have passed");
       scpAction.InitiateAndWait();
     }

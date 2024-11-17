@@ -29,7 +29,6 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
   m_context.BuildTemplate(programTemplate, program);
 
   ScAddr const & variableProcessNode = getProgramProcess(program);
-
   if (!variableProcessNode.IsValid())
   {
     SC_AGENT_LOG_ERROR("Cannot find key element of program " << program.Hash());
