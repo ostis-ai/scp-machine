@@ -1,32 +1,24 @@
-set(SCP_SRC "${CMAKE_SOURCE_DIR}/scp")
+set(SCP_SRC "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-file(GLOB_RECURSE SOURCES "*.cpp")
-file(GLOB_RECURSE HEADERS "*.hpp")
-
-list(FILTER SOURCES EXCLUDE REGEX ".*/tests/.*")
-list(FILTER HEADERS EXCLUDE REGEX ".*/tests/.*")
+file(GLOB SOURCES CONFIGURE_DEPENDS
+    "src/*.hpp" "src/*.cpp"
+    "src/*/*.hpp" "src/*/*.cpp"
+)
 
 add_definitions(-DSCP_DEBUG)
 add_definitions(-DSCP_MATH)
 add_definitions(-DSCP_STRING)
 
-add_library(scp SHARED ${SOURCES} ${HEADERS})
-target_link_libraries(scp
-    LINK_PUBLIC sc-core
-    LINK_PUBLIC sc-memory
-    LINK_PUBLIC sc-kpm-common
-)
+find_package(sc-machine REQUIRED)
 
-target_include_directories(scp
-    PUBLIC ${SCP_SRC}
-    PUBLIC ${SC_MEMORY_PATH}
-    PUBLIC ${SC_CORE_PATH}
-)
+add_library(scp SHARED ${SOURCES} ${HEADERS})
+target_link_libraries(scp LINK_PUBLIC sc-machine::sc-memory)
+target_include_directories(scp PRIVATE ${SCP_SRC})
 
 if (${SCP_CLANG_FORMAT_CODE})
     target_clangformat_setup(scp)
 endif()
 
-if (${SC_BUILD_TESTS})
-    include(${CMAKE_CURRENT_LIST_DIR}/tests/tests.cmake)
+if (${SCP_BUILD_TESTS})
+    include(${CMAKE_CURRENT_SOURCE_DIR}/tests/tests.cmake)
 endif ()
