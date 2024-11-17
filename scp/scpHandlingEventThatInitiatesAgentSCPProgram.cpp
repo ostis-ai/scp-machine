@@ -57,13 +57,6 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
       scpAction.InitiateAndWait();
     }
   }
-  auto const & resIt = m_context.CreateIterator5(
-      action, ScType::ConstCommonArc, ScType::ConstNode, ScType::ConstPermPosArc, ScKeynodes::nrel_result);
-  if (resIt->Next())
-  {
-    ScAddr const & actionResult = resIt->Get(2);
-    action.SetResult(actionResult);
-  }
   return action.FinishSuccessfully();
 }
 
