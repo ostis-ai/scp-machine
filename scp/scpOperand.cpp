@@ -10,6 +10,8 @@
 
 #include "scpOperand.hpp"
 
+#include "scp.hpp"
+
 #include <iostream>
 
 namespace scp
@@ -277,13 +279,17 @@ void SCPOperand::resolveModifiers()
       element_type = element_type | ScType::Node;
       continue;
     }
-    if (modifier == Keynodes::rrel_link)
+    if (modifier == Keynodes::rrel_node_link || modifier == Keynodes::rrel_link)
     {
+      if (modifier == Keynodes::rrel_link)
+        SCP_LOG_WARNING("Role relation `rrel_link` is deprecated. Use role relation `rrel_node_link` instead.");
       element_type = element_type | ScType::NodeLink;
       continue;
     }
-    if (modifier == Keynodes::rrel_struct)
+    if (modifier == Keynodes::rrel_structure || modifier == Keynodes::rrel_struct)
     {
+      if (modifier == Keynodes::rrel_struct)
+        SCP_LOG_WARNING("Role relation `rrel_struct` is deprecated. Use role relation `rrel_structure` instead.");
       element_type = element_type | ScType::NodeStructure;
       continue;
     }
@@ -303,51 +309,78 @@ void SCPOperand::resolveModifiers()
       continue;
     }
 
-    if (modifier == Keynodes::rrel_edge)
+    if (modifier == Keynodes::rrel_connector)
     {
+      element_type = element_type | ScType::Connector;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_common_edge || modifier == Keynodes::rrel_edge)
+    {
+      if (modifier == Keynodes::rrel_edge)
+        SCP_LOG_WARNING("Role relation `rrel_edge` is deprecated. Use role relation `rrel_common_edge` instead.");
       element_type = element_type | ScType::CommonEdge;
       continue;
     }
-    if (modifier == Keynodes::rrel_common)
+    if (modifier == Keynodes::rrel_arc)
     {
+      element_type = element_type | ScType::Arc;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_common_arc || modifier == Keynodes::rrel_common)
+    {
+      if (modifier == Keynodes::rrel_common)
+        SCP_LOG_WARNING("Role relation `rrel_common` is deprecated. Use role relation `rrel_common_arc` instead.");
       element_type = element_type | ScType::CommonArc;
       continue;
     }
-
-    //! TODO rrel_arc
-
-    if (modifier == Keynodes::rrel_access)
+    if (modifier == Keynodes::rrel_membership_arc || modifier == Keynodes::rrel_access)
     {
+      if (modifier == Keynodes::rrel_access)
+        SCP_LOG_WARNING("Role relation `rrel_access` is deprecated. Use role relation `rrel_membership_arc` instead.");
       element_type = element_type | ScType::MembershipArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_temp)
+
+    if (modifier == Keynodes::rrel_temp_arc || modifier == Keynodes::rrel_temp)
     {
+      if (modifier == Keynodes::rrel_temp)
+        SCP_LOG_WARNING("Role relation `rrel_temp` is deprecated. Use role relation `rrel_temp_arc` instead.");
       element_type = element_type | ScType::TempArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_perm)
+    if (modifier == Keynodes::rrel_perm_arc || modifier == Keynodes::rrel_perm)
     {
+      if (modifier == Keynodes::rrel_perm)
+        SCP_LOG_WARNING("Role relation `rrel_perm` is deprecated. Use role relation `rrel_perm_arc` instead.");
       element_type = element_type | ScType::PermArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_pos)
+    if (modifier == Keynodes::rrel_pos_arc || modifier == Keynodes::rrel_pos)
     {
+      if (modifier == Keynodes::rrel_pos)
+        SCP_LOG_WARNING("Role relation `rrel_pos` is deprecated. Use role relation `rrel_pos_arc` instead.");
       element_type = element_type | ScType::PosArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_neg)
+    if (modifier == Keynodes::rrel_neg_arc || modifier == Keynodes::rrel_neg)
     {
+      if (modifier == Keynodes::rrel_neg)
+        SCP_LOG_WARNING("Role relation `rrel_neg` is deprecated. Use role relation `rrel_neg_arc` instead.");
       element_type = element_type | ScType::NegArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_fuz)
+    if (modifier == Keynodes::rrel_fuz_arc || modifier == Keynodes::rrel_fuz)
     {
+      if (modifier == Keynodes::rrel_fuz)
+        SCP_LOG_WARNING("Role relation `rrel_fuz` is deprecated. Use role relation `rrel_fuz_arc` instead.");
       element_type = element_type | ScType::FuzArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_pos_const_perm)
+    if (modifier == Keynodes::rrel_const_perm_pos_arc || modifier == Keynodes::rrel_pos_const_perm)
     {
+      if (modifier == Keynodes::rrel_pos_const_perm)
+        SCP_LOG_WARNING(
+            "Role relation `rrel_pos_const_perm` is deprecated. Use role relation `rrel_const_perm_pos_arc` instead.");
       element_type = element_type | ScType::ConstPermPosArc;
       continue;
     }
