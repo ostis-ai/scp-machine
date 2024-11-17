@@ -20,4 +20,4 @@ rrel_1 <- sc_node_role_relation;;
 rrel_2 <- sc_node_role_relation;;
 rrel_1 <- sc_node_role_relation;;
 SCPAction1 <- sc_node;;
-Math_Test <- sc_node_struct;;
+Math_Test <- sc_node_structure;;

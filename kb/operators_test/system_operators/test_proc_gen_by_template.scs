@@ -1,32 +1,31 @@
 test_proc_gen_by_template
 <- scp_program;
--> rrel_key_sc_element: .._process1;;
+-> rrel_key_sc_element: .._process;;
 
 @test_params = {{rrel_1: _set; rrel_2: .set }};;
 
 test_proc_gen_by_template = [*
-.._process1
-_<- scp_process;
+.._process
+<-_ scp_process;
 
-_<= nrel_decomposition_of_action:: _... (*
-
-  _-> rrel_1:: .._operator1
+<=_ nrel_decomposition_of_action:: _...
+(*
+    _-> rrel_1:: .._operator1
     (*
-    _<- sys_gen;;
+        <-_ sys_gen;;
 
-    _-> rrel_1:: rrel_fixed:: rrel_scp_const:: test_template;;
-    _-> rrel_2:: rrel_assign:: rrel_scp_var:: .._all_result_pairs;;
-    _-> rrel_3:: rrel_fixed:: rrel_scp_const:: @test_params;;
-    _-> rrel_4:: rrel_fixed:: rrel_scp_const:: all_generated_results;;
+        _-> rrel_1:: rrel_fixed:: rrel_scp_const:: test_template;;
+        _-> rrel_2:: rrel_assign:: rrel_scp_var:: .._all_result_pairs;;
+        _-> rrel_3:: rrel_fixed:: rrel_scp_const:: @test_params;;
+        _-> rrel_4:: rrel_fixed:: rrel_scp_const:: all_generated_results;;
 
-    _=> nrel_goto:: .._operator2;;
+        _=> nrel_goto:: .._operator2;;
     *);;
 
     _-> .._operator2
     (*
-    _<- return;;
+        <-_ return;;
     *);;
-
 *);;
 
 *];;

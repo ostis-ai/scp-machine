@@ -272,13 +272,13 @@ nrel_decomposition_of_action
 	=> nrel_x: [616.623];
 	=> nrel_y: [362.181];
 	=> nrel_idtf_pos: [0];;
-rrel_pos_const_perm
+rrel_const_perm_pos_arc
 	=> nrel_scg_representation: ..scgNode42;;
 ..scgNode42
 	=> nrel_x: [595.917];
 	=> nrel_y: [438.284];
 	=> nrel_idtf_pos: [0];;
-rrel_pos_const_perm
+rrel_const_perm_pos_arc
 	=> nrel_scg_representation: ..scgNode43;;
 ..scgNode43
 	=> nrel_x: [597.867];

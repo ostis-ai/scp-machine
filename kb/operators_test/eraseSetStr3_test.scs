@@ -1,15 +1,15 @@
 scp_test_operator_eraseSetStr3_1
 <- eraseSetStr3;
 -> rrel_1: rrel_fixed: rrel_scp_var: ... (* -> test_set1;; *);
--> rrel_2: rrel_assign: rrel_erase: rrel_scp_var: rrel_pos_const_perm: ... ;
+-> rrel_2: rrel_assign: rrel_erase: rrel_scp_var: rrel_const_perm_pos_arc: ...;
 -> rrel_3: rrel_fixed: rrel_scp_var: ... (* -> test_elem1;; *);
 => nrel_goto: ...;;
 
 scp_test_operator_eraseSetStr3_2
 <- eraseSetStr3;
 -> rrel_1: rrel_fixed: rrel_scp_var: ... (* -> test_set2;; *);
--> rrel_2: rrel_assign: rrel_scp_var: rrel_pos_const_perm: ... ;
--> rrel_3: rrel_assign: rrel_erase: rrel_scp_var: ... ;
+-> rrel_2: rrel_assign: rrel_scp_var: rrel_const_perm_pos_arc: ...;
+-> rrel_3: rrel_assign: rrel_erase: rrel_scp_var: ...;
 => nrel_goto: ...;;
 
 test_set1 -> test_elem1;;

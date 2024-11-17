@@ -1,0 +1,37 @@
+program_search_all_role_relations_for_given_membership_arc
+=> nrel_main_idtf:
+	[scp-программа поиска всех ролевых отношений для заданной sc-дуги принадлежности] (* <- lang_ru;; *);
+	[scp-program to search all role relations for giver membership sc-arc] (* <- lang_en;; *);
+<- scp_program;
+-> rrel_key_sc_element: .._process;;
+
+program_search_all_role_relations_for_given_membership_arc = [*
+.._process
+<-_ scp_process;
+
+_-> rrel_1:: rrel_in:: .._incoming_arc;
+_-> rrel_2:: rrel_in:: .._result;
+
+<=_ nrel_decomposition_of_action:: _...
+(*  
+    _-> rrel_1:: .._operator1
+    (*
+        <-_ searchSetStr3;;
+
+        _-> rrel_1:: rrel_assign:: rrel_node:: rrel_const:: rrel_role_relation:: rrel_scp_var:: .._relation;;
+        _-> rrel_2:: rrel_assign:: rrel_scp_var:: .._arc;;
+        _-> rrel_3:: rrel_fixed:: rrel_scp_const:: .._incoming_arc;;
+        
+        _-> rrel_set_1:: rrel_fixed:: rrel_scp_const:: .._result;;
+        _-> rrel_set_2:: rrel_fixed:: rrel_scp_const:: .._result;;
+
+        _=> nrel_goto:: .._operator2;;
+    *);;
+
+    _-> .._operator2
+    (*
+        <-_ return;;
+    *);;
+*);;
+
+*];;
