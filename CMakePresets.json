@@ -5,8 +5,9 @@
     {
       "name": "debug-conan",
       "displayName": "Debug config (Conan)",
-      "description": "Debug config with tests and benchmarks (Conan dependencies used)",
+      "description": "Debug config with tests (Conan dependencies used)",
       "inherits": "conan-debug",
+      "installDir": "${sourceDir}/build/Debug/install",
       "cacheVariables": {
         "SCP_BUILD_TESTS": true
       }
@@ -15,6 +16,7 @@
       "name": "release-conan",
       "displayName": "Release config (Conan)",
       "description": "Release config (Conan dependencies used)",
+      "installDir": "${sourceDir}/build/Release/install",
       "inherits": "conan-release"
     },
     {
