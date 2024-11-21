@@ -9,10 +9,13 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
+#include "scpResult.hpp"
+
 #include <chrono>
 
 namespace scp
 {
+
 ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
@@ -22,7 +25,7 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
   if (!m_context.IsElement(agentProgram))
   {
     SC_AGENT_LOG_ERROR("Agent program is not valid");
-    action.FinishUnsuccessfully();
+    return action.FinishUnsuccessfully();
   }
 
   ScAddr const & scpParams = m_context.GenerateNode(ScType::ConstNode);
@@ -57,7 +60,24 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
       scpAction.InitiateAndWait();
     }
   }
-  return action.FinishSuccessfully();
+
+  sc_result resultCode = SC_RESULT_UNKNOWN;
+  if (action.IsFinishedSuccessfully())
+    resultCode = SC_RESULT_OK;
+  else if (action.IsFinishedUnsuccessfully())
+    resultCode = SC_RESULT_NO;
+  else if (action.IsFinishedWithError())
+    resultCode = SC_RESULT_ERROR;
+  else if (!action.IsFinished())
+  {
+    action.FinishSuccessfully();
+    resultCode = SC_RESULT_OK;
+  }
+
+  if (!action.IsFinished())
+    m_context.GenerateConnector(ScType::ConstPermPosArc, ScKeynodes::action_finished, action);
+
+  return SCPResult(resultCode);
 }
 
 ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
