@@ -45,7 +45,6 @@ void scpModule::Initialize(ScMemoryContext * context)
 {
   std::cout << "SCP START" << std::endl;
   ScAgentContext agentContext;
-  Keynodes::InitializeDeprecatedKeynodes();
   SCPAgentEvent::SubscribeAllSCPAgents(agentContext);
 }
 

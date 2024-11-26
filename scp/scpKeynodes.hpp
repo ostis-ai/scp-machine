@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include <unordered_map>
-
 #include <sc-memory/sc_keynodes.hpp>
 
 namespace scp
@@ -291,10 +289,10 @@ public:
       "action_interpret_var_value_operator",
       ScType::ConstNodeClass};
 
-  static std::unordered_map<ScAddr, ScKeynode, ScAddrHashFunc> m_deprecatedKeynodes;
-  static std::unordered_map<ScAddr, std::string, ScAddrHashFunc> m_deprecatedKeynodeIdentifiers;
+  static ScAddrToValueUnorderedMap<std::pair<ScKeynode, ScKeynode>> const & GetDeprecatedKeynodes();
 
-  static void InitializeDeprecatedKeynodes();
+private:
+  static ScAddrToValueUnorderedMap<std::pair<ScKeynode, ScKeynode>> m_deprecatedKeynodes;
 };
 
 }  // namespace scp

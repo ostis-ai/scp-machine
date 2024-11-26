@@ -224,11 +224,12 @@ void SCPOperand::resolveModifiers()
       continue;
     }
 
-    auto const & it = Keynodes::m_deprecatedKeynodes.find(modifier);
-    if (it != Keynodes::m_deprecatedKeynodes.cend())
+    auto const & deprecatedKeynodes = Keynodes::GetDeprecatedKeynodes();
+    auto const & it = deprecatedKeynodes.find(modifier);
+    if (it != deprecatedKeynodes.cend())
       SCP_LOG_WARNING(
-          "Role relation `" << Keynodes::m_deprecatedKeynodeIdentifiers[modifier]
-                            << "` is deprecated. Use role relation `" << std::string(it->second) << "` instead.");
+          "Role relation `" << std::string(it->second.first) << "` is deprecated. Use role relation `"
+                            << std::string(it->second.second) << "` instead.");
 
     if (order == 0 && set_order == 0)
     {
@@ -340,6 +341,16 @@ void SCPOperand::resolveModifiers()
     if (modifier == Keynodes::rrel_temp_arc || modifier == Keynodes::rrel_temp)
     {
       element_type = element_type | ScType::TempArc;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_actual_arc)
+    {
+      element_type = element_type | ScType::ActualTempArc;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_inactual_arc)
+    {
+      element_type = element_type | ScType::InactualTempArc;
       continue;
     }
     if (modifier == Keynodes::rrel_perm_arc || modifier == Keynodes::rrel_perm)

@@ -9,36 +9,26 @@
 namespace scp
 {
 
-std::unordered_map<ScAddr, ScKeynode, ScAddrHashFunc> Keynodes::m_deprecatedKeynodes;
-std::unordered_map<ScAddr, std::string, ScAddrHashFunc> Keynodes::m_deprecatedKeynodeIdentifiers;
+ScAddrToValueUnorderedMap<std::pair<ScKeynode, ScKeynode>> Keynodes::m_deprecatedKeynodes;
 
-void Keynodes::InitializeDeprecatedKeynodes()
+ScAddrToValueUnorderedMap<std::pair<ScKeynode, ScKeynode>> const & Keynodes::GetDeprecatedKeynodes()
 {
-  m_deprecatedKeynodes = {
-      {Keynodes::rrel_link, Keynodes::rrel_node_link},
-      {Keynodes::rrel_edge, Keynodes::rrel_common_edge},
-      {Keynodes::rrel_common, Keynodes::rrel_common_arc},
-      {Keynodes::rrel_access, Keynodes::rrel_membership_arc},
-      {Keynodes::rrel_pos, Keynodes::rrel_pos_arc},
-      {Keynodes::rrel_neg, Keynodes::rrel_neg_arc},
-      {Keynodes::rrel_fuz, Keynodes::rrel_fuz_arc},
-      {Keynodes::rrel_perm, Keynodes::rrel_perm_arc},
-      {Keynodes::rrel_temp, Keynodes::rrel_temp_arc},
-      {Keynodes::rrel_pos_const_perm, Keynodes::rrel_const_perm_pos_arc},
-  };
+  if (m_deprecatedKeynodes.empty())
+    m_deprecatedKeynodes = {
+        {Keynodes::rrel_link, {Keynodes::rrel_link, Keynodes::rrel_node_link}},
+        {Keynodes::rrel_struct, {Keynodes::rrel_struct, Keynodes::rrel_structure}},
+        {Keynodes::rrel_edge, {Keynodes::rrel_edge, Keynodes::rrel_common_edge}},
+        {Keynodes::rrel_common, {Keynodes::rrel_common, Keynodes::rrel_common_arc}},
+        {Keynodes::rrel_access, {Keynodes::rrel_access, Keynodes::rrel_membership_arc}},
+        {Keynodes::rrel_pos, {Keynodes::rrel_pos, Keynodes::rrel_pos_arc}},
+        {Keynodes::rrel_neg, {Keynodes::rrel_neg, Keynodes::rrel_neg_arc}},
+        {Keynodes::rrel_fuz, {Keynodes::rrel_fuz, Keynodes::rrel_fuz_arc}},
+        {Keynodes::rrel_perm, {Keynodes::rrel_perm, Keynodes::rrel_perm_arc}},
+        {Keynodes::rrel_temp, {Keynodes::rrel_temp, Keynodes::rrel_temp_arc}},
+        {Keynodes::rrel_pos_const_perm, {Keynodes::rrel_pos_const_perm, Keynodes::rrel_const_perm_pos_arc}},
+    };
 
-  m_deprecatedKeynodeIdentifiers = {
-      {Keynodes::rrel_link, Keynodes::rrel_link},
-      {Keynodes::rrel_edge, Keynodes::rrel_edge},
-      {Keynodes::rrel_common, Keynodes::rrel_common},
-      {Keynodes::rrel_access, Keynodes::rrel_access},
-      {Keynodes::rrel_pos, Keynodes::rrel_pos},
-      {Keynodes::rrel_neg, Keynodes::rrel_neg},
-      {Keynodes::rrel_fuz, Keynodes::rrel_fuz},
-      {Keynodes::rrel_perm, Keynodes::rrel_perm},
-      {Keynodes::rrel_temp, Keynodes::rrel_temp},
-      {Keynodes::rrel_pos_const_perm, Keynodes::rrel_pos_const_perm},
-  };
+  return m_deprecatedKeynodes;
 }
 
 }  // namespace scp
