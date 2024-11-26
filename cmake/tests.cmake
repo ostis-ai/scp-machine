@@ -9,7 +9,7 @@ function(make_tests_from_folder folder)
             "${folder}/*.hpp")
 
     add_executable(${target} ${SOURCES})
-    target_link_libraries(${target} GTest::gtest GTest::gtest_main ${TEST_DEPENDS})
+    target_link_libraries(${target} GTest::gtest_main ${TEST_DEPENDS})
     target_include_directories(${target} PRIVATE ${TEST_INCLUDES})
     gtest_add_tests(TARGET ${target} TEST_LIST ${target_tests})
 endfunction()

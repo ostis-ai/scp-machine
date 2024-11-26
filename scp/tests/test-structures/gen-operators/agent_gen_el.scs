@@ -46,12 +46,11 @@ agent_gen_el_program
 -> rrel_key_sc_element: .._process;;
 
 agent_gen_el_program = [*
-@input_arc = (.._subscription_element _-> .._action);;
 .._process
 <-_ scp_process;
 
-_-> rrel_1:: rrel_in:: _event;
-_-> rrel_2:: rrel_in:: @input_arc;
+_-> rrel_1:: rrel_in:: .._event;
+_-> rrel_2:: rrel_in:: .._input_arc;
 
 <=_ nrel_decomposition_of_action:: _...
 (*
@@ -60,7 +59,7 @@ _-> rrel_2:: rrel_in:: @input_arc;
         <-_ searchElStr3;;
 
         _-> rrel_1:: rrel_assign:: rrel_scp_var:: .._subscription_element;;
-        _-> rrel_2:: rrel_fixed:: rrel_scp_const:: @input_arc;;
+        _-> rrel_2:: rrel_fixed:: rrel_scp_const:: .._input_arc;;
         _-> rrel_3:: rrel_assign:: rrel_scp_var:: .._action;;
 
         _=> nrel_then:: .._operator2;;

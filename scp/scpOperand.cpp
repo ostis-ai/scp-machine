@@ -226,7 +226,9 @@ void SCPOperand::resolveModifiers()
 
     auto const & it = Keynodes::m_deprecatedKeynodes.find(modifier);
     if (it != Keynodes::m_deprecatedKeynodes.cend())
-      SCP_LOG_WARNING("Role relation `" << Keynodes::m_deprecatedKeynodeIdentifiers[modifier] << "` is deprecated. Use role relation `" << std::string(it->second) << "` instead.");
+      SCP_LOG_WARNING(
+          "Role relation `" << Keynodes::m_deprecatedKeynodeIdentifiers[modifier]
+                            << "` is deprecated. Use role relation `" << std::string(it->second) << "` instead.");
 
     if (order == 0 && set_order == 0)
     {

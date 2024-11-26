@@ -2,8 +2,8 @@ ui_menu_test
 <- ui_user_command_class_atom; ui_user_command_class_view_kb; ui_one_argument_command_class;
 
 => nrel_main_idtf: 
-[Работает ли sc-агент поиска всех выходящих sc-дуг с отношениями?] (* <- lang_ru;; *);
-[Does the sc-agent to search all outgoing sc-arcs with relations work?] (* <- lang_en;; *);
+	[Какие выходящие базовые sc-дуги с отношениями имеет указанное множество?] (* <- lang_ru;; *);
+	[What outgoing basic sc-arcs with relations does specified set have?] (* <- lang_en;; *);
 
 => ui_nrel_command_template:
 [*
@@ -13,5 +13,6 @@ ui_menu_test
 	*);;
 *];
 
-=> ui_nrel_command_lang_template: [Работает ли sc-агент поиска всех выходящих sc-дуг с отношениями для множества $ui_arg_1?] (* <- lang_ru;; *);
-=> ui_nrel_command_lang_template: [Does the sc-agent to search all outgoing sc-arcs with relations for set $ui_arg_1?] (* <- lang_en;; *);;
+=> ui_nrel_command_lang_template: 
+	[Какие выходящие базовые sc-дуги с отношениями имеет множество $ui_arg_1?] (* <- lang_ru;; *);
+	[What outgoing basic sc-arcs does set $ui_arg_1 have?] (* <- lang_en;; *);;
