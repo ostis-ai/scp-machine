@@ -9,10 +9,13 @@
 #include "scpKeynodes.hpp"
 #include "scpUtils.hpp"
 
+#include "scpResult.hpp"
+
 #include <chrono>
 
 namespace scp
 {
+
 ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
@@ -22,7 +25,7 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
   if (!m_context.IsElement(agentProgram))
   {
     SC_AGENT_LOG_ERROR("Agent program is not valid");
-    action.FinishUnsuccessfully();
+    return action.FinishUnsuccessfully();
   }
 
   ScAddr const & scpParams = m_context.GenerateNode(ScType::ConstNode);
@@ -50,21 +53,31 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
     else
     {
       SC_AGENT_LOG_WARNING(
-          "Max customer waiting time"
+          "Max customer waiting time "
           << maxCustomerWaitingTime
-          << " has expired before action of class `action_scp_interpretation_request` was initiated because"
+          << " has expired before action of class `action_scp_interpretation_request` was initiated because "
           << timeFromStart << " ms have passed");
       scpAction.InitiateAndWait();
     }
   }
-  auto const & resIt = m_context.CreateIterator5(
-      action, ScType::ConstCommonArc, ScType::ConstNode, ScType::ConstPermPosArc, ScKeynodes::nrel_result);
-  if (resIt->Next())
+
+  sc_result resultCode = SC_RESULT_UNKNOWN;
+  if (action.IsFinishedSuccessfully())
+    resultCode = SC_RESULT_OK;
+  else if (action.IsFinishedUnsuccessfully())
+    resultCode = SC_RESULT_NO;
+  else if (action.IsFinishedWithError())
+    resultCode = SC_RESULT_ERROR;
+  else if (!action.IsFinished())
   {
-    ScAddr const & actionResult = resIt->Get(2);
-    action.SetResult(actionResult);
+    action.FinishSuccessfully();
+    resultCode = SC_RESULT_OK;
   }
-  return action.FinishSuccessfully();
+
+  if (!action.IsFinished())
+    m_context.GenerateConnector(ScType::ConstPermPosArc, ScKeynodes::action_finished, action);
+
+  return SCPResult(resultCode);
 }
 
 ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
