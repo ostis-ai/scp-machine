@@ -39,12 +39,5 @@
       "name": "release",
       "configurePreset": "release-conan"
     }
-  ],
-  "packagePresets": [
-    {
-      "name": "release-conan",
-      "configurePreset": "release-conan",
-      "generators": ["TGZ"]
-    }
   ]
 }

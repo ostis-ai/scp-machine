@@ -13,6 +13,7 @@ cmake-build-debug
 .vscode
 __pycache__
 .idea
+.DS_Store
 
 # docs
 *.aux
