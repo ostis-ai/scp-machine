@@ -6,8 +6,7 @@ file(GLOB_RECURSE HEADERS "*.hpp")
 list(FILTER SOURCES EXCLUDE REGEX ".*/tests/.*")
 list(FILTER HEADERS EXCLUDE REGEX ".*/tests/.*")
 
-set(CMAKE_C_FLAGS_DEBUG "-DSCP_DEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "-DSCP_DEBUG")
+add_definitions(-DSCP_DEBUG)
 add_definitions(-DSCP_MATH)
 add_definitions(-DSCP_STRING)
 
