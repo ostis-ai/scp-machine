@@ -46,6 +46,9 @@ To build your project using these presets, you can use the following commands:
 ```sh
 # Use pipx to install Conan if not already installed
 pipx install conan
+```
+
+```sh
 # Install dependencies using Conan with Debug build type
 conan install . -s build_type=Debug
 # Configure using debug-conan preset

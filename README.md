@@ -7,7 +7,7 @@
 
 Short version: **scp-machine** is a software interpreter of programs in the basic programming language of the [**OSTIS Technology**](https://github.com/ostis-ai).
 
-scp-machine interprets programs represented as knowledge graphs in the SCP language. scp-machine is an extension to [**sc-machine**](https://github.com/ostis-ai/sc-machine).
+scp-machine interprets programs represented as knowledge graphs in the SCP Language. scp-machine is an extension to [**sc-machine**](https://github.com/ostis-ai/sc-machine).
 
 ## Getting started
 
