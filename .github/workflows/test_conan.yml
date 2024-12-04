@@ -63,12 +63,12 @@ jobs:
       - name: Install sc-machine
         run: conan install . -s build_type=Release
 
-      - name: Build sc-machine with tests
+      - name: Build scp-machine with tests
         id: run_cmake
         run: |
           cmake --preset release-with-tests-conan
           cmake --build --preset release
 
-      - name: Run sc-machine tests
+      - name: Run scp-machine tests
         id: run_tests
         run: cd build/Release && ctest -C Release -V
