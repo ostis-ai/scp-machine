@@ -106,7 +106,7 @@ _**All commit, that not applies to these rules, should be split by these rules. 
  - Update changelog;
  - Update documentation;
  - Cover new functionality by tests;
- - Your code should be written according to a codestyle like in sc-machine.
+ - Your code should be written according to a codestyle like in scp-machine.
 
 ### Pull Request creation
 
