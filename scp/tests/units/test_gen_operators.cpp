@@ -1,4 +1,5 @@
-#include <sc-memory/test/sc_test.hpp>
+#include "scp_agents_test.hpp"
+
 #include <sc-builder/scs_loader.hpp>
 
 #include "scpAgentEvent.hpp"
@@ -15,14 +16,11 @@ using namespace scp;
 namespace scpGenOperatorsTest
 {
 ScsLoader loader;
-std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/test-structures/gen-operators/";
 std::string const TEST_OPERATOR = "test_operator";
 size_t const WAIT_TIME = 1000;
 
 static ScKeynode action_gen_el("action_gen_el", ScType::ConstNodeClass);
 static ScKeynode concept_set("concept_set", ScType::ConstNodeClass);
-
-using SCPGenOperatorsTest = ScMemoryTest;
 
 void SubscribeAgents(ScAgentContext & context)
 {
@@ -62,10 +60,10 @@ bool ApplyOperator(ScAgentContext & context, ScAddr const & operatorAddr, size_t
       ->Wait(waitTime);
 }
 
-TEST_F(SCPGenOperatorsTest, TestGenEl)
+TEST_F(SCPAgentsTest, TestGenEl)
 {
   ScAgentContext & context = *m_ctx;
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "gen_el_test.scs");
+  loader.loadScsFile(context, SCP_OPERATORS_KB + "gen_el_test.scs");
   SubscribeAgents(context);
   ScAddr const & testOperator = context.SearchElementBySystemIdentifier(TEST_OPERATOR);
   EXPECT_TRUE(testOperator.IsValid());
@@ -79,12 +77,12 @@ TEST_F(SCPGenOperatorsTest, TestGenEl)
   UnsubscribeAgents(context);
 }
 
-TEST_F(SCPGenOperatorsTest, ComplexAgentsChain)
+TEST_F(SCPAgentsTest, ComplexAgentsChain)
 {
   ScAgentContext & context = *m_ctx;
   SubscribeAgents(context);
   context.BeginEventsBlocking();
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "agent_gen_el.scs");
+  loader.loadScsFile(context, SCP_OPERATORS_KB + "agent_gen_el.scs");
   context.EndEventsBlocking();
   ScAddr const & agent = context.SearchElementBySystemIdentifier("agent_gen_el_active");
   EXPECT_TRUE(agent.IsValid());
