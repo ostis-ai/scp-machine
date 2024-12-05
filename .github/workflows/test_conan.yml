@@ -58,7 +58,7 @@ jobs:
           pipx install conan
 
       - name: Install compilers
-        run: sudo apt install build-essential ninja-build ccache
+        run: sudo apt install build-essential ninja-build
 
       - name: Install sc-machine
         run: conan install . -s build_type=Release
