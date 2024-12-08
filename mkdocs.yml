@@ -1,0 +1,31 @@
+site_name: scp-machine
+
+extra_css:
+  - _assets/main.css
+extra_javascript:
+  - _assets/scg.min.js
+  - _assets/main.js
+
+nav:
+  - Home: index.md
+  - Quick start: quick_start.md
+  - Build instructions:
+      - Quick start: build/quick_start.md
+      - Build system: build/build_system.md
+  - Development:
+      - Contributing Guide: https://github.com/ostis-ai/scp-machine/blob/main/CONTRIBUTING.md
+      - Codestyle Guide: https://ostis-ai.github.io/sc-machine/dev/codestyle/
+  - License: https://github.com/ostis-ai/scp-machine/blob/main/COPYING.md
+  - Changelog: changelog.md
+
+theme: material
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.details
+  - pymdownx.superfences
