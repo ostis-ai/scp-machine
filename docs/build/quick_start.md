@@ -57,7 +57,7 @@ After that, you can go to `build/Debug` and run tests via `ctest`:
 
 ```sh
 cd build/Debug
-ctest -C Debug -V
+ctest -V
 ```
 
 ### Use scp-machine in Release
@@ -94,7 +94,7 @@ After that, you can run tests:
 
 ```sh
 cd build/Release
-ctest -C Release -V
+ctest -V
 ```
 
 You can also check code formatting. To learn more, go to the [CMake flags](cmake_flags.md) page.
