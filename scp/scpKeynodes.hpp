@@ -180,6 +180,7 @@ public:
   static inline ScKeynode const op_ifFormCont{"ifFormCont"};
   static inline ScKeynode const op_ifCoin{"ifCoin"};
   static inline ScKeynode const op_ifType{"ifType"};
+  static inline ScKeynode const op_ifTypeCoin{"ifTypeCoin"};
 
   static inline ScKeynode const op_varAssign{"varAssign"};
   static inline ScKeynode const op_varErase{"varErase"};

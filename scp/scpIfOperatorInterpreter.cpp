@@ -10,6 +10,7 @@
 
 #include "if_operators/SCPOperatorIfCoin.hpp"
 #include "if_operators/SCPOperatorIfType.hpp"
+#include "if_operators/SCPOperatorIfTypeCoin.hpp"
 #include "if_operators/SCPOperatorIfVarAssign.hpp"
 
 namespace scp
@@ -36,6 +37,11 @@ ASCPIfOperatorInterpreter::getSupportedOperators() const
          [](ScAgentContext & ctx, ScAddr addr)
          {
            return std::make_unique<SCPOperatorIfType>(ctx, addr);
+         }},
+        {Keynodes::op_ifTypeCoin,
+         [](ScAgentContext & ctx, ScAddr addr)
+         {
+           return std::make_unique<SCPOperatorIfTypeCoin>(ctx, addr);
          }},
         {Keynodes::op_ifVarAssign,
          [](ScAgentContext & ctx, ScAddr addr)
