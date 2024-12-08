@@ -5,6 +5,7 @@
  */
 
 #pragma once
+
 #include <sc-memory/sc_keynodes.hpp>
 
 namespace scp
@@ -93,46 +94,63 @@ public:
 
   static inline ScKeynode const rrel_erase{"rrel_erase"};
 
-  static inline ScKeynode const rrel_const{"rrel_const"};
-
-  static inline ScKeynode const rrel_var{"rrel_var"};
-
   static inline ScKeynode const rrel_scp_const{"rrel_scp_const"};
 
   static inline ScKeynode const rrel_scp_var{"rrel_scp_var"};
 
-  static inline ScKeynode const rrel_node{"rrel_node"};
+  static inline ScKeynode const rrel_const{"rrel_const"};
 
-  static inline ScKeynode const rrel_link{"rrel_link"};
-
-  static inline ScKeynode const rrel_arc{"rrel_arc"};
-
-  static inline ScKeynode const rrel_edge{"rrel_edge"};
-
-  static inline ScKeynode const rrel_pos{"rrel_pos"};
-
-  static inline ScKeynode const rrel_neg{"rrel_neg"};
-
-  static inline ScKeynode const rrel_fuz{"rrel_fuz"};
-
-  static inline ScKeynode const rrel_temp{"rrel_temp"};
-
-  static inline ScKeynode const rrel_perm{"rrel_perm"};
-
-  static inline ScKeynode const rrel_access{"rrel_access"};
-
-  static inline ScKeynode const rrel_common{"rrel_common"};
-
-  static inline ScKeynode const rrel_pos_const_perm{"rrel_pos_const_perm"};
+  static inline ScKeynode const rrel_var{"rrel_var"};
 
   // Node types
-  static inline ScKeynode const rrel_struct{"rrel_struct"};
+  static inline ScKeynode const rrel_node{"rrel_node"};
+
+  static inline ScKeynode const rrel_node_link{"rrel_node_link", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_link{"rrel_link"};  // deprecated
+
+  static inline ScKeynode const rrel_structure{"rrel_structure", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_struct{"rrel_struct"};  // deprecated
 
   static inline ScKeynode const rrel_role_relation{"rrel_role_relation"};
 
   static inline ScKeynode const rrel_non_role_relation{"rrel_non_role_relation"};
 
   static inline ScKeynode const rrel_class{"rrel_class"};
+
+  // Connector types
+  static inline ScKeynode const rrel_connector{"rrel_connector", ScType::ConstNodeRole};
+
+  static inline ScKeynode const rrel_common_edge{"rrel_common_edge", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_edge{"rrel_edge"};  // deprecated
+
+  static inline ScKeynode const rrel_arc{"rrel_arc"};
+
+  static inline ScKeynode const rrel_common_arc{"rrel_common_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_common{"rrel_common"};  // deprecated
+
+  static inline ScKeynode const rrel_membership_arc{"rrel_membership_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_access{"rrel_access"};  // deprecated
+
+  static inline ScKeynode const rrel_pos_arc{"rrel_pos_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_pos{"rrel_pos"};  // deprecated
+
+  static inline ScKeynode const rrel_neg_arc{"rrel_neg_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_neg{"rrel_neg"};  // deprecated
+
+  static inline ScKeynode const rrel_fuz_arc{"rrel_fuz_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_fuz{"rrel_fuz"};  // deprecated
+
+  static inline ScKeynode const rrel_perm_arc{"rrel_perm_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_perm{"rrel_perm"};  // deprecated
+
+  static inline ScKeynode const rrel_temp_arc{"rrel_temp_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_temp{"rrel_temp"};  // deprecated
+
+  static inline ScKeynode const rrel_actual_arc{"rrel_actual_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_inactual_arc{"rrel_inactual_arc", ScType::ConstNodeRole};
+
+  static inline ScKeynode const rrel_const_perm_pos_arc{"rrel_const_perm_pos_arc", ScType::ConstNodeRole};
+  static inline ScKeynode const rrel_pos_const_perm{"rrel_pos_const_perm"};  // deprecated
 
   // Order relations
   static inline ScKeynode const rrel_1{"rrel_1"};
@@ -270,6 +288,11 @@ public:
   static inline ScKeynode const action_interpret_var_value_operator{
       "action_interpret_var_value_operator",
       ScType::ConstNodeClass};
+
+  static ScAddrToValueUnorderedMap<std::pair<ScKeynode, ScKeynode>> const & GetDeprecatedKeynodes();
+
+private:
+  static ScAddrToValueUnorderedMap<std::pair<ScKeynode, ScKeynode>> m_deprecatedKeynodes;
 };
 
 }  // namespace scp

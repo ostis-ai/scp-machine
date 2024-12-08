@@ -23,11 +23,13 @@ namespace kbAgentsTest
 {
 ScsLoader loader;
 std::string const TEST_AGENT_FILES_DIR_PATH =
-    SCP_MACHINE_TEST_SRC_PATH "/../../kb/agent_test/search_all_output_with_rel/";
-std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/testStructures/agentTest/";
+    SCP_MACHINE_TEST_SRC_PATH "/../../kb/agent_test/search_all_outgoing_arcs_with_relations/";
+std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/test-structures/agent-test/";
 size_t const WAIT_TIME = 1000;
 
-static ScKeynode test_action1{"test_action1", ScType::ConstNodeClass};
+static ScKeynode action_search_all_outgoing_arcs_with_relations{
+    "action_search_all_outgoing_arcs_with_relations",
+    ScType::ConstNodeClass};
 
 using kbAgentsTest = ScMemoryTest;
 
@@ -73,15 +75,17 @@ TEST_F(kbAgentsTest, Test_sc_agent1_scp)
 {
   ScAgentContext & context = *m_ctx;
   context.BeginEventsBlocking();
-  loader.loadScsFile(context, TEST_AGENT_FILES_DIR_PATH + "agent1_proc.scs");
-  loader.loadScsFile(context, TEST_AGENT_FILES_DIR_PATH + "proc_find_all_input.scs");
-  loader.loadScsFile(context, TEST_AGENT_FILES_DIR_PATH + "sc_agent1.scs");
+  loader.loadScsFile(context, TEST_AGENT_FILES_DIR_PATH + "agent_program_search_all_outgoing_arcs_with_relations.scs");
+  loader.loadScsFile(
+      context, TEST_AGENT_FILES_DIR_PATH + "program_search_all_role_relations_for_given_membership_arc.scs");
+  loader.loadScsFile(context, TEST_AGENT_FILES_DIR_PATH + "sc_agent_search_all_outgoing_arcs_with_relations.scs");
 
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "input_arcs.scs");
+  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "incoming_arcs.scs");
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "operators.scs");
   context.EndEventsBlocking();
   SubscribeAgents(context);
-  ScAddr const & agent = context.SearchElementBySystemIdentifier("sc_agent1_scp");
+  ScAddr const & agent =
+      context.SearchElementBySystemIdentifier("sc_agent_search_all_outgoing_arcs_with_relations_scp");
   EXPECT_TRUE(agent.IsValid());
   SCPAgentEvent::HandleActiveAgent(context, SCPAgentEvent::RegisterSCPAgent, agent);
 
@@ -89,7 +93,7 @@ TEST_F(kbAgentsTest, Test_sc_agent1_scp)
   EXPECT_TRUE(actionArgument.IsValid());
   ScAddr const & actionExpectedResult = context.SearchElementBySystemIdentifier("test_result");
   EXPECT_TRUE(actionExpectedResult.IsValid());
-  ScAction action = context.GenerateAction(test_action1).SetArguments(actionArgument);
+  ScAction action = context.GenerateAction(action_search_all_outgoing_arcs_with_relations).SetArguments(actionArgument);
   EXPECT_TRUE(action.InitiateAndWait(WAIT_TIME));
   EXPECT_TRUE(action.IsFinished());
   EXPECT_TRUE(action.IsFinishedSuccessfully());

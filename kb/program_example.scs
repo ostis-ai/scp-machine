@@ -30,7 +30,7 @@
 	@pair28 = (rrel_1 _-> @pair27);;
 	@pair29 = (searchElStr3 _-> _operator1);;
 	@pair30 = (rrel_scp_var _-> @pair6);;
-	@pair31 = (rrel_pos_const_perm _-> @pair10);;
+	@pair31 = (rrel_const_perm_pos_arc _-> @pair10);;
 	@pair32 = (nrel_then _-> @pair3);;
 	@pair33 = (rrel_fixed _-> @pair4);;
 	@pair34 = (rrel_scp_const _-> @pair27);;
@@ -40,7 +40,7 @@
 	@pair38 = (nrel_goto _-> @pair1);;
 	@pair39 = (nrel_else _-> @pair0);;
 	@pair40 = (return _-> _operator3);;
-	@pair41 = (rrel_pos_const_perm _-> @pair6);;
+	@pair41 = (rrel_const_perm_pos_arc _-> @pair6);;
 	@pair42 = (rrel_3 _-> @pair4);;
 	@pair43 = (rrel_scp_const _-> @pair18);;
 	@pair44 = (rrel_1 _-> @pair8);;

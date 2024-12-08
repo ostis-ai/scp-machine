@@ -1,0 +1,54 @@
+sc_agent_search_all_outgoing_arcs_with_relations
+=> nrel_main_idtf:
+	[sc-агент поиска всех выходящих базовых sc-дуг с отношениями] (* <- lang_ru;; *);
+	[sc-agent to search all outgoing basic sc-arcs with relations] (* <- lang_ru;; *);
+
+<- abstract_sc_agent;
+
+=> nrel_primary_initiation_condition: 
+	(sc_event_after_generate_outgoing_arc => action_initiated);
+
+=> nrel_initiation_condition_and_result: 
+	(..sc_agent_search_all_outgoing_arcs_with_relations_condition => ..sc_agent_search_all_outgoing_arcs_with_relations_result);
+
+=> nrel_sc_agent_action_class:
+	action_search_all_outgoing_arcs_with_relations
+	(*
+	    <- sc_node_class;;
+	    <= nrel_inclusion: information_action;;
+	*);
+
+<= nrel_sc_agent_key_sc_elements: 
+{
+	action_initiated;
+	action_search_all_outgoing_arcs_with_relations
+};
+
+=> nrel_inclusion: 
+	.platform_independent_realization_of_sc_agent_search_all_outgoing_arcs_with_relations
+	(*
+		<- platform_independent_abstract_sc_agent;;
+		<= nrel_sc_agent_program: 
+		{
+			agent_program_search_all_outgoing_arcs_with_relations;
+			program_search_all_role_relations_for_given_membership_arc
+		};;
+
+		-> sc_agent_search_all_outgoing_arcs_with_relations_scp
+		(* <- active_sc_agent;; *);;  
+	*);;
+
+..sc_agent_search_all_outgoing_arcs_with_relations_condition
+= [*
+	action_search_all_outgoing_arcs_with_relations _-> .._action;;
+	action_initiated _-> .._action;;
+	.._action _-> rrel_1:: .._parameter;;
+*];;
+
+.._variable_role_relation
+    <- sc_node_role_relation;;
+
+..sc_agent_search_all_outgoing_arcs_with_relations_result
+= [*
+    .._var1 _-> .._variable_role_relation:: .._var2;;
+*];;

@@ -1,6 +1,6 @@
 test_operator
 <- genEl;
--> rrel_1: rrel_assign: rrel_scp_var: rrel_node: rrel_const: ... (* -> test_scp_var_value1;; *);
+-> rrel_1: rrel_assign: rrel_scp_var: rrel_const: rrel_node: ... (* -> test_scp_var_value1;; *);
 => nrel_goto: ...;;
 
 scp_operator_atomic_type

@@ -1,0 +1,18 @@
+ui_menu_test
+<- ui_user_command_class_atom; ui_user_command_class_view_kb; ui_one_argument_command_class;
+
+=> nrel_main_idtf: 
+	[Какие выходящие базовые sc-дуги с отношениями имеет указанное множество?] (* <- lang_ru;; *);
+	[What outgoing basic sc-arcs with relations does specified set have?] (* <- lang_en;; *);
+
+=> ui_nrel_command_template:
+[*
+	action_search_all_outgoing_arcs_with_relations _-> _... 
+	(*
+		_-> ui_arg_1;;
+	*);;
+*];
+
+=> ui_nrel_command_lang_template: 
+	[Какие выходящие базовые sc-дуги с отношениями имеет множество $ui_arg_1?] (* <- lang_ru;; *);
+	[What outgoing basic sc-arcs does set $ui_arg_1 have?] (* <- lang_en;; *);;

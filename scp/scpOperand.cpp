@@ -10,6 +10,8 @@
 
 #include "scpOperand.hpp"
 
+#include "scp.hpp"
+
 #include <iostream>
 
 namespace scp
@@ -222,6 +224,13 @@ void SCPOperand::resolveModifiers()
       continue;
     }
 
+    auto const & deprecatedKeynodes = Keynodes::GetDeprecatedKeynodes();
+    auto const & it = deprecatedKeynodes.find(modifier);
+    if (it != deprecatedKeynodes.cend())
+      SCP_LOG_WARNING(
+          "Role relation `" << std::string(it->second.first) << "` is deprecated. Use role relation `"
+                            << std::string(it->second.second) << "` instead.");
+
     if (order == 0 && set_order == 0)
     {
       resolveSetOrder(modifier);
@@ -277,12 +286,12 @@ void SCPOperand::resolveModifiers()
       element_type = element_type | ScType::Node;
       continue;
     }
-    if (modifier == Keynodes::rrel_link)
+    if (modifier == Keynodes::rrel_node_link || modifier == Keynodes::rrel_link)
     {
       element_type = element_type | ScType::NodeLink;
       continue;
     }
-    if (modifier == Keynodes::rrel_struct)
+    if (modifier == Keynodes::rrel_structure || modifier == Keynodes::rrel_struct)
     {
       element_type = element_type | ScType::NodeStructure;
       continue;
@@ -303,50 +312,68 @@ void SCPOperand::resolveModifiers()
       continue;
     }
 
-    if (modifier == Keynodes::rrel_edge)
+    if (modifier == Keynodes::rrel_connector)
+    {
+      element_type = element_type | ScType::Connector;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_common_edge || modifier == Keynodes::rrel_edge)
     {
       element_type = element_type | ScType::CommonEdge;
       continue;
     }
-    if (modifier == Keynodes::rrel_common)
+    if (modifier == Keynodes::rrel_arc)
+    {
+      element_type = element_type | ScType::Arc;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_common_arc || modifier == Keynodes::rrel_common)
     {
       element_type = element_type | ScType::CommonArc;
       continue;
     }
-
-    //! TODO rrel_arc
-
-    if (modifier == Keynodes::rrel_access)
+    if (modifier == Keynodes::rrel_membership_arc || modifier == Keynodes::rrel_access)
     {
       element_type = element_type | ScType::MembershipArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_temp)
+
+    if (modifier == Keynodes::rrel_temp_arc || modifier == Keynodes::rrel_temp)
     {
       element_type = element_type | ScType::TempArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_perm)
+    if (modifier == Keynodes::rrel_actual_arc)
+    {
+      element_type = element_type | ScType::ActualTempArc;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_inactual_arc)
+    {
+      element_type = element_type | ScType::InactualTempArc;
+      continue;
+    }
+    if (modifier == Keynodes::rrel_perm_arc || modifier == Keynodes::rrel_perm)
     {
       element_type = element_type | ScType::PermArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_pos)
+    if (modifier == Keynodes::rrel_pos_arc || modifier == Keynodes::rrel_pos)
     {
       element_type = element_type | ScType::PosArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_neg)
+    if (modifier == Keynodes::rrel_neg_arc || modifier == Keynodes::rrel_neg)
     {
       element_type = element_type | ScType::NegArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_fuz)
+    if (modifier == Keynodes::rrel_fuz_arc || modifier == Keynodes::rrel_fuz)
     {
       element_type = element_type | ScType::FuzArc;
       continue;
     }
-    if (modifier == Keynodes::rrel_pos_const_perm)
+    if (modifier == Keynodes::rrel_const_perm_pos_arc || modifier == Keynodes::rrel_pos_const_perm)
     {
       element_type = element_type | ScType::ConstPermPosArc;
       continue;

@@ -15,7 +15,7 @@ using namespace scp;
 namespace scpGenOperatorsTest
 {
 ScsLoader loader;
-std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/testStructures/genOperators/";
+std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/test-structures/gen-operators/";
 std::string const TEST_OPERATOR = "test_operator";
 size_t const WAIT_TIME = 1000;
 
