@@ -106,12 +106,12 @@ _**All commit, that not applies to these rules, should be split by these rules. 
  - Update changelog;
  - Update documentation;
  - Cover new functionality by tests;
- - Your code should be written according to a codestyle like in scp-machine.
+ - Your code should be written according to a codestyle like in scp-machine (see [Codestyle rules](https://ostis-ai.github.io/sc-machine/dev/codestyle/)).
 
 ### Pull Request creation
 
  - Create PR on GitHub;
- - Check that CI checks were passed successfully;
+ - Check that CI checks were passed successfully.
 
 ### Pull Request Review
 
@@ -120,4 +120,3 @@ _**All commit, that not applies to these rules, should be split by these rules. 
  - Author make review fixes at `Review fixes` commits;
  - Author re-request review;
  - Reviewer resolve conversations if they were fixed and approve PR.
-
