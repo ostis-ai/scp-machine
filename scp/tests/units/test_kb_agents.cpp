@@ -29,8 +29,6 @@ static ScKeynode action_search_all_outgoing_arcs_with_relations{
     "action_search_all_outgoing_arcs_with_relations",
     ScType::ConstNodeClass};
 
-using KBAgentsTest = ScMemoryTest;
-
 void SubscribeAgents(ScAgentContext & context)
 {
   context.SubscribeAgent<ASCPProcessInterpreter>();
@@ -102,7 +100,7 @@ TEST_F(SCPAgentsTest, Test_sc_agent1_scp)
   {
     ScAddr const & actionResultElement = actionExpectedResultIterator->Get(2);
     EXPECT_TRUE(context.CheckConnector(actionResult, actionResultElement, ScType::ConstPermPosArc))
-        << "Action result does not have element with hash " << actionResultElement.Hash() << " any system identifier "
+        << "Action result does not have element with hash " << actionResultElement.Hash() << " and system identifier "
         << context.GetElementSystemIdentifier(actionResultElement);
   }
 
