@@ -106,7 +106,7 @@ _**All commit, that not applies to these rules, should be split by these rules. 
  - Update changelog;
  - Update documentation;
  - Cover new functionality by tests;
- - Your code should be written according to a codestyle like in scp-machine (see [Codestyle rules](https://ostis-ai.github.io/sc-machine/dev/codestyle/)).
+ - Your code should be written according to a codestyle like in sc-machine (see [Codestyle rules](https://ostis-ai.github.io/sc-machine/dev/codestyle/)).
 
 ### Pull Request creation
 

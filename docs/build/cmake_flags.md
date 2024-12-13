@@ -13,7 +13,7 @@ cmake --build --preset <build-preset>
 
 To check code with CLangFormat run:
 ```sh
-cmake --preset release-with-tests -DSC_CLANG_FORMAT_CODE=ON
+cmake --preset release-with-tests-conan -DSCP_CLANG_FORMAT_CODE=ON
 cmake --build --preset release --target clangformat_check
 ```
 
@@ -24,7 +24,7 @@ or
 
 To format code with CLangFormat run:
 ```sh
-cmake --preset release-with-tests -DSC_CLANG_FORMAT_CODE=ON
+cmake --preset release-with-tests-conan -DSCP_CLANG_FORMAT_CODE=ON
 cmake --build --preset release --target clangformat
 ```
 
