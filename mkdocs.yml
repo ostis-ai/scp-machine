@@ -3,7 +3,6 @@ site_name: scp-machine
 extra_css:
   - _assets/main.css
 extra_javascript:
-  - _assets/scg.min.js
   - _assets/main.js
 
 nav:
