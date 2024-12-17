@@ -61,6 +61,8 @@ cd build/Debug
 ctest -V
 ```
 
+You can also check code formatting. To learn more, go to the [CMake flags](cmake_flags.md) page.
+
 ### Use scp-machine in Release
 
 #### Install dependencies with Conan
@@ -99,3 +101,22 @@ ctest -V
 ```
 
 You can also check code formatting. To learn more, go to the [CMake flags](cmake_flags.md) page.
+
+### Run scp-machine
+
+Before launching scp-machine, [extract sc-machine from GitHub Releases](https://ostis-ai.github.io/sc-machine/quick_start/) or [build it](https://ostis-ai.github.io/sc-machine/build/quick_start/).
+
+To launch scp-machine, run:
+
+```sh
+# create empty knowledge base sources folder
+mkdir kb
+# note: at this stage you can move your KB sources to the ./kb folder
+
+cd sc-machine-<version>-<platform>
+# build knowledge base
+./bin/sc-builder -i ../kb -o ../kb.bin --clear
+# run sc-machine with scp-machine
+./bin/sc-machine -s ../kb.bin \
+    -e "path/to/scp-machine/build/<Release|Debug>/lib/extensions"
+```
