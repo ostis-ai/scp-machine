@@ -51,8 +51,8 @@ Examples:
 
 Possible tags:
 
-  * `[scp]` - changes in tests;
-  * `[kb]` - changes in tests;
+  * `[scp]` - changes in scp folder;
+  * `[kb]` - changes in kb folder;
   * `[tests]` or `[test]` - changes in tests;
   * `[config]` - commits with changes in configuration;
   * `[review]` - commits with review fixes;
