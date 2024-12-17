@@ -1,4 +1,4 @@
-# Build system
+# Build System
 
 The scp-machine build system is based on the principles of the [sc-machine](https://github.com/ostis-ai/sc-machine) build system. To learn more about them, read [sc-machine build system documentation](https://ostis-ai.github.io/sc-machine/build/build_system/).
 

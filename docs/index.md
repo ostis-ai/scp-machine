@@ -8,10 +8,10 @@ scp-machine is a **software interpreter** designed to execute programs written i
 
 Table of contents:
 
-- [Quick start](quick_start.md) - *get up and running with scp-machine quickly*
-- **Build instructions** - *guidelines for building the project, configuring settings*
-    * [Quick start](build/quick_start.md) - *get up and start developing scp-machine quickly*
-    * [Build system](build/build_system.md) - *how to build the project and use it as a library*
+- [Quick Start](quick_start.md) - *get up and running with scp-machine quickly*
+- **Build Instructions** - *guidelines for building the project, configuring settings*
+    * [Quick Start for Developers](build/quick_start.md) - *get up and start developing scp-machine quickly*
+    * [Build System](build/build_system.md) - *how to build the project and use it as a library*
     * [CMake Flags](build/cmake_flags.md) - *description of CMake flags used to configure scp-machine*
 - **Development** - *guidelines for contributing to development*
     * [Contributing Guide](https://github.com/ostis-ai/scp-machine/blob/main/CONTRIBUTING.md) - *guide for those who wants to make contribution into scp-machine*

@@ -7,11 +7,11 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Quick start: quick_start.md
-  - Build instructions:
-      - Quick start: build/quick_start.md
-      - Build system: build/build_system.md
-      - CMake flags: build/cmake_flags.md
+  - Quick Start: quick_start.md
+  - Build Instructions:
+      - Quick Start for Developers: build/quick_start.md
+      - Build System: build/build_system.md
+      - CMake Flags: build/cmake_flags.md
   - Development:
       - Contributing Guide: https://github.com/ostis-ai/scp-machine/blob/main/CONTRIBUTING.md
       - Codestyle Guide: https://ostis-ai.github.io/sc-machine/dev/codestyle/

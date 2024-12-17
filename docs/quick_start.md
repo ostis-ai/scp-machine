@@ -1,4 +1,4 @@
-# Quick start
+# Quick Start
 
 ## Use scp-machine as an extension to sc-machine
 
