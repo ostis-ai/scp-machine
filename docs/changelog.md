@@ -9,20 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Intro for scp-machine in docs
+- CMake flags section in docs
+- Quick start section for users in docs
+- Quick start section for developers in docs
 - Documentation for all agents
 - Sys gen and sys search operators
-- Build script from sc-machine
 - Add README.md and info about build
 - Add changelog
 - Cherry-pick scp-interpreter from https://github.com/ostis-dev/scp-machine
 
 ### Changed
 
+- Build scp-machine with conan-provided dependencies
+- Install sc-machine with conan
 - Rename questions to actions
 
 ### Fixed
 
-- SC-memory API usage
+- sc-memory API usage
 - Remove system identifiers usage in parameters for generating program template
 
 ### Removed

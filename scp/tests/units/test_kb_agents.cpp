@@ -1,4 +1,5 @@
-#include <sc-memory/test/sc_test.hpp>
+#include "scp_agents_test.hpp"
+
 #include <sc-builder/scs_loader.hpp>
 
 #include "scpAgentEvent.hpp"
@@ -22,16 +23,11 @@ using namespace scp;
 namespace kbAgentsTest
 {
 ScsLoader loader;
-std::string const TEST_AGENT_FILES_DIR_PATH =
-    SCP_MACHINE_TEST_SRC_PATH "/../../kb/agent_test/search_all_outgoing_arcs_with_relations/";
-std::string const TEST_FILES_DIR_PATH = SCP_MACHINE_TEST_SRC_PATH "/test-structures/agent-test/";
 size_t const WAIT_TIME = 1000;
 
 static ScKeynode action_search_all_outgoing_arcs_with_relations{
     "action_search_all_outgoing_arcs_with_relations",
     ScType::ConstNodeClass};
-
-using kbAgentsTest = ScMemoryTest;
 
 void SubscribeAgents(ScAgentContext & context)
 {
@@ -71,17 +67,16 @@ void UnsubscribeAgents(ScAgentContext & context)
   context.UnsubscribeAgent<ASCPFinishedInterpretationActionProcessor>();
 }
 
-TEST_F(kbAgentsTest, Test_sc_agent1_scp)
+TEST_F(SCPAgentsTest, Test_sc_agent1_scp)
 {
   ScAgentContext & context = *m_ctx;
   context.BeginEventsBlocking();
-  loader.loadScsFile(context, TEST_AGENT_FILES_DIR_PATH + "agent_program_search_all_outgoing_arcs_with_relations.scs");
-  loader.loadScsFile(
-      context, TEST_AGENT_FILES_DIR_PATH + "program_search_all_role_relations_for_given_membership_arc.scs");
-  loader.loadScsFile(context, TEST_AGENT_FILES_DIR_PATH + "sc_agent_search_all_outgoing_arcs_with_relations.scs");
+  loader.loadScsFile(context, SCP_MACHINE_KB + "agent_program_search_all_outgoing_arcs_with_relations.scs");
+  loader.loadScsFile(context, SCP_MACHINE_KB + "program_search_all_role_relations_for_given_membership_arc.scs");
+  loader.loadScsFile(context, SCP_MACHINE_KB + "sc_agent_search_all_outgoing_arcs_with_relations.scs");
 
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "incoming_arcs.scs");
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "operators.scs");
+  loader.loadScsFile(context, SCP_AGENTS_KB + "incoming_arcs.scs");
+  loader.loadScsFile(context, SCP_AGENTS_KB + "operators.scs");
   context.EndEventsBlocking();
   SubscribeAgents(context);
   ScAddr const & agent =
@@ -105,7 +100,7 @@ TEST_F(kbAgentsTest, Test_sc_agent1_scp)
   {
     ScAddr const & actionResultElement = actionExpectedResultIterator->Get(2);
     EXPECT_TRUE(context.CheckConnector(actionResult, actionResultElement, ScType::ConstPermPosArc))
-        << "action result does not have element with hash " << actionResultElement.Hash() << " ans system identifier "
+        << "Action result does not have element with hash " << actionResultElement.Hash() << " and system identifier "
         << context.GetElementSystemIdentifier(actionResultElement);
   }
 
