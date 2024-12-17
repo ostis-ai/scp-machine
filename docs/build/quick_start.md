@@ -17,6 +17,7 @@ To upgrade CMake, follow the installation guide appropriate for your OS or use:
 # Install pipx first using guide: https://pipx.pypa.io/stable/installation/
 pipx install cmake
 pipx ensurepath
+# relaunch your shell after installation
 ```
 
 ## Start develop scp-machine with Conan
@@ -28,6 +29,8 @@ Install Conan, to build scp-machine dependencies with Conan-provided dependencie
 ```sh
 # Use pipx to install conan if not already installed
 pipx install conan
+pipx ensurepath
+# relaunch your shell after installation
 ```
 
 ### Use scp-machine in Debug
