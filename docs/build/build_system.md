@@ -16,22 +16,20 @@ cmake --list-presets
 
 Configure presets define how the project is configured before building. They specify various settings, including whether to include tests and which dependencies to use.
 
-| **Name**                     | **Display Name**                        | **Description**                                      |
-|------------------------------|-----------------------------------------|------------------------------------------------------|
-| `debug-conan`                | Debug config (Conan)                    | Debug config with tests (Conan dependencies used)    |
-| `release-conan`              | Release config (Conan)                  | Release config (Conan dependencies used)             |
-| `release-with-tests-conan`   | Release config with tests (Conan)       | Release config with tests (Conan dependencies used)  |
+| **Name**                     | **Display Name**                        | **Description**                                      | **Build location** |
+|------------------------------|-----------------------------------------|------------------------------------------------------|--------------------|
+| `debug-conan`                | Debug config (Conan)                    | Debug config with tests (Conan dependencies used)    | build/Debug        |
+| `release-conan`              | Release config (Conan)                  | Release config (Conan dependencies used)             | build/Release      |
+| `release-with-tests-conan`   | Release config with tests (Conan)       | Release config with tests (Conan dependencies used)  | build/Release      |
 
 ## Build presets
 
 Build presets link to the configure presets and specify how to build the project. They determine the output directories based on the selected configuration.
 
-| **Name**   | **Configure Preset**                        |
-|------------|---------------------------------------------|
-| `debug`    | `debug-conan`                               |
-| `release`  | `release-conan`, `release-with-tests-conan` |
-
-The build artifacts will be located in the `build/<Release|Debug>/bin` folder.
+| **Name**   | **Configure Preset**                        | **Build location** |
+|------------|---------------------------------------------|--------------------|
+| `debug`    | `debug-conan`                               | build/Debug        |
+| `release`  | `release-conan`, `release-with-tests-conan` | build/Release      |
 
 ## Recommendations
 

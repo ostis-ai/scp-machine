@@ -122,4 +122,6 @@ cd sc-machine-<version>-<platform>
 # run sc-machine with scp-machine
 ./bin/sc-machine -s ../kb.bin \
     -e "path/to/scp-machine/build/<Release|Debug>/lib/extensions"
+# if it needs you can provide several paths to extensions separated 
+# with semicolon
 ```
