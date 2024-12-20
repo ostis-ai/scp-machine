@@ -33,7 +33,6 @@
     {
       "name": "debug",
       "configurePreset": "debug-conan"
-
     },
     {
       "name": "release",
