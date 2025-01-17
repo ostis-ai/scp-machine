@@ -19,9 +19,12 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
   auto const & [program, paramsForSubstitution] = action.GetArguments<2>();
   if (!program.IsValid() || !paramsForSubstitution.IsValid())
   {
-    SC_AGENT_LOG_ERROR(
-        "Action arguments expected to be valid, but got " << program.Hash() << " and " << paramsForSubstitution.Hash()
-                                                          << " instead");
+    m_logger.Error(
+        "Action arguments expected to be valid, but got ",
+        program.Hash(),
+        " and ",
+        paramsForSubstitution.Hash(),
+        " instead");
     return action.FinishUnsuccessfully();
   }
 
@@ -31,7 +34,7 @@ ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
   ScAddr const & variableProcessNode = getProgramProcess(program);
   if (!variableProcessNode.IsValid())
   {
-    SC_AGENT_LOG_ERROR("Cannot find key element of program " << program.Hash());
+    m_logger.Error("Cannot find key element of program ", program.Hash());
     return action.FinishUnsuccessfully();
   }
 
@@ -148,9 +151,14 @@ void ASCPProcessInterpreter::waitProcessFinish(
       waiter->Wait(maxCustomerWaitingTime - timeFromStart);
     else
     {
-      SC_AGENT_LOG_WARNING(
-          "Max customer waiting time" << maxCustomerWaitingTime << " has expired before action " << processNode.Hash()
-                                      << " was initiated because" << timeFromStart << " ms have passed");
+      m_logger.Error(
+          "Max customer waiting time",
+          maxCustomerWaitingTime,
+          " has expired before action ",
+          processNode.Hash(),
+          " was initiated because",
+          timeFromStart,
+          " ms have passed");
       waiter->Wait();
     }
   }

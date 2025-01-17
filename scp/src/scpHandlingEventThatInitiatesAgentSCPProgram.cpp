@@ -24,7 +24,7 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
   ScAddr const & agentProgram = GetAgentProgram();
   if (!m_context.IsElement(agentProgram))
   {
-    SC_AGENT_LOG_ERROR("Agent program is not valid");
+    m_logger.Error("Agent program is not valid");
     return action.FinishUnsuccessfully();
   }
 
@@ -52,11 +52,12 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
       scpAction.InitiateAndWait(maxCustomerWaitingTime - timeFromStart);
     else
     {
-      SC_AGENT_LOG_WARNING(
-          "Max customer waiting time "
-          << maxCustomerWaitingTime
-          << " has expired before action of class `action_scp_interpretation_request` was initiated because "
-          << timeFromStart << " ms have passed");
+      m_logger.Warning(
+          "Max customer waiting time ",
+          maxCustomerWaitingTime,
+          " has expired before action of class `action_scp_interpretation_request` was initiated because ",
+          timeFromStart,
+          " ms have passed");
       scpAction.InitiateAndWait();
     }
   }
@@ -84,7 +85,7 @@ ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
 {
   if (!m_context.IsElement(m_agentImplementationAddr))
   {
-    SC_AGENT_LOG_ERROR("Agent implementation node is not valid");
+    m_logger.Error("Agent implementation node is not valid");
     return ScAddr::Empty;
   }
 
@@ -110,8 +111,7 @@ ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
   }
   if (!agentProgram.IsValid())
   {
-    SC_AGENT_LOG_ERROR(
-        "Not found program for sc-agent `" << m_context.GetElementSystemIdentifier(GetAbstractAgent()) << "`");
+    m_logger.Error("Not found program for sc-agent `", m_context.GetElementSystemIdentifier(GetAbstractAgent()), "`");
     return ScAddr::Empty;
   }
 
@@ -120,9 +120,10 @@ ScAddr ASCPHandlingEventThatInitiatesAgentSCPProgram::GetAgentProgram() const
       agentProgram, ScType::ConstPermPosArc, ScType::VarNode, ScType::ConstPermPosArc, Keynodes::rrel_key_sc_element);
   if (!programKeyElementIterator->Next())
   {
-    SC_AGENT_LOG_ERROR(
-        "Not found process variable in program for sc-agent `"
-        << m_context.GetElementSystemIdentifier(GetAbstractAgent()) << "`");
+    m_logger.Error(
+        "Not found process variable in program for sc-agent `",
+        m_context.GetElementSystemIdentifier(GetAbstractAgent()),
+        "`");
     return ScAddr::Empty;
   }
   return agentProgram;
