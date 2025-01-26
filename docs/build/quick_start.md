@@ -4,20 +4,32 @@ This guide provides short information for developers to start to work with scp-m
 
 ## Check CMake
 
+Install pipx first using [**pipx installation guide**](https://pipx.pypa.io/stable/installation/) if not already installed.
+
 Ensure you are using **CMake version 3.24** or newer. Verify your version with:
 
 ```sh
 cmake --version
 ```
 
-To upgrade CMake, follow the installation guide appropriate for your OS or use:
+To upgrade CMake, run:
   
 ```sh
 # Use pipx to install cmake if not already installed
-# Install pipx first using guide: https://pipx.pypa.io/stable/installation/
 pipx install cmake
 pipx ensurepath
 # relaunch your shell after installation
+exec $SHELL
+```
+
+Install Ninja generator for CMake, to use sc-machine CMake presets:
+
+```sh
+# Use pipx to install ninja if not already installed
+pipx install ninja
+pipx ensurepath
+# relaunch your shell after installation
+exec $SHELL
 ```
 
 ## Start develop scp-machine with Conan
@@ -31,6 +43,7 @@ Install Conan, to build scp-machine dependencies with Conan-provided dependencie
 pipx install conan
 pipx ensurepath
 # relaunch your shell after installation
+exec $SHELL
 ```
 
 ### Use scp-machine in Debug

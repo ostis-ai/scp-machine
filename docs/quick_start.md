@@ -19,6 +19,8 @@ cd sc-machine-<version>-<platform>
 # run sc-machine with scp-machine and sc-machine extensions
 ./bin/sc-machine -s ../kb.bin \
     -e "path/to/extracted/scp-machine/lib/extensions;lib/extensions"
+# if it needs you can provide several paths to extensions separated 
+# with semicolon
 ```
 
 To learn more about how to install and use sc-machine artifacts, see [sc-machine quick start](https://ostis-ai.github.io/sc-machine/quick_start/).
