@@ -18,19 +18,19 @@ else()
     message(STATUS "No extensions directory provided. Defaulting to: ${SC_EXTENSIONS_DIRECTORY}")
 endif()
 
-option(SCP_CLANG_FORMAT_CODE "Flag to add clangformat and clangformat_check targets" OFF)
-option(SCP_BUILD_TESTS "Flag to build unit tests" OFF)
+option(SC_CLANG_FORMAT_CODE "Flag to add clangformat and clangformat_check targets" OFF)
+option(SC_BUILD_TESTS "Flag to build unit tests" OFF)
 
 option(AUTO_CCACHE "Use ccache to speed up rebuilds" ON)
 
-if(${SCP_BUILD_TESTS})
+if(${SC_BUILD_TESTS})
     include(CTest)
     include(GoogleTest)
     find_package(GTest REQUIRED)
     include(${CMAKE_MODULE_PATH}/tests.cmake)
 endif()
 
-if(${SCP_CLANG_FORMAT_CODE})
+if(${SC_CLANG_FORMAT_CODE})
     include(${CMAKE_MODULE_PATH}/ClangFormat.cmake)
 endif()
 

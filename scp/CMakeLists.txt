@@ -16,10 +16,10 @@ target_link_libraries(scp LINK_PUBLIC sc-machine::sc-memory)
 target_include_directories(scp PRIVATE ${SCP_SRC})
 set_target_properties(scp PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
 
-if (${SCP_CLANG_FORMAT_CODE})
+if (${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(scp)
 endif()
 
-if (${SCP_BUILD_TESTS})
+if (${SC_BUILD_TESTS})
     include(${CMAKE_CURRENT_SOURCE_DIR}/tests/tests.cmake)
 endif ()
