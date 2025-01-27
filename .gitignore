@@ -2,10 +2,8 @@ bin
 /build/
 /build-*/
 /site/
-scripts/redis*
 cmake-build-debug
-
-*.generated.*
+.venv
 
 *.user
 *.*~
