@@ -78,6 +78,10 @@ jobs:
       - name: Install compilers
         run: sudo apt install build-essential ninja-build ccache
 
+      - name: Set Conan remote
+        run: |
+          conan remote add ostis-ai https://conan.ostis.net/artifactory/api/conan/ostis-ai-sc-machine/
+
       - name: Install sc-machine
         run: conan install . --build=missing
 
