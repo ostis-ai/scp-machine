@@ -1,6 +1,6 @@
 make_tests_from_folder(${CMAKE_CURRENT_LIST_DIR}/units
     NAME scp-tests
-    DEPENDS sc-machine::sc-agents-common sc-machine::sc-builder-lib scp
+    DEPENDS sc-machine::sc-builder-lib scp
     INCLUDES ${SCP_SRC}
 )
 
