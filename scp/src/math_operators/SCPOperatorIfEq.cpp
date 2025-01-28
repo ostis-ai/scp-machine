@@ -31,8 +31,7 @@ sc_result SCPOperatorIfEq::Parse()
 
 sc_result SCPOperatorIfEq::Execute()
 {
-  std::cout << "SCPOperatorIfEq execute(): start"
-            << "\n";
+  std::cout << "SCPOperatorIfEq execute(): start" << "\n";
   if (SC_RESULT_OK != ResetValues())
     return SC_RESULT_ERROR;
 
