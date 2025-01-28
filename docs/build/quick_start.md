@@ -53,7 +53,7 @@ exec $SHELL
 scp-machine is an extension to sc-machine, so sc-machine is main dependency for scp-machine. To install it, run in the root of the project:
 
 ```sh
-conan install . -s build_type=Debug
+conan install . -s build_type=Debug --build=missing
 ```
 
 #### Build scp-machine in Debug
@@ -86,7 +86,7 @@ You can also check code formatting. To learn more, go to the [CMake flags](cmake
 To install it, run in the root of the project:
 
 ```sh
-conan install . -s build_type=Release
+conan install . -s build_type=Release --build=missing
 ```
 
 #### Build scp-machine in Release
