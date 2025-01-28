@@ -33,8 +33,7 @@ sc_result SCPOperatorContAdd::Parse()
 
 sc_result SCPOperatorContAdd::Execute()
 {
-  std::cout << "SCPOperatorContAdd execute(): start"
-            << "\n";
+  std::cout << "SCPOperatorContAdd execute(): start" << "\n";
   if (SC_RESULT_OK != ResetValues())
     return SC_RESULT_ERROR;
 

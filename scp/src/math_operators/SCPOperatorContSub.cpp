@@ -31,8 +31,7 @@ sc_result SCPOperatorContSub::Parse()
 
 sc_result SCPOperatorContSub::Execute()
 {
-  std::cout << "SCPOperatorContSub execute(): start"
-            << "\n";
+  std::cout << "SCPOperatorContSub execute(): start" << "\n";
   if (SC_RESULT_OK != ResetValues())
     return SC_RESULT_ERROR;
 
