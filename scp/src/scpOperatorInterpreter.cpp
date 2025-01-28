@@ -19,7 +19,7 @@ ScResult ASCPOperatorInterpreter::DoProgram(
   ScAddr type;
   if (!Utils::resolveOperatorType(m_context, scpOperatorAddr, type))
   {
-    SC_AGENT_LOG_ERROR("Cannot resolve operator type for " << scpOperatorAddr.Hash());
+    m_logger.Error("Cannot resolve operator type for ", scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
   }
 
@@ -32,7 +32,7 @@ ScResult ASCPOperatorInterpreter::DoProgram(
 
   if (scpOperator == nullptr)
   {
-    SC_AGENT_LOG_ERROR("Cannot create operator from " << scpOperatorAddr.Hash());
+    m_logger.Error("Cannot create operator from ", scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
   }
 
@@ -42,7 +42,7 @@ ScResult ASCPOperatorInterpreter::DoProgram(
   sc_result parseResult = scpOperator->Parse();
   if (parseResult != SC_RESULT_OK)
   {
-    SC_AGENT_LOG_ERROR("Cannot parse operator " << scpOperatorAddr.Hash());
+    m_logger.Error("Cannot parse operator ", scpOperatorAddr.Hash());
     return action.FinishUnsuccessfully();
   }
   else

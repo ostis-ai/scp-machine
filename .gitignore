@@ -2,25 +2,16 @@ bin
 /build/
 /build-*/
 /site/
-scripts/redis*
 cmake-build-debug
+.venv
 
-tools/builder/src/parser/
-sc-memory/sc-memory/scs/scsLexer.*
-sc-memory/sc-memory/scs/scsParser.*
-sc-memory/sc-memory/scs/*.tokens
-*.generated.*
-
-!thirdparty/*/bin/
-
-sc-machine.json
-manifest.json
 *.user
 *.*~
 
 .vscode
 __pycache__
 .idea
+.DS_Store
 
 # docs
 *.aux
@@ -33,3 +24,5 @@ __pycache__
 docs/*.log
 *.pdf
 *.run.xml
+
+/ConanPresets.json

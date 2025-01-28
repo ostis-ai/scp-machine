@@ -1,52 +1,76 @@
-cmake_minimum_required(VERSION 3.11)
-project(scp-machine)
+cmake_minimum_required(VERSION 3.24)
 set(CMAKE_CXX_STANDARD 17)
-get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
+project(scp-machine VERSION 0.1.0 LANGUAGES C CXX)
+message(STATUS "Current project version: ${CMAKE_PROJECT_VERSION}")
+cmake_policy(SET CMP0048 NEW)
 
-set(SCP_MACHINE_CMAKE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-if(NOT SC_BIN_PATH)
-    set(SC_BIN_PATH "${CMAKE_BINARY_DIR}/../bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+if (DEFINED "${SC_EXTENSIONS_DIRECTORY}")
+    message(STATUS "Provided extensions directory: ${SC_EXTENSIONS_DIRECTORY}")
+    file(MAKE_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
+else()
+    set(SC_EXTENSIONS_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/extensions)
+    file(MAKE_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
+    message(STATUS "No extensions directory provided. Defaulting to: ${SC_EXTENSIONS_DIRECTORY}")
 endif()
-set(SC_EXTENSIONS_DIRECTORY "${SC_BIN_PATH}/extensions")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
-link_directories(${SC_BIN_PATH} ${SC_EXTENSIONS_DIRECTORY})
 
-set(SC_MACHINE_PATH "${PARENT_DIR}/sc-machine")
-set(SC_MEMORY_PATH "${SC_MACHINE_PATH}/sc-memory/sc-memory/include")
-set(SC_CORE_PATH "${SC_MACHINE_PATH}/sc-memory/sc-core/include")
-set(SC_BUILDER_PATH "${SC_MACHINE_PATH}/sc-tools/sc-builder/include")
-
-option(SCP_CLANG_FORMAT_CODE "Flag to add clangformat and clangformat_check targets" OFF)
+option(SC_CLANG_FORMAT_CODE "Flag to add clangformat and clangformat_check targets" OFF)
 option(SC_BUILD_TESTS "Flag to build unit tests" OFF)
 
-if(${SCP_CLANG_FORMAT_CODE})
-    include(${SCP_MACHINE_CMAKE_PATH}/ClangFormat.cmake)
-endif()
+option(AUTO_CCACHE "Use ccache to speed up rebuilds" ON)
 
 if(${SC_BUILD_TESTS})
     include(CTest)
-    enable_testing()
     include(GoogleTest)
     find_package(GTest REQUIRED)
-    include(${SCP_MACHINE_CMAKE_PATH}/tests.cmake)
+    include(${CMAKE_MODULE_PATH}/tests.cmake)
+endif()
+
+if(${SC_CLANG_FORMAT_CODE})
+    include(${CMAKE_MODULE_PATH}/ClangFormat.cmake)
 endif()
 
 if(${WIN32})
     message(SEND_ERROR "scp-machine isn't supported on Windows OS.")
 endif(${WIN32})
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "-std=c++17 -Wall")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3")        ## Optimize
-    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")  ## Strip binary
+if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")
+elseif(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 endif()
 
-# for multi-config builds (e.g. msvc)
-foreach(OUTPUT_CONFIG ${CMAKE_CONFIGURATION_TYPES})
-    string(TOUPPER ${OUTPUTCONFIG} OUTPUT_CONFIG)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${SC_BIN_PATH})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${SC_BIN_PATH})
-endforeach(OUTPUT_CONFIG)
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM AND ${AUTO_CCACHE})
+    message(STATUS "Using ${CCACHE_PROGRAM} as compiler launcher")
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+endif()
+
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG)
+
+include(GNUInstallDirs)
+
+message("CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
+message("CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message("Compiler: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}, path: ${CMAKE_CXX_COMPILER}")
+
+# Set up dynamic linking paths for our own libraries
+# For macOS, use @loader_path instead of $ORIGIN
+if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path;@loader_path/../lib;")
+else()
+    set(CMAKE_INSTALL_RPATH "$ORIGIN;$ORIGIN/../lib;")
+endif()
+
+# Always use full RPATH
+set(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_subdirectory(scp)
+
+include(${CMAKE_MODULE_PATH}/install.cmake)
