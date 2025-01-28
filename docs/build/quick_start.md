@@ -1,4 +1,4 @@
-# Quick Start for Developers
+# Quick Start for Contributors
 
 This guide provides short information for developers to start to work with scp-machine quickly. You can always learn more about the scp-machine's [build system](build_system.md).
 
@@ -125,16 +125,12 @@ Before launching scp-machine, [extract sc-machine from GitHub Releases](https://
 To launch scp-machine, run:
 
 ```sh
-# create empty knowledge base sources folder
-mkdir kb
-# note: at this stage you can move your KB sources to the ./kb folder
-
-cd sc-machine-<version>-<platform>
-# build knowledge base
-./bin/sc-builder -i ../kb -o ../kb.bin --clear
-# run sc-machine with scp-machine
-./bin/sc-machine -s ../kb.bin \
-    -e "path/to/scp-machine/build/<Release|Debug>/lib/extensions"
+./path/to/sc-machine/binary -s path/to/kb.bin \
+    -e "path/to/extracted/scp-machine/lib/extensions;path/to/sc-machine/lib/extensions"
 # if several paths to extensions are provided then they should be separated 
 # by semicolon and wrapped in double quotes
 ```
+
+### Contributing
+
+To contribute changes to the project, you need to [create Pull Request](https://github.com/ostis-ai/scp-machine/blob/main/CONTRIBUTING.md).
