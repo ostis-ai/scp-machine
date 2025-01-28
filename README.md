@@ -1,7 +1,9 @@
 # scp-machine
 
+[![CI](https://github.com/ostis-ai/scp-machine/actions/workflows/test_conan.yml/badge.svg)](https://github.com/ostis-ai/scp-machine/actions/workflows/test_conan.yml)
 [![license](https://img.shields.io/badge/License-MIT-yellow.svg)](COPYING.MIT)
 
+[![Quick Start](https://img.shields.io/badge/-Quick%20Start-black?style=for-the-badge&logo=rocket)](https://ostis-ai.github.io/scp-machine/quick_start)
 [![Docs](https://img.shields.io/badge/Docs-gray?style=for-the-badge&logo=read-the-docs)](https://ostis-ai.github.io/scp-machine)
 [![Community](https://img.shields.io/badge/-Community-teal?style=for-the-badge&logo=matrix)](https://app.element.io/index.html#/room/#ostis_tech_support:matrix.org)
 
