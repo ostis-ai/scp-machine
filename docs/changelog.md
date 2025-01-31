@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Developer tool to review PRs -- Ellipsis
 - Intro for scp-machine in docs
 - CMake flags section in docs
 - Quick start section for users in docs
