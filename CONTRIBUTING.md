@@ -72,7 +72,7 @@ Last commit
 Init commit
 </pre>
 
-In this example we add class to work with console (where implemented colored output), then in another commit we add gimplementation of colored log output.
+In this example we add class to work with console (where implemented colored output), then in another commit we add implementation of colored log output.
 
 ***
 Each commit should have not much differences excluding cases, with:
