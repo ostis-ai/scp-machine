@@ -57,7 +57,7 @@ Possible tags:
   * `[refactor]` - commits with some code refactoring;
   * `[changelog]` - use when you update changelog;
   * `[docs]` or `[doc]` - use when you update documentation;
-  * `[scripts]` - updates in the `scp-machine/scripts` files
+  * `[scripts]` - updates in the `scp-machine/scripts` files;
   * `[ci]` - changes in `ci` configuration or scripts;
   * `[git]` - changes in `git` configuration;
 
@@ -71,8 +71,6 @@ Last commit
 ...
 Init commit
 </pre>
-
-In this example we add class to work with console (where implemented colored output), then in another commit we add implementation of colored log output.
 
 ***
 Each commit should have not much differences excluding cases, with:
