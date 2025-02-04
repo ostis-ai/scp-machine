@@ -14,7 +14,7 @@ Table of contents:
     * [Build System](build/build_system.md) - *how to build the project and use it as a library*
     * [CMake Flags](build/cmake_flags.md) - *description of CMake flags used to configure scp-machine*
 - **Development** - *guidelines for contributing to development*
-    * [Contributing Guide](https://github.com/ostis-ai/scp-machine/blob/main/CONTRIBUTING.md) - *guide for those who wants to make contribution into scp-machine*
+    * [Contributing Guide](CONTRIBUTING.md) - *guide for those who wants to make contribution into scp-machine*
     * [Codestyle Guide](https://ostis-ai.github.io/sc-machine/dev/codestyle/) - *guide for those who wants to write code for scp-machine*
 - [License](https://github.com/ostis-ai/scp-machine/blob/main/COPYING.MIT)
 - [Changelog](changelog.md)

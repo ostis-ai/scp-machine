@@ -16,7 +16,7 @@ nav:
       - Build System: build/build_system.md
       - CMake Flags: build/cmake_flags.md
   - Development:
-      - Contributing Guide: https://github.com/ostis-ai/scp-machine/blob/main/CONTRIBUTING.md
+      - Contributing Guide: CONTRIBUTING.md
       - Codestyle Guide: https://ostis-ai.github.io/sc-machine/dev/codestyle/
   - License: https://github.com/ostis-ai/scp-machine/blob/main/COPYING.MIT
   - Changelog: changelog.md
