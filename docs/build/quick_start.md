@@ -46,6 +46,14 @@ pipx ensurepath
 exec $SHELL
 ```
 
+### Add Conan remote repository
+
+Add Conan remote repository with the specified URL:
+
+```sh
+conan remote add ostis-ai https://conan.ostis.net/artifactory/api/conan/ostis-ai-library
+```
+
 ### Use scp-machine in Debug
 
 #### Install dependencies with Conan
