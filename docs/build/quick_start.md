@@ -22,7 +22,7 @@ pipx ensurepath
 exec $SHELL
 ```
 
-Install Ninja generator for CMake, to use sc-machine CMake presets:
+Install Ninja generator for CMake, to use CMake presets:
 
 ```sh
 # Use pipx to install ninja if not already installed
