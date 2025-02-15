@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Rename Conan remote repository url to https://conan.ostis.net/artifactory/api/conan/ostis-ai-library
+
 ### Fixed
 
 - Move CONTRIBUTING.md to docs folder
