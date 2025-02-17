@@ -74,7 +74,8 @@ cmake --preset debug-conan
 cmake --build --preset debug
 ```
 
-Note: By default, configure preset `debug` enables building scp-machine tests.
+!!! Note
+    By default, configure preset `debug` enables building scp-machine tests.
 
 #### Run scp-machine tests in Debug
 
