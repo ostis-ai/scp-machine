@@ -1,0 +1,23 @@
+\begin{SCn}
+
+\scnheader{Агент уничтожения scp-процессов}
+\scnidtf{sc-агент уничтожения scp-процессов}
+\scntext{примечание}{Первичным условием инициирования агента уничтожения scp-процессов является появление выходящей константной постоянной sc-дуги принадлежности из класса action\_finished.}
+\begin{scnrelfromvector}{задачи}
+	\scnfileitem{Удалить все операнды и множества пар, являющиеся операндами с ролями rrel\_2 и rrel\_3 у операторов процесса, принадлежащих классам sys\_search и sys\_gen.}
+	\scnfileitem{Удалить операнд с ролью rrel\_2 у операторов процесса, принадлежащих классу call.}
+	\scnfileitem{Удалить все операторы процесса.}
+	\scnfileitem{Удалить множество операторов процесса.}
+	\scnfileitem{Удалить процесс.}
+\end{scnrelfromvector}
+\scnrelfrom{пример входной конструкции}{\scnfileimage[30em]{images/scp_process_destroyer_input.png}}
+\begin{scnrelfromset}{аргументы агента}
+	\scnitem{пустое множество}
+\end{scnrelfromset}
+\scnrelfrom{ответ агента}{ответ агента уничтожения scp-процессов}
+\begin{scnindent}
+	\scneq{пустое множество}
+\end{scnindent}
+\scnrelfrom{пример выходной конструкции}{\scnfileimage[30em]{images/scp_process_destroyer_output.png}}
+
+\end{SCn}
