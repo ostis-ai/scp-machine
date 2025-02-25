@@ -1,0 +1,22 @@
+\begin{SCn}
+
+\scnheader{Агент интерпретации процесса}
+\scnidtf{sc-агент интерпретации процесса}
+\scntext{примечание}{Первичным условием инициирования агента интерпретации процесса является появление выходящей константной постоянной sc-дуги принадлежности из класса action\_initiated.}
+\begin{scnrelfromvector}{задачи}
+	\scnfileitem{Сгенерировать процесс по шаблону указанной scp-программы, подставив указанные аргументы вместо параметров scp-программы.}
+	\scnfileitem{Инициировать интерпретацию первого оператора процесса.}
+	\scnfileitem{Подождать завершения интерпретации процесса.}
+\end{scnrelfromvector}
+\scnrelfrom{пример входной конструкции}{\scnfileimage[30em]{images/scp_process_interpreter_input.png}}
+\begin{scnrelfromset}{аргументы агента}
+	\scnitem{scp-программа}
+	\scnitem{множество аргументов scp-программы}
+\end{scnrelfromset}
+\scnrelfrom{ответ агента}{ответ агента интерпретации процесса}
+\begin{scnindent}
+	\scneq{пустое множество}
+\end{scnindent}
+\scnrelfrom{пример выходной конструкции}{\scnfileimage[30em]{images/scp_process_interpreter_output.png}}
+
+\end{SCn}
