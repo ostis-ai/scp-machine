@@ -14,6 +14,8 @@ namespace scp
 class ASCPEraseOperatorInterpreter : public ASCPOperatorInterpreter
 {
 public:
+  ASCPEraseOperatorInterpreter();
+
   ScAddr GetActionClass() const override;
 
   ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>

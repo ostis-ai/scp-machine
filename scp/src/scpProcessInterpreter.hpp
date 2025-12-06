@@ -14,6 +14,8 @@ namespace scp
 class ASCPProcessInterpreter : public ScActionInitiatedAgent
 {
 public:
+  ASCPProcessInterpreter();
+
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScAction & action) override;

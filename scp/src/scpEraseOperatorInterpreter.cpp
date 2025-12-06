@@ -18,6 +18,12 @@ namespace scp
 ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
     ASCPEraseOperatorInterpreter::supportedOperators = {};
 
+ASCPEraseOperatorInterpreter::ASCPEraseOperatorInterpreter()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File, "logs/ASCPEraseOperatorInterpreter.log", utils::ScLogLevel::Debug, true);
+}
+
 ScAddr ASCPEraseOperatorInterpreter::GetActionClass() const
 {
   return Keynodes::action_interpret_erase_operator;

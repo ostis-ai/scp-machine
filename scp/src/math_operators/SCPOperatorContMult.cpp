@@ -31,7 +31,8 @@ sc_result SCPOperatorContMult::Parse()
 
 sc_result SCPOperatorContMult::Execute()
 {
-  std::cout << "SCPOperatorContMult execute(): start" << "\n";
+  std::cout << "SCPOperatorContMult execute(): start"
+            << "\n";
   if (SC_RESULT_OK != ResetValues())
     return SC_RESULT_ERROR;
 

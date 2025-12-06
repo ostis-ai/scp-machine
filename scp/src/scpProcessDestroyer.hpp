@@ -14,6 +14,8 @@ namespace scp
 class ASCPProcessDestroyer : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
+  ASCPProcessDestroyer();
+
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action)

@@ -12,6 +12,12 @@
 
 namespace scp
 {
+ASCPProcessDestroyer::ASCPProcessDestroyer()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File, "logs/ASCPProcessDestroyer.log", utils::ScLogLevel::Debug, true);
+}
+
 ScResult ASCPProcessDestroyer::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)

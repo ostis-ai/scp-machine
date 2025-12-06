@@ -31,7 +31,8 @@ sc_result SCPOperatorIfGr::Parse()
 
 sc_result SCPOperatorIfGr::Execute()
 {
-  std::cout << "SCPOperatorIfGr execute(): start" << "\n";
+  std::cout << "SCPOperatorIfGr execute(): start"
+            << "\n";
   if (SC_RESULT_OK != ResetValues())
     return SC_RESULT_ERROR;
 

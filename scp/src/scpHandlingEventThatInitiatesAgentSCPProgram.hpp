@@ -13,6 +13,8 @@ namespace scp
 class ASCPHandlingEventThatInitiatesAgentSCPProgram : public ScElementaryEventAgent
 {
 public:
+  ASCPHandlingEventThatInitiatesAgentSCPProgram();
+
   ScResult DoProgram(ScElementaryEvent const & event, ScAction & action) override;
 
   ScAddr GetAgentProgram() const;

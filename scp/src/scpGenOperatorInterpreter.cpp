@@ -18,6 +18,12 @@ namespace scp
 ScAddrToValueUnorderedMap<std::function<std::unique_ptr<SCPOperator>(ScAgentContext &, ScAddr)>>
     ASCPGenOperatorInterpreter::supportedOperators = {};
 
+ASCPGenOperatorInterpreter::ASCPGenOperatorInterpreter()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File, "logs/ASCPGenOperatorInterpreter.log", utils::ScLogLevel::Debug, true);
+}
+
 ScAddr ASCPGenOperatorInterpreter::GetActionClass() const
 {
   return Keynodes::action_interpret_gen_operator;
