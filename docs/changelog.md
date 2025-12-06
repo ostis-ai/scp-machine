@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Don't finish agent actions by ASCPHandlingEventThatInitiatesAgentSCPProgram
 - Set logging type FILE for all agents
 
 ### Fixed

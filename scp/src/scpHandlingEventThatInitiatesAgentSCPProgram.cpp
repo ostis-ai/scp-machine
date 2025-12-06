@@ -79,14 +79,7 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
   else if (action.IsFinishedWithError())
     resultCode = SC_RESULT_ERROR;
   else if (!action.IsFinished())
-  {
-    m_context.GenerateConnector(ScType::ConstPermPosArc, ScKeynodes::action_finished, action);
-    m_context.GenerateConnector(ScType::ConstPermPosArc, ScKeynodes::action_finished_successfully, action);
-    resultCode = SC_RESULT_OK;
-  }
-
-  if (!action.IsFinished())
-    m_context.GenerateConnector(ScType::ConstPermPosArc, ScKeynodes::action_finished, action);
+    resultCode = SC_RESULT_ERROR;
 
   return SCPResult(resultCode);
 }
