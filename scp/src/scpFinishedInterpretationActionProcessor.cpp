@@ -12,6 +12,15 @@
 namespace scp
 {
 
+ASCPFinishedInterpretationActionProcessor::ASCPFinishedInterpretationActionProcessor()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File,
+      "logs/ASCPFinishedInterpretationActionProcessor.log",
+      utils::ScLogLevel::Debug,
+      true);
+}
+
 ScResult ASCPFinishedInterpretationActionProcessor::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)

@@ -23,19 +23,7 @@ _-> rrel_2:: rrel_in:: .._incoming_arc;
 		_-> rrel_2:: rrel_fixed:: rrel_scp_const:: .._incoming_arc;;
 		_-> rrel_3:: rrel_assign:: rrel_scp_var:: .._action;;
 
-		_=> nrel_goto:: .._operator2;;
-	*);;
-
-	_-> .._operator2
-	(*
-		<-_ searchElStr3;;
-
-		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: action_search_all_outgoing_arcs_with_relations;;
-		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc1;;
-		_-> rrel_3:: rrel_fixed:: rrel_scp_var:: .._action;;
-
-		_=> nrel_then:: .._operator3;;
-		_=> nrel_else:: .._operator_return;;
+		_=> nrel_goto:: .._operator3;;
 	*);;
 
 	_-> .._operator3
@@ -49,7 +37,7 @@ _-> rrel_2:: rrel_in:: .._incoming_arc;
 		_-> rrel_5:: rrel_fixed:: rrel_scp_const:: rrel_1;;
 
 		_=> nrel_then:: .._operator4;;
-		_=> nrel_else:: .._operator_return;;
+		_=> nrel_else:: .._operator_finish_action_unsuccessfully;;
 	*);;
 
 	_-> .._operator4
@@ -153,7 +141,40 @@ _-> rrel_2:: rrel_in:: .._incoming_arc;
 		_-> rrel_4:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc2;;
 		_-> rrel_5:: rrel_fixed:: rrel_scp_const:: nrel_result;;
 
+		_=> nrel_goto:: .._operator_finish_action_successfully;;
+	*);;
+
+	_-> .._operator_finish_action_successfully
+	(*
+		<-_ genElStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: action_finished_successfully;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc1;;
+		_-> rrel_3:: rrel_fixed:: rrel_scp_var:: .._action;;
+
+		_=> nrel_goto:: .._operator_finish_action;;
+	*);;
+
+    _-> .._operator_finish_action
+	(*
+		<-_ genElStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: action_finished;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc1;;
+		_-> rrel_3:: rrel_fixed:: rrel_scp_var:: .._action;;
+
 		_=> nrel_goto:: .._operator_return;;
+	*);;
+
+	_-> .._operator_finish_action_unsuccessfully
+	(*
+		<-_ genElStr3;;
+
+		_-> rrel_1:: rrel_fixed:: rrel_scp_const:: action_finished_unsuccessfully;;
+		_-> rrel_2:: rrel_assign:: rrel_scp_var:: rrel_const_perm_pos_arc:: .._arc1;;
+		_-> rrel_3:: rrel_fixed:: rrel_scp_var:: .._action;;
+
+		_=> nrel_goto:: .._operator_finish_action;;
 	*);;
 
 	_-> .._operator_return

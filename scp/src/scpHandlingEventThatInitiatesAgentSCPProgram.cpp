@@ -16,6 +16,15 @@
 namespace scp
 {
 
+ASCPHandlingEventThatInitiatesAgentSCPProgram::ASCPHandlingEventThatInitiatesAgentSCPProgram()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File,
+      "logs/ASCPHandlingEventThatInitiatesAgentSCPProgram.log",
+      utils::ScLogLevel::Debug,
+      true);
+}
+
 ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEvent const & event, ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();
@@ -70,13 +79,7 @@ ScResult ASCPHandlingEventThatInitiatesAgentSCPProgram::DoProgram(ScElementaryEv
   else if (action.IsFinishedWithError())
     resultCode = SC_RESULT_ERROR;
   else if (!action.IsFinished())
-  {
-    action.FinishSuccessfully();
-    resultCode = SC_RESULT_OK;
-  }
-
-  if (!action.IsFinished())
-    m_context.GenerateConnector(ScType::ConstPermPosArc, ScKeynodes::action_finished, action);
+    resultCode = SC_RESULT_ERROR;
 
   return SCPResult(resultCode);
 }

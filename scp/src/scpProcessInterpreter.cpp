@@ -12,6 +12,12 @@
 
 namespace scp
 {
+ASCPProcessInterpreter::ASCPProcessInterpreter()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File, "logs/ASCPProcessInterpreter.log", utils::ScLogLevel::Debug, true);
+}
+
 ScResult ASCPProcessInterpreter::DoProgram(ScAction & action)
 {
   auto const & startTime = std::chrono::high_resolution_clock::now();

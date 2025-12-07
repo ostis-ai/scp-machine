@@ -31,7 +31,8 @@ sc_result SCPOperatorContDiv::Parse()
 
 sc_result SCPOperatorContDiv::Execute()
 {
-  std::cout << "SCPOperatorContDiv execute(): start" << "\n";
+  std::cout << "SCPOperatorContDiv execute(): start"
+            << "\n";
   if (SC_RESULT_OK != ResetValues())
     return SC_RESULT_ERROR;
 

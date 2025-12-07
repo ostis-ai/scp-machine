@@ -15,6 +15,8 @@ class ASCPFinishedInterpretationActionProcessor
   : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
+  ASCPFinishedInterpretationActionProcessor();
+
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action)

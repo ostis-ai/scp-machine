@@ -12,6 +12,12 @@
 namespace scp
 {
 
+ASCPAgentActivator::ASCPAgentActivator()
+{
+  m_logger =
+      utils::ScLogger(utils::ScLogger::ScLogType::File, "logs/ASCPAgentActivator.log", utils::ScLogLevel::Debug, true);
+}
+
 ScResult ASCPAgentActivator::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)
@@ -31,6 +37,12 @@ ScAddr ASCPAgentActivator::GetActionClass() const
 ScAddr ASCPAgentActivator::GetEventSubscriptionElement() const
 {
   return Keynodes::active_sc_agent;
+}
+
+ASCPAgentDeactivator::ASCPAgentDeactivator()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File, "logs/ASCPAgentDeactivator.log", utils::ScLogLevel::Debug, true);
 }
 
 ScResult ASCPAgentDeactivator::DoProgram(

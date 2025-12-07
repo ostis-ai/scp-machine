@@ -14,6 +14,8 @@ namespace scp
 class ASCPProgramExecutionSyncronizer : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
+  ASCPProgramExecutionSyncronizer();
+
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action)

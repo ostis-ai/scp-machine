@@ -12,6 +12,12 @@
 
 namespace scp
 {
+ASCPProgramExecutionSyncronizer::ASCPProgramExecutionSyncronizer()
+{
+  m_logger = utils::ScLogger(
+      utils::ScLogger::ScLogType::File, "logs/ASCPProgramExecutionSyncronizer.log", utils::ScLogLevel::Debug, true);
+}
+
 ScResult ASCPProgramExecutionSyncronizer::DoProgram(
     ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event,
     ScAction & action)

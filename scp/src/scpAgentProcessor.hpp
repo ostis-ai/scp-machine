@@ -14,6 +14,8 @@ namespace scp
 class ASCPAgentActivator : public ScAgent<ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
+  ASCPAgentActivator();
+
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScEventAfterGenerateOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action)
@@ -27,6 +29,8 @@ public:
 class ASCPAgentDeactivator : public ScAgent<ScEventBeforeEraseOutgoingArc<ScType::ConstPermPosArc>>
 {
 public:
+  ASCPAgentDeactivator();
+
   ScAddr GetActionClass() const override;
 
   ScResult DoProgram(ScEventBeforeEraseOutgoingArc<ScType::ConstPermPosArc> const & event, ScAction & action) override;
