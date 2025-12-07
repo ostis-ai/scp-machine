@@ -1,0 +1,30 @@
+\begin{SCn}
+
+\scnheader{Агент интерпретации оператора управления scp-процессами}
+\scnidtf{sc-агент интерпретации оператора управления scp-процессами}
+\scntext{примечание}{Первичным условием инициирования агента интерпретации оператора управления scp-процессами является появление выходящей константной постоянной sc-дуги принадлежности из класса active\_action.}
+\begin{scnrelfromset}{реализованные операторы}
+	\scnitem{scp-оператор завершения выполнения программы}
+	\scnitem{scp-оператор ожидания завершения выполнения scp-программы}
+	\scnitem{scp-оператор асинхронного вызова подпрограммы}
+	\scnitem{scp-оператор ожидания события}
+\end{scnrelfromset}
+\begin{scnrelfromset}{нереализованные операторы}
+	\scnitem{конъюнкция предшествующих scp-операторов}
+	\scnitem{scp-оператор ожидания завершения выполнения множества scp-программ}
+\end{scnrelfromset}
+\begin{scnrelfromvector}{задачи}
+	\scnfileitem{Интерпретация активного оператора управления scp-процессами.}
+\end{scnrelfromvector}
+\scnrelfrom{пример входной конструкции}{\scnfileimage[8em]{images/scp_process_control_operator_interpreter_input.png}}
+\begin{scnrelfromset}{аргументы агента}
+	\scnitem{пустое множество}
+\end{scnrelfromset}
+\scnrelfrom{ответ агента}{ответ агента интерпретации оператора управления scp-процессами}
+\begin{scnindent}
+	\scneq{пустое множество}
+\end{scnindent}
+\scnrelfrom{пример выходной конструкции}{\scnfileimage[30em]{images/scp_process_control_operator_interpreter_output.png}}
+
+\end{SCn}
+
